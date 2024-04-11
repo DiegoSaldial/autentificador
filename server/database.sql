@@ -60,6 +60,36 @@ create table `usuario_permiso`(
     primary key(`usuario_id`,`metodo`)
 );
 
+create table `menus`(
+    `id` tinyint unsigned auto_increment not null primary key,
+    `label` varchar(40) not null unique,
+    `path` varchar(40) not null,
+    `icon` varchar(40) not null,
+    `color` varchar(40) not null,
+    `grupo` tinyint(1) unsigned not null default 1
+);
+
+create table `menus_usuario`(
+    `id` tinyint unsigned auto_increment not null primary key,
+    `usuario_id` integer unsigned not null,
+    `menu_id` tinyint unsigned not null,
+    `fecha_registro` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00'),
+    foreign key(`usuario_id`) references `usuarios`(`id`),
+    foreign key(`menu_id`) references `menus`(`id`)
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
 -- indice para optimizar la busqueda 
 CREATE INDEX idx_username ON usuarios (username);
 
@@ -82,7 +112,10 @@ VALUES
     ('permisos', 'Listar permisos', 'Listar los permisos en el sistema.'),
     ('usuarios', 'Listar usuarios', 'Listar los usuarios en el sistema.'),
     ('usuarioById', 'Listar usuario por id', 'Listar los datos de un usuario en el sistema.'),
-    ('rolById', 'Listar rol por id', 'Listar los datos de un rol en el sistema.');
+    ('rolById', 'Listar rol por id', 'Listar los datos de un rol en el sistema.'),
+    ('asignarMenusUsuario', 'Asignar', 'Asignar permisos al usuario en el sistema.'),
+    ('menus', 'menus', 'Listar menus en el sistema.'),
+    ('menus_by_usuario', 'menus_by_usuario', 'Menus de usuario en el sistema.');
 
 insert into `rol_permiso`(`rol`,`metodo`)
 values 
@@ -94,13 +127,29 @@ values
     ('Administrador','permisos'),
     ('Administrador','usuarios'),
     ('Administrador','usuarioById'),
-    ('Administrador','rolById');
+    ('Administrador','rolById'),
+    ('Administrador','asignarMenusUsuario'),
+    ('Administrador','menus'),
+    ('Administrador','menus_by_usuario');
 
 insert into `rol_usuario`(`rol`,`usuario_id`)
 values 
     ('Administrador',1);
 
 
+
+
+
+
+
+insert into `menus`(`label`,`path`,`icon`,`grupo`,`color`) values 
+('Usuarios','/usuarios','group',1,'primary'),
+('Roles','/roles','local_movies',1,'primary');
+
+
+insert into `menus_usuario`(usuario_id,menu_id) values 
+(1,1),
+(1,2);
 
 
 

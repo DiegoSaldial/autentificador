@@ -89,7 +89,7 @@ func GetPermisosSueltosByUser(db *sql.DB, userid string) ([]*model.ResponsePermi
 }
 
 func GetPermisos(db *sql.DB) ([]*model.Permiso, error) {
-	sql := `select metodo,nombre, descripcion,fecha_registro from permisos`
+	sql := `select metodo,nombre, descripcion,fecha_registro from permisos order by fecha_registro asc`
 	rows, err := db.Query(sql)
 	if err != nil {
 		return nil, err

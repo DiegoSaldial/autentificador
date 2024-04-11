@@ -6,6 +6,11 @@ import (
 	"time"
 )
 
+type AsignarMenusUsuario struct {
+	UserID string   `json:"user_id"`
+	Menus  []string `json:"menus"`
+}
+
 type GetUser struct {
 	ID           string `json:"id"`
 	ShowRoles    bool   `json:"show_roles"`
@@ -15,6 +20,15 @@ type GetUser struct {
 type InputMe struct {
 	ShowRoles    bool `json:"show_roles"`
 	ShowPermisos bool `json:"show_permisos"`
+}
+
+type Menus struct {
+	ID    string `json:"id"`
+	Label string `json:"label"`
+	Path  string `json:"path"`
+	Icon  string `json:"icon"`
+	Color string `json:"color"`
+	Grupo int    `json:"grupo"`
 }
 
 type Mutation struct {

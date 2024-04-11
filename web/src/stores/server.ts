@@ -28,8 +28,12 @@ export function mutar(sql:DocumentNode,variables: OperationVariables = {}, opcio
       //
     })
 
-    onDone(({ data }) => {
-      resolve(data);
+    onDone((res) => {
+      //resolve(data);
+
+      // esto se usa en el proyecto academico, probar si conviene
+      if(res.errors) reject(res.errors)
+      else resolve(res.data);
     });
   });
 

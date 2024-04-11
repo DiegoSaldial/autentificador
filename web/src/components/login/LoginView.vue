@@ -19,6 +19,7 @@
 import { ref } from 'vue'
 import LoginService from './loginService'
 import {useLoginStore} from 'stores/login-store'
+import MenusService from 'pages/usuarios/menuService'
 import MeService from './meService'
 
 export default {
@@ -29,15 +30,35 @@ export default {
     const loading = ref(false)
     const service = new LoginService();
     const meService = new MeService();
+    const menuService = new MenusService();
     const useLogin = useLoginStore();
 
     async function getMe(){
       loading.value = true;
       let meres = await meService.me().then(e=>e).catch(e=>e);
       if(meres.me){
+        await cargarMenus(meres);
         useLogin.setUser(meres.me);
       }
       loading.value = false;
+    }
+
+    const cargarMenus = async (meres) => {
+      let menus = await menuService.menus_by_usuario(meres.me.usuario.id);
+      const menuItemsAgrupados = menus.menus_by_usuario.reduce((grupos, item) => {
+        const grupoId = item.grupo;
+        const grupoExistente = grupos.find(grupo => grupo.some(obj => obj.grupo === grupoId));
+
+        if (grupoExistente) {
+          grupoExistente.push(item);
+        } else {
+          grupos.push([item]);
+        }
+
+        return grupos;
+      }, []);
+
+      useLogin.setMenus(menuItemsAgrupados);
     }
 
     return {

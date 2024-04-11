@@ -34,6 +34,15 @@ type Permiso {
   fecha_registro: Time! 
 }
 
+type Menus {
+    id: ID!
+    label: String!
+    path: String!
+    icon: String!
+    color: String!
+    grupo: Int!
+}
+
 # =================================
 type ResponseLogin {
   token: String!
@@ -131,6 +140,11 @@ input GetUser {
   show_permisos: Boolean!
 }
 
+input AsignarMenusUsuario {
+  user_id: ID!
+  menus: [ID!]!
+}
+
 
 
 # go run github.com/99designs/gqlgen generate
@@ -144,6 +158,8 @@ type Query {
   usuarios(query:QueryUsuarios!): [Usuario!]! 
   usuarioById(input:GetUser!): ResponseMe!
   rolById(rol:String!): ResponseRolCreate!
+  menus: [Menus!]!
+  menus_by_usuario(id:ID!): [Menus!]!
 }
 
 # =================================
@@ -154,4 +170,5 @@ type Mutation {
   updateUsuario(input:UpdateUsuario!): Usuario!
   createRol(input:NewRol!): ResponseRolCreate!
   updateRol(input:NewRol!): ResponseRolCreate!
+  asignarMenusUsuario(input:AsignarMenusUsuario!): String!
 }
