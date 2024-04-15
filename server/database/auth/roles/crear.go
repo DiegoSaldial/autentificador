@@ -1,33 +1,27 @@
 package roles
 
 import (
-	"auth/database/permisos"
+	"auth/database/auth/permisos"
 	"auth/graph/model"
 	"database/sql"
 	"fmt"
 	"strings"
 )
 
-func Actualizar(db *sql.DB, input model.NewRol) (*model.ResponseRolCreate, error) {
-	sql := `update roles set descripcion=?,jerarquia=? where nombre=?`
+func Crear(db *sql.DB, input model.NewRol) (*model.ResponseRolCreate, error) {
+	sql := `insert into roles(nombre,descripcion,jerarquia) values (?,?,?)`
 	tx, err := db.Begin()
 	if err != nil {
 		return nil, err
 	}
 
-	_, err = tx.Exec(sql, input.Descripcion, input.Jerarquia, input.Nombre)
+	_, err = tx.Exec(sql, input.Nombre, input.Descripcion, input.Jerarquia)
 	if err != nil {
 		tx.Rollback()
 		return nil, err
 	}
 
-	_, err = tx.Exec("delete from rol_permiso where rol = ?", input.Nombre)
-	if err != nil {
-		tx.Rollback()
-		return nil, err
-	}
-
-	sql = "replace into rol_permiso(rol, metodo) values %s"
+	sql = "insert into rol_permiso(rol, metodo) values %s"
 	places := make([]string, len(input.Permisos))
 	args := make([]interface{}, len(input.Permisos)*2)
 

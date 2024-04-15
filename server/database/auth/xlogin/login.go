@@ -1,8 +1,8 @@
 package xlogin
 
 import (
-	"auth/database/usuarios"
-	"auth/database/xauth"
+	"auth/database/auth/usuarios"
+	"auth/database/auth/xauth"
 	"auth/graph/model"
 	"context"
 	"database/sql"

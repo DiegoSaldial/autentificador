@@ -1,8 +1,8 @@
 package usuarios
 
 import (
-	"auth/database/permisos"
-	"auth/database/roles"
+	"auth/database/auth/permisos"
+	"auth/database/auth/roles"
 	"auth/graph/model"
 	"database/sql"
 	"errors"

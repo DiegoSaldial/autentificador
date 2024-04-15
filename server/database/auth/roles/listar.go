@@ -1,7 +1,7 @@
 package roles
 
 import (
-	"auth/database/permisos"
+	"auth/database/auth/permisos"
 	"auth/graph/model"
 	"database/sql"
 	"errors"

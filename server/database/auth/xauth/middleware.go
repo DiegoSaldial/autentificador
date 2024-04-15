@@ -1,8 +1,8 @@
 package xauth
 
 import (
-	"auth/database/permisos"
-	"auth/database/usuarios"
+	"auth/database/auth/permisos"
+	"auth/database/auth/usuarios"
 	"auth/graph/model"
 	"context"
 	"database/sql"

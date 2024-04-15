@@ -1,7 +1,7 @@
 package main
 
 import (
-	"auth/database/xauth"
+	"auth/database/auth/xauth"
 	"auth/graph"
 	"database/sql"
 	"fmt"
