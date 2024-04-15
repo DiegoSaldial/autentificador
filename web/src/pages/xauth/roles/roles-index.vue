@@ -67,9 +67,9 @@
 
 <script>
 import { onMounted, ref } from 'vue';
-import RolesService from 'pages/roles/rolesService'
-import Registrar from 'pages/roles/registrar-rol.vue'
-import Ver from 'pages/roles/ver-rol.vue'
+import RolesService from 'pages/xauth/roles/rolesService'
+import Registrar from 'pages/xauth/roles/registrar-rol.vue'
+import Ver from 'pages/xauth/roles/ver-rol.vue'
 import { parseFecha } from 'stores/utils'
 
 const columns = [

@@ -242,12 +242,12 @@
 import { ref } from 'vue';
 import { InputNewUsuario } from './type_usuarios';
 import UsuariosService from './usuariosService';
-import RolesService from 'pages/roles/rolesService';
-import PermisoService from 'pages/permisos/permisoService';
+import RolesService from 'pages/xauth/roles/rolesService';
+import PermisoService from 'pages/xauth/permisos/permisoService';
 import MenusService from './menuService';
 import { Notify } from 'quasar';
 import Validaciones from './validador';
-import click from '../../shared/session';
+import click from 'src/shared/session';
 
 const columnas_rols = [
   { name: 'nombre', label: '', field: 'nombre', align: 'left' },
@@ -443,3 +443,5 @@ export default {
   },
 };
 </script>
+../../../shared/session
+src/pages/xauth/permisos/permisoService

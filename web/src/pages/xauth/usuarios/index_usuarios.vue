@@ -80,7 +80,7 @@
 <script>
 import { onMounted, ref,watch } from 'vue';
 import UsuariosService from './usuariosService'
-import RolesService from '../roles/rolesService';
+import RolesService from 'pages/xauth/roles/rolesService';
 import Registrar from './registrar_usuario.vue'
 import Ver from './ver-usuario.vue'
 import { parseFecha } from 'stores/utils'
@@ -186,3 +186,4 @@ export default {
   }
 }
 </script>
+../../roles/rolesService

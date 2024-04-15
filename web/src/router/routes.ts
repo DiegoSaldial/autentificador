@@ -6,8 +6,8 @@ const routes: RouteRecordRaw[] = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/IndexPage.vue') },
-      { path: '/usuarios', component: async () => await import('pages/usuarios/index_usuarios.vue') },
-      { path:'/roles', component: async () => await import('pages/roles/roles-index.vue') }
+      { path: '/usuarios', component: async () => await import('pages/xauth/usuarios/index_usuarios.vue') },
+      { path:'/roles', component: async () => await import('pages/xauth/roles/roles-index.vue') }
     ],
   },
 
