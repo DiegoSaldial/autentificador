@@ -1,6 +1,7 @@
 import { useLoginStore } from 'stores/login-store';
 import { jwtDecode } from 'jwt-decode';
 import { Notify } from 'quasar';
+import { setTimeLabel } from 'src/shared/login-time';
 
 export default {
   name: 'MyLayout',
@@ -17,6 +18,7 @@ export default {
       const expirationTime = decodedToken.exp || 0;
       const timeRemaining = expirationTime - currentTime;
       // console.log( '>>>>>>>>>>>>>>>>', timeRemaining);
+      setTimeLabel(store.token, store.refreshToken);
       if (timeRemaining < 0) {
         store.setToken();
         Notify.create({

@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { ApolloClientOptions } from '@apollo/client/core'
-import { createHttpLink, InMemoryCache } from '@apollo/client/core'
+import type { ApolloClientOptions } from '@apollo/client/core';
+import { createHttpLink, InMemoryCache } from '@apollo/client/core';
 // import type { BootFileParams } from '@quasar/app-vite'
 import { useLoginStore } from 'stores/login-store';
 import { setContext } from '@apollo/client/link/context';
-import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
+import { getTimeExp, setTimeLabel } from 'src/shared/login-time';
 
 export /* async */ function getClientOptions() {
   const store = useLoginStore();
@@ -13,19 +13,19 @@ export /* async */ function getClientOptions() {
   const authLink = setContext(async (_, { headers }) => {
     let token = store.getToken.value || '';
 
-    if(token){
+    if (token) {
       const refreshToken = store.getRefreshToken.value || '';
       const exp = getTimeExp(token);
       const expTotal = getTimeExp(refreshToken);
 
-      if( exp < 0 && expTotal < 0 ) token = refreshToken;
-      if( exp < 0 && expTotal > 0 ){
-        const newToken = await relogin(token,refreshToken);
+      if (exp < 0 && expTotal < 0) token = refreshToken;
+      if (exp < 0 && expTotal > 0) {
+        const newToken = await relogin(token, refreshToken);
         token = newToken;
-        store.setNewToken(token)
+        store.setNewToken(token);
         console.log('new token.....', token);
       }
-      setTimeLabel(token,refreshToken)
+      setTimeLabel(token, refreshToken);
     }
 
     return {
@@ -36,45 +36,9 @@ export /* async */ function getClientOptions() {
     };
   });
 
-  const getTimeExp = (token:string) => {
-    const decodedToken = jwtDecode(token);
-    const currentTime = Date.now() / 1000;
-    const expirationTime = decodedToken.exp || 0;
-    const timeRemaining = expirationTime - currentTime;
-    return timeRemaining;
-  }
-
-  const getTimeSession = (timeRemaining: number) => {
-    const hours = (Math.floor(timeRemaining / 3600) + '').padStart(2, '0');
-    const min = Math.floor((timeRemaining % 3600) / 60);
-    const minutes = (min + '').padStart(2, '0');
-    const seconds = (Math.floor(timeRemaining % 60) + '').padStart(2, '0');
-    const sesion = {
-      hours: hours,
-      minutes: minutes,
-      seconds: seconds,
-    };
-    return sesion;
-  }
-
-  const setTimeLabel = (token:string,refreshToken:string) =>{
-    const exp = getTimeExp(token);
-    const expTotal = getTimeExp(refreshToken);
-
-    const { hours: a, minutes: b, seconds: c } = getTimeSession(exp);
-    const { hours, minutes, seconds } = getTimeSession(expTotal);
-
-    let tiempo_end = '';
-    if (hours.includes('-') && minutes.includes('-') && seconds.includes('-')) {
-      tiempo_end = `${a}:${b}:${c} <br/> ${a}:${b}:${c}`;
-    } else {
-      tiempo_end = `${a}:${b}:${c} <br/> ${hours}:${minutes}:${seconds}`;
-    }
-    store.setTiempoSession(tiempo_end);
-  }
-
-  const relogin = async (token:string, refreshToken:string) => {
-    const query = 'mutation refreshtoken($token:String!, $refreshToken: String!){ refreshtoken(token:$token, refreshToken:$refreshToken) } ';
+  const relogin = async (token: string, refreshToken: string) => {
+    const query =
+      'mutation refreshtoken($token:String!, $refreshToken: String!){ refreshtoken(token:$token, refreshToken:$refreshToken) } ';
 
     const data = JSON.stringify({
       query: query,
@@ -90,14 +54,16 @@ export /* async */ function getClientOptions() {
       data: data,
       headers: {
         'Content-Type': 'application/json',
-      }
-    }
+      },
+    };
 
-    const res = await axios(config).then(({data})=>data).catch((e:any)=>e)
-    if( res && res.data ) return res.data.refreshtoken;
+    const res = await axios(config)
+      .then(({ data }) => data)
+      .catch((e: any) => e);
+    if (res && res.data) return res.data.refreshtoken;
 
     return token;
-  }
+  };
 
   ///* {app, router, ...} */ options?: Partial<BootFileParams<any>>
   return <ApolloClientOptions<unknown>>Object.assign(
@@ -116,14 +82,14 @@ export /* async */ function getClientOptions() {
       ),
 
       cache: new InMemoryCache(),
-      defaultOptions:{
-        query:{
+      defaultOptions: {
+        query: {
           errorPolicy: 'all',
         },
-        mutate:{
-          errorPolicy: 'all'
-        }
-      }
+        mutate: {
+          errorPolicy: 'all',
+        },
+      },
     },
     // Specific Quasar mode options.
     process.env.MODE === 'spa'
