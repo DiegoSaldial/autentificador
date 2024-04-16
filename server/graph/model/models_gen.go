@@ -119,6 +119,20 @@ type Rol struct {
 	FechaRegistro time.Time `json:"fecha_registro"`
 }
 
+type UpdatePerfil struct {
+	ID        string  `json:"id"`
+	Nombres   string  `json:"nombres"`
+	Apellido1 string  `json:"apellido1"`
+	Apellido2 *string `json:"apellido2,omitempty"`
+	Documento *string `json:"documento,omitempty"`
+	Celular   string  `json:"celular"`
+	Correo    *string `json:"correo,omitempty"`
+	Sexo      *string `json:"sexo,omitempty"`
+	Direccion *string `json:"direccion,omitempty"`
+	Username  *string `json:"username,omitempty"`
+	Password  *string `json:"password,omitempty"`
+}
+
 type UpdateUsuario struct {
 	ID              string   `json:"id"`
 	Nombres         string   `json:"nombres"`

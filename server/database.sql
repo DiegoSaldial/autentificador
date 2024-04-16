@@ -106,6 +106,7 @@ INSERT INTO `permisos` (`metodo`, `nombre`, `descripcion`)
 VALUES
     ('createUsuario', 'Crear Usuario', 'Permite crear un nuevo usuarios en el sistema.'),
     ('updateUsuario', 'Actualizar Usuario', 'Permite actualizar los datos de un usuarios en el sistema.'),
+    ('updateUsuarioPerfil', 'Actualizar Perfil del Usuario', 'Permite actualizar los datos de un usuarios en el sistema.'),
     ('createRol', 'Crear Rol', 'Permite crear un nuevo rol en el sistema.'),
     ('updateRol', 'Actualizar Rol', 'Permite actualizar los datos de un rol en el sistema.'),
     ('roles', 'Listar roles', 'Listar los roles en el sistema.'),
@@ -121,6 +122,7 @@ insert into `rol_permiso`(`rol`,`metodo`)
 values 
     ('Administrador','createUsuario'),
     ('Administrador','updateUsuario'),
+    ('Administrador','updateUsuarioPerfil'),
     ('Administrador','createRol'),
     ('Administrador','updateRol'),
     ('Administrador','roles'),

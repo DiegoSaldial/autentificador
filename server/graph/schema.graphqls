@@ -125,6 +125,19 @@ input UpdateUsuario {
   roles: [String!]!
   permisos_sueltos: [String!]!
 }
+input UpdatePerfil {
+  id: ID!
+  nombres: String!
+  apellido1: String!
+  apellido2: String
+  documento: String
+  celular: String!
+  correo: String
+  sexo: String
+  direccion: String
+  username: String
+  password: String 
+}
 
 
 input NewRol {
@@ -168,6 +181,7 @@ type Mutation {
   refreshtoken(token:String!, refreshToken:String!): String!
   createUsuario(input:NewUsuario!): Usuario!
   updateUsuario(input:UpdateUsuario!): Usuario!
+  updateUsuarioPerfil(input:UpdatePerfil!): Usuario!
   createRol(input:NewRol!): ResponseRolCreate!
   updateRol(input:NewRol!): ResponseRolCreate!
   asignarMenusUsuario(input:AsignarMenusUsuario!): String!

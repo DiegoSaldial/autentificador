@@ -7,13 +7,14 @@
       <q-tooltip> Perfil </q-tooltip>
       <q-menu>
         <div class="row no-wrap q-pa-md">
-          <div class="column">
+          <div class="column" style="min-width: 120px;">
             <div class="text-h6 q-mb-md">Mi Perfil</div>
-            <p class="q-mb-xs"> {{ datos.usuario }} </p>
-            <p class="q-mb-xs"> {{ datos.documento }} </p>
-            <p class="q-mb-xs"> {{ datos.celular }} </p>
-            <p class="q-mb-xs"> {{ datos.correo }} </p>
-            <p class="q-mb-xs"> {{ datos.roles }} </p>
+            <p class="q-mt-none q-mb-xs"> {{ datos.usuario }} </p>
+            <p class="q-mt-none q-mb-xs"> {{ datos.documento }} </p>
+            <p class="q-mt-none q-mb-xs"> {{ datos.celular }} </p>
+            <p class="q-mt-none q-mb-xs"> {{ datos.correo }} </p>
+            <p class="q-mt-none q-mb-xs"> {{ datos.roles }} </p>
+            <q-btn color="purple" label="Editar" icon="edit" square flat size="sm" v-close-popup outline stretch @click="openEdit()" />
           </div>
 
           <q-separator vertical inset class="q-mx-lg" />
@@ -25,11 +26,13 @@
 
             <div class="text-subtitle1 q-mt-md q-mb-xs" style="white-space: nowrap"> {{ datos.usuario }} </div>
 
-            <q-btn color="orange" label="Salir" icon="block" square size="sm" v-close-popup stretch @click="logout()" />
+            <q-btn color="red" label="Salir" icon="block" square flat size="sm" v-close-popup stretch @click="logout()" />
           </div>
         </div>
       </q-menu>
     </q-btn>
+
+    <EditarPerfil ref="refEditarPerfil"/>
   </div>
 </template>
 
@@ -37,13 +40,18 @@
 <script>
 import { onMounted, ref } from 'vue'
 import { useLoginStore } from 'src/stores/login-store';
+import EditarPerfil from './editar_perfil.vue'
 
 export default {
+  components:{ EditarPerfil },
   setup () {
     const store = useLoginStore()
     const datos = ref({})
+    const refEditarPerfil = ref()
 
     const logout = ()=> store.setToken()
+
+    const openEdit = () => refEditarPerfil.value.open();
 
     const cargarDatos = () => {
       let data = store.dataUser;
@@ -66,7 +74,9 @@ export default {
     return {
       datos,
       logout,
-      store
+      openEdit,
+      store,
+      refEditarPerfil
     }
   }
 }

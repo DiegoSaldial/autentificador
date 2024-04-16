@@ -9,84 +9,24 @@
         <q-form @submit="onSubmit">
           <div class="row q-col-gutter-xs">
             <div class="col col-sm-6">
-              <q-input
-                filled
-                v-model.trim="input.nombre"
-                label="Nombre"
-                lazy-rules
-                dense
-                :rules="[(val) => validaciones.val_nombre(val)]"
-              />
+              <q-input filled v-model.trim="input.nombre" label="Nombre" lazy-rules dense :rules="[(val) => validaciones.val_nombre(val)]" />
             </div>
             <div class="col col-sm-6">
-              <q-input
-                filled
-                v-model.trim="input.descripcion"
-                label="Descripcion"
-                lazy-rules
-                dense
-                counter
-                :rules="[(val) => validaciones.val_descripcion(val)]"
-              />
+              <q-input filled v-model.trim="input.descripcion" label="Descripcion" lazy-rules dense counter :rules="[(val) => validaciones.val_descripcion(val)]" />
             </div>
             <div class="col col-sm-6">
-              <q-input
-                filled
-                v-model.number="input.jerarquia"
-                label="Jerarquia"
-                type="number"
-                lazy-rules
-                dense
-                counter
-                :rules="[(val) => validaciones.val_jerarquia(val)]"
-              />
+              <q-input filled v-model.number="input.jerarquia" label="Jerarquia" type="number" lazy-rules dense counter :rules="[(val) => validaciones.val_jerarquia(val)]" />
             </div>
 
             <div class="col col-sm-12">
-              <q-table
-                flat
-                color="orange"
-                :loading="loading_perms"
-                title="permisos"
-                hide-pagination
-                :rows-per-page-options="[0]"
-                dense
-                :rows="permisos"
-                :columns="columnas_perm"
-                row-key="metodo"
-                :selected-rows-label="getSelectedString"
-                selection="multiple"
-                v-model:selected="permisos_sel"
-              />
+              <q-table flat color="orange" :loading="loading_perms" title="permisos" hide-pagination :rows-per-page-options="[0]" dense :rows="permisos" :columns="columnas_perm" row-key="metodo" :selected-rows-label="getSelectedString" selection="multiple" v-model:selected="permisos_sel" />
             </div>
           </div>
 
           <div class="q-mt-md" :align="'right'">
-            <q-linear-progress
-              v-if="loading"
-              dark
-              rounded
-              indeterminate
-              color="secondary"
-              class="q-mb-sm"
-            />
-            <q-btn
-              :disable="loading"
-              label="cerrar"
-              color="red"
-              icon="close"
-              square
-              flat
-              @click="cerrar()"
-            />
-            <q-btn
-              :disable="loading"
-              :label="is_edit ? 'Actualizar' : 'Registrar'"
-              icon="done"
-              type="submit"
-              color="green"
-              square
-            />
+            <q-linear-progress v-if="loading" dark rounded indeterminate color="secondary" class="q-mb-sm" />
+            <q-btn :disable="loading" label="cerrar" color="red" icon="close" square flat @click="cerrar()" />
+            <q-btn :disable="loading" :label="is_edit ? 'Actualizar' : 'Registrar'" icon="done" type="submit" color="green" square />
           </div>
         </q-form>
       </q-card-section>
