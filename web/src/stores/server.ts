@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMutation, useQuery } from '@vue/apollo-composable';
 import { OperationVariables } from '@apollo/client/core/index.js';
 import { DocumentNode } from 'graphql';
@@ -32,7 +33,12 @@ export function mutar(sql:DocumentNode,variables: OperationVariables = {}, opcio
       //resolve(data);
 
       // esto se usa en el proyecto academico, probar si conviene
-      if(res.errors) reject(res.errors)
+      // if(res.errors) reject(res.errors)
+      // esto se usa en el proyecto academico, probar si conviene
+      if(res.errors) {
+        if(opciones.showNotyError) parseErrors(res.errors);
+        reject(res.errors)
+      }
       else resolve(res.data);
     });
   });
@@ -62,6 +68,10 @@ export function query(sql:DocumentNode,variables: OperationVariables = {},opcion
 
 }
 
+function parseErrors(lista:any) {
+  const errores = lista.map((m:any)=>m.message);
+  mostrarNotifyError(errores);
+}
 
 function mostrarNotifyError(mensaje:string | undefined){
   Notify.create({

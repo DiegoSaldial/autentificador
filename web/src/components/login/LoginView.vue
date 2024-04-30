@@ -10,18 +10,31 @@
         dense
         :color="$q.dark.isActive ? 'orange' : 'primary'"
         :rules="[(val) => (val && val.length > 0) || 'dato obligatorio']"
-      />
+      >
+        <template v-slot:prepend>
+          <q-icon name="person" />
+        </template>
+      </q-input>
 
       <q-input
         filled
-        type="text"
+        :type="pwd"
         v-model.trim="clave"
         label="Clave de acceso"
         lazy-rules
         dense
         :color="$q.dark.isActive ? 'orange' : 'primary'"
         :rules="[(val) => (val && val.length > 0) || 'dato obligatorio']"
-      />
+      >
+        <template v-slot:prepend>
+          <q-icon name="key" />
+        </template>
+        <template v-slot:append>
+          <q-btn flat dense size="small" @click="changePWD()">
+            <q-icon name="visibility" />
+          </q-btn>
+        </template>
+      </q-input>
 
       <div class="column items-center">
         <q-linear-progress
@@ -61,6 +74,7 @@ export default {
     const meService = new MeService();
     const menuService = new MenusService();
     const useLogin = useLoginStore();
+    const pwd = ref('password');
 
     async function getMe() {
       loading.value = true;
@@ -98,10 +112,15 @@ export default {
       useLogin.setMenus(menuItemsAgrupados);
     };
 
+    const changePWD = () =>
+      pwd.value == 'text' ? (pwd.value = 'password') : (pwd.value = 'text');
+
     return {
       username,
       clave,
       loading,
+      pwd,
+      changePWD,
 
       async onSubmit() {
         loading.value = true;
