@@ -7,45 +7,45 @@
 
       <q-card-section class="q-pt-none">
         <div class="row">
-          <div class="col col-sm-6">
+          <div class="col-xs-12 col-sm-6">
             <p class="q-mb-xs"><b>Nombres:</b> {{ input.nombres }}</p>
           </div>
-          <div class="col col-sm-6">
+          <div class="col-xs-12 col-sm-6">
             <p class="q-mb-xs"><b>Apellido 1:</b> {{ input.apellido1 }}</p>
           </div>
-          <div class="col col-sm-6">
+          <div class="col-xs-12 col-sm-6">
             <p class="q-mb-xs"><b>Apellido 2:</b> {{ input.apellido2 }}</p>
           </div>
-          <div class="col col-sm-6">
+          <div class="col-xs-12 col-sm-6">
             <p class="q-mb-xs"><b>Documento:</b> {{ input.documento }}</p>
           </div>
-          <div class="col col-sm-6">
+          <div class="col-xs-12 col-sm-6">
             <p class="q-mb-xs"><b>Celular:</b> {{ input.celular }}</p>
           </div>
-          <div class="col col-sm-6">
+          <div class="col-xs-12 col-sm-6">
             <p class="q-mb-xs"><b>Sexo:</b> {{ input.sexo }}</p>
           </div>
-          <div class="col col-sm-6">
+          <div class="col-xs-12 col-sm-6">
             <p class="q-mb-xs"><b>Correo:</b> {{ input.correo }}</p>
           </div>
-          <div class="col col-sm-6">
+          <div class="col-xs-12 col-sm-6">
             <p class="q-mb-xs"><b>Direccion:</b> {{ input.direccion }}</p>
           </div>
-          <div class="col col-sm-12">
+          <div class="col-xs-12 col-sm-12">
             <p class="q-mb-lg"><b>Username:</b> {{ input.username }}</p>
           </div>
           <template v-for="(r, i) in roles_sel" :key="i">
-            <div class="col col-sm-4">
+            <div class="col-xs-12 col-sm-4">
               <p class="q-mb-xs"><b>Rol:</b> {{ r.nombre }}</p>
             </div>
-            <div class="col col-sm-8">
+            <div class="col-xs-12 col-sm-8">
               <p class="q-mb-xs">
                 <b>Permisos:</b> {{ r.xpermisos.join(', ') }}
               </p>
             </div>
           </template>
 
-          <div class="col col-sm-12">
+          <div class="col-xs-12 col-sm-12">
             <p class="q-mt-lg"><b>Permisos sueltos:</b> {{ permisos_sel }}</p>
           </div>
         </div>

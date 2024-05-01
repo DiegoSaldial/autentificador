@@ -153,3 +153,8 @@ func UpdatePerfil(db *sql.DB, input model.UpdatePerfil) (*model.Usuario, error) 
 
 	return GetById(db, input.ID)
 }
+
+func SetLastLogin(db *sql.DB, userid string) {
+	sql := "update usuarios set last_login=CURRENT_TIMESTAMP where id = ?"
+	db.Exec(sql, userid)
+}

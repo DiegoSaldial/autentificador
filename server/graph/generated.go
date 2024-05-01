@@ -141,6 +141,7 @@ type ComplexityRoot struct {
 		FechaRegistro func(childComplexity int) int
 		FechaUpdate   func(childComplexity int) int
 		ID            func(childComplexity int) int
+		LastLogin     func(childComplexity int) int
 		Nombres       func(childComplexity int) int
 		Sexo          func(childComplexity int) int
 		Username      func(childComplexity int) int
@@ -690,6 +691,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Usuario.ID(childComplexity), true
+
+	case "Usuario.last_login":
+		if e.complexity.Usuario.LastLogin == nil {
+			break
+		}
+
+		return e.complexity.Usuario.LastLogin(childComplexity), true
 
 	case "Usuario.nombres":
 		if e.complexity.Usuario.Nombres == nil {
@@ -1562,6 +1570,8 @@ func (ec *executionContext) fieldContext_Mutation_createUsuario(ctx context.Cont
 				return ec.fieldContext_Usuario_fecha_update(ctx, field)
 			case "estado":
 				return ec.fieldContext_Usuario_estado(ctx, field)
+			case "last_login":
+				return ec.fieldContext_Usuario_last_login(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Usuario", field.Name)
 		},
@@ -1645,6 +1655,8 @@ func (ec *executionContext) fieldContext_Mutation_updateUsuario(ctx context.Cont
 				return ec.fieldContext_Usuario_fecha_update(ctx, field)
 			case "estado":
 				return ec.fieldContext_Usuario_estado(ctx, field)
+			case "last_login":
+				return ec.fieldContext_Usuario_last_login(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Usuario", field.Name)
 		},
@@ -1728,6 +1740,8 @@ func (ec *executionContext) fieldContext_Mutation_updateUsuarioPerfil(ctx contex
 				return ec.fieldContext_Usuario_fecha_update(ctx, field)
 			case "estado":
 				return ec.fieldContext_Usuario_estado(ctx, field)
+			case "last_login":
+				return ec.fieldContext_Usuario_last_login(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Usuario", field.Name)
 		},
@@ -2357,6 +2371,8 @@ func (ec *executionContext) fieldContext_Query_usuarios(ctx context.Context, fie
 				return ec.fieldContext_Usuario_fecha_update(ctx, field)
 			case "estado":
 				return ec.fieldContext_Usuario_estado(ctx, field)
+			case "last_login":
+				return ec.fieldContext_Usuario_last_login(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Usuario", field.Name)
 		},
@@ -2914,6 +2930,8 @@ func (ec *executionContext) fieldContext_ResponseMe_usuario(ctx context.Context,
 				return ec.fieldContext_Usuario_fecha_update(ctx, field)
 			case "estado":
 				return ec.fieldContext_Usuario_estado(ctx, field)
+			case "last_login":
+				return ec.fieldContext_Usuario_last_login(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Usuario", field.Name)
 		},
@@ -4522,6 +4540,47 @@ func (ec *executionContext) fieldContext_Usuario_estado(ctx context.Context, fie
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Usuario_last_login(ctx context.Context, field graphql.CollectedField, obj *model.Usuario) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Usuario_last_login(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.LastLogin, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*time.Time)
+	fc.Result = res
+	return ec.marshalOTime2ᚖtimeᚐTime(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Usuario_last_login(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Usuario",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Time does not have child fields")
 		},
 	}
 	return fc, nil
@@ -7661,6 +7720,8 @@ func (ec *executionContext) _Usuario(ctx context.Context, sel ast.SelectionSet, 
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "last_login":
+			out.Values[i] = ec._Usuario_last_login(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -8860,6 +8921,22 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 		return graphql.Null
 	}
 	res := graphql.MarshalString(*v)
+	return res
+}
+
+func (ec *executionContext) unmarshalOTime2ᚖtimeᚐTime(ctx context.Context, v interface{}) (*time.Time, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalTime(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOTime2ᚖtimeᚐTime(ctx context.Context, sel ast.SelectionSet, v *time.Time) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	res := graphql.MarshalTime(*v)
 	return res
 }
 

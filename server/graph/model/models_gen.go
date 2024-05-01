@@ -150,17 +150,18 @@ type UpdateUsuario struct {
 }
 
 type Usuario struct {
-	ID            string    `json:"id"`
-	Nombres       string    `json:"nombres"`
-	Apellido1     string    `json:"apellido1"`
-	Apellido2     *string   `json:"apellido2,omitempty"`
-	Documento     *string   `json:"documento,omitempty"`
-	Celular       *string   `json:"celular,omitempty"`
-	Correo        *string   `json:"correo,omitempty"`
-	Sexo          *string   `json:"sexo,omitempty"`
-	Direccion     *string   `json:"direccion,omitempty"`
-	Username      string    `json:"username"`
-	FechaRegistro time.Time `json:"fecha_registro"`
-	FechaUpdate   time.Time `json:"fecha_update"`
-	Estado        bool      `json:"estado"`
+	ID            string     `json:"id"`
+	Nombres       string     `json:"nombres"`
+	Apellido1     string     `json:"apellido1"`
+	Apellido2     *string    `json:"apellido2,omitempty"`
+	Documento     *string    `json:"documento,omitempty"`
+	Celular       *string    `json:"celular,omitempty"`
+	Correo        *string    `json:"correo,omitempty"`
+	Sexo          *string    `json:"sexo,omitempty"`
+	Direccion     *string    `json:"direccion,omitempty"`
+	Username      string     `json:"username"`
+	FechaRegistro time.Time  `json:"fecha_registro"`
+	FechaUpdate   time.Time  `json:"fecha_update"`
+	Estado        bool       `json:"estado"`
+	LastLogin     *time.Time `json:"last_login,omitempty"`
 }

@@ -18,6 +18,7 @@ export default class UsuariosService {
           sexo
           direccion
           username
+          last_login
           fecha_registro
           fecha_update
           estado
@@ -71,6 +72,7 @@ export default class UsuariosService {
             sexo
             direccion
             username
+            last_login
             fecha_registro
             fecha_update
             estado

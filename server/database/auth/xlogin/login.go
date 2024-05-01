@@ -34,6 +34,8 @@ func Login(db *sql.DB, data model.NewLogin) (*model.ResponseLogin, error) {
 		RefreshToken: refreshToken,
 	}
 
+	usuarios.SetLastLogin(db, us.ID)
+
 	return &res, nil
 }
 

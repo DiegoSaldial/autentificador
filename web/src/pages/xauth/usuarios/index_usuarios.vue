@@ -41,6 +41,12 @@
         </q-td>
       </template>
 
+      <template v-slot:body-cell-last_login="props">
+        <q-td :props="props">
+          {{ parseFecha(props.row.last_login, true) }}
+        </q-td>
+      </template>
+
       <template v-slot:body-cell-estado="props">
         <q-td :props="props">
           {{ props.row.estado?'Activo':'Inactivo' }}
@@ -97,6 +103,7 @@ const columns = [
   { name: 'sexo', label: 'sexo', field: 'sexo' },
   { name: 'direccion', label: 'direccion', field: 'direccion' },
   { name: 'username', label: 'username', field: 'username' },
+  { name: 'last_login', label: 'last login', field: 'last_login' },
   { name: 'fecha_registro', label: 'registro', field: 'fecha_registro' },
   { name: 'fecha_update', label: 'modificado', field: 'fecha_update' },
   { name: 'estado', label: 'estado', field: 'estado' },
@@ -146,8 +153,8 @@ export default {
     const visualizar = (item) => refVer.value.open(item.id);
 
     const columnas = () => {
-      if(more_datos.value) visibleColumns.value = ['id','nombres','apellido1','apellido2','documento','celular','correo','sexo','direccion','username','fecha_registro','fecha_update','estado','opt'];
-      else visibleColumns.value = ['id','nombres','apellido1','apellido2','opt'];
+      if(more_datos.value) visibleColumns.value = ['id','nombres','apellido1','apellido2','documento','celular','correo','sexo','direccion','username','last_login','fecha_registro','fecha_update','estado','opt'];
+      else visibleColumns.value = ['id','nombres','apellido1','apellido2','last_login','opt'];
     }
 
     const setParams = async ()=> {

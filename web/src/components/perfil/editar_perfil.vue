@@ -8,25 +8,25 @@
       <q-card-section class="q-pt-none">
         <q-form @submit="onSubmit">
           <div class="row q-col-gutter-xs">
-            <div class="col col-sm-6">
+            <div class="col-xs-12 col-sm-6">
               <q-input filled v-model.trim="input.nombres" label="Nombres:" required lazy-rules dense :rules="[(val) => validaciones.val_nombre(val)]" />
             </div>
-            <div class="col col-sm-6">
+            <div class="col-xs-12 col-sm-6">
               <q-input filled v-model.trim="input.apellido1" label="Apellido 1:" required lazy-rules dense :rules="[(val) => validaciones.val_nombre(val)]" />
             </div>
-            <div class="col col-sm-6">
+            <div class="col-xs-12 col-sm-6">
               <q-input filled v-model.trim="input.apellido2" label="Apellido 2:" lazy-rules dense :rules="[(val) => validaciones.val_nombre(val)]" />
             </div>
-            <div class="col col-sm-6">
+            <div class="col-xs-12 col-sm-6">
               <q-input filled v-model.trim="input.celular" label="Celular:" lazy-rules dense :rules="[(val) => validaciones.val_nombre(val)]" />
             </div>
-            <div class="col col-sm-6">
+            <div class="col-xs-12 col-sm-6">
               <q-input filled v-model.trim="input.correo" label="Correo:" lazy-rules dense :rules="[(val) => validaciones.val_nombre(val)]" />
             </div>
-            <div class="col col-sm-6">
+            <div class="col-xs-12 col-sm-6">
               <q-input filled v-model.trim="input.documento" label="Documento:" lazy-rules dense :rules="[(val) => validaciones.val_nombre(val)]" />
             </div>
-            <div class="col col-sm-12">
+            <div class="col-xs-12 col-sm-12">
               <q-input filled v-model.trim="input.direccion" label="Direccion:" lazy-rules dense :rules="[(val) => validaciones.val_nombre(val)]" />
             </div> 
           </div>

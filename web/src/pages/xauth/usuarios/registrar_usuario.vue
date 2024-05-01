@@ -8,39 +8,39 @@
       <q-card-section class="q-pt-none">
         <q-form @submit="onSubmit">
           <div class="row q-col-gutter-xs">
-            <div class="col col-sm-6">
+            <div class="col-xs-12 col-sm-6">
               <q-input filled v-model.trim="input.nombres" label="* Nombres" dense :rules="[(val) => validaciones.val_nombre(val)]" />
             </div>
-            <div class="col col-sm-6">
+            <div class="col-xs-12 col-sm-6">
               <q-input filled v-model.trim="input.apellido1" label="* Apellido 1" lazy-rules dense :rules="[(val) => validaciones.val_apellido1(val)]" />
             </div>
-            <div class="col col-sm-6">
+            <div class="col-xs-12 col-sm-6">
               <q-input filled v-model.trim="input.apellido2" label="Apellido 2" lazy-rules dense counter :rules="[(val) => validaciones.val_apellido2(val)]" />
             </div>
-            <div class="col col-sm-6">
+            <div class="col-xs-12 col-sm-6">
               <q-input filled v-model.trim="input.documento" label="Documento" lazy-rules dense counter :rules="[(val) => validaciones.val_documento(val)]" />
             </div>
-            <div class="col col-sm-6">
+            <div class="col-xs-12 col-sm-6">
               <q-input filled v-model.trim="input.celular" label="Celular" lazy-rules dense counter :rules="[(val) => validaciones.val_celular(val)]" />
             </div>
-            <div class="col col-sm-6">
+            <div class="col-xs-12 col-sm-6">
               <q-radio v-model="input.sexo" val="M" label="Masculino" class="q-pa-none" />
               <q-radio v-model="input.sexo" val="F" label="Femenino" class="q-pa-none" />
             </div>
-            <div class="col col-sm-12">
+            <div class="col-xs-12 col-sm-12">
               <q-input filled v-model.trim="input.correo" label="Correo" lazy-rules dense counter :rules="[(val) => validaciones.val_correo(val)]" />
             </div>
-            <div class="col col-sm-12">
+            <div class="col-xs-12 col-sm-12">
               <q-input filled v-model.trim="input.direccion" label="Direccion" lazy-rules dense counter :rules="[(val) => validaciones.val_direccion(val)]" />
             </div>
-            <div class="col col-sm-6">
+            <div class="col-xs-12 col-sm-6">
               <q-input filled v-model.trim="input.username" label="* username" lazy-rules dense counter :rules="[(val) => validaciones.val_username(val)]" />
             </div>
-            <div class="col col-sm-6">
+            <div class="col-xs-12 col-sm-6">
               <q-input filled v-model.trim="input.password" label="password" :placeholder="input.id ? 'vacio sin cambios' : ''" lazy-rules dense counter :rules="[(val) => validaciones.val_password(val, input)]" />
             </div>
 
-            <div class="col col-sm-12">
+            <div class="col-xs-12 col-sm-12">
               <q-list padding bordered>
                 <q-expansion-item popup header-class="text-purple" default-opened expand-separator icon="group_add" label="* Roles" caption="Un rol contiene un grupo de permisos" >
                   <q-table flat color="orange" :loading="loading_roles" title="" hide-pagination :rows-per-page-options="[0]" dense :rows="roles" :columns="columnas_rols" row-key="nombre" selection="multiple" v-model:selected="roles_sel" />

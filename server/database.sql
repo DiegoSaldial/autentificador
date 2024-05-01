@@ -11,6 +11,7 @@ create table `usuarios`(
     `estado` tinyint(1) not null default 1,
     `username` varchar(30) unique not null,
     `password` varchar(64) not null, -- hash
+    `last_login` datetime,
     `fecha_registro` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00'),
     `fecha_update` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00') ON UPDATE CURRENT_TIMESTAMP
 );

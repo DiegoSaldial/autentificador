@@ -1,60 +1,67 @@
 <template>
   <div class="q-pa-md column items-center">
-    <h5 class="q-mb-lg">Acceder al sistema</h5>
-    <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
-      <q-input
-        filled
-        v-model.trim="username"
-        label="Nombre de usuario"
-        lazy-rules
-        dense
-        :color="$q.dark.isActive ? 'orange' : 'primary'"
-        :rules="[(val) => (val && val.length > 0) || 'dato obligatorio']"
-      >
-        <template v-slot:prepend>
-          <q-icon name="person" />
-        </template>
-      </q-input>
+    <q-card>
+      <q-card-section class="text-center">
+        <h5 class="q-mb-none q-mt-sm">Acceder al sistema</h5>
+      </q-card-section>
 
-      <q-input
-        filled
-        :type="pwd"
-        v-model.trim="clave"
-        label="Clave de acceso"
-        lazy-rules
-        dense
-        :color="$q.dark.isActive ? 'orange' : 'primary'"
-        :rules="[(val) => (val && val.length > 0) || 'dato obligatorio']"
-      >
-        <template v-slot:prepend>
-          <q-icon name="key" />
-        </template>
-        <template v-slot:append>
-          <q-btn flat dense size="small" @click="changePWD()">
-            <q-icon name="visibility" />
-          </q-btn>
-        </template>
-      </q-input>
+      <q-card-section>
+        <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
+          <q-input
+            filled
+            v-model.trim="username"
+            label="Nombre de usuario"
+            lazy-rules
+            dense
+            :color="$q.dark.isActive ? 'orange' : 'primary'"
+            :rules="[(val) => (val && val.length > 0) || 'dato obligatorio']"
+          >
+            <template v-slot:prepend>
+              <q-icon name="person" />
+            </template>
+          </q-input>
 
-      <div class="column items-center">
-        <q-linear-progress
-          v-if="loading"
-          dark
-          rounded
-          indeterminate
-          color="secondary"
-          class="q-mb-sm"
-        />
-        <q-btn
-          :disable="loading"
-          icon="person"
-          stretch
-          label="Ingresar"
-          type="submit"
-          color="orange"
-        />
-      </div>
-    </q-form>
+          <q-input
+            filled
+            :type="pwd"
+            v-model.trim="clave"
+            label="Clave de acceso"
+            lazy-rules
+            dense
+            :color="$q.dark.isActive ? 'orange' : 'primary'"
+            :rules="[(val) => (val && val.length > 0) || 'dato obligatorio']"
+          >
+            <template v-slot:prepend>
+              <q-icon name="key" />
+            </template>
+            <template v-slot:append>
+              <q-btn flat dense size="small" @click="changePWD()">
+                <q-icon name="visibility" />
+              </q-btn>
+            </template>
+          </q-input>
+
+          <div class="column items-center">
+            <q-linear-progress
+              v-if="loading"
+              dark
+              rounded
+              indeterminate
+              color="secondary"
+              class="q-mb-sm"
+            />
+            <q-btn
+              :disable="loading"
+              icon="person"
+              stretch
+              label="Ingresar"
+              type="submit"
+              color="orange"
+            />
+          </div>
+        </q-form>
+      </q-card-section>
+    </q-card>
   </div>
 </template>
 

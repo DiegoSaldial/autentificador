@@ -7,7 +7,7 @@
       <q-tooltip> Perfil </q-tooltip>
       <q-menu>
         <div class="row no-wrap q-pa-md">
-          <div class="column" style="min-width: 120px;">
+          <div class="column" style="min-width: 130px;">
             <div class="text-h6 q-mb-md">Mi Perfil</div>
             <p class="q-mt-none q-mb-xs"> {{ datos.usuario }} </p>
             <p class="q-mt-none q-mb-xs"> {{ datos.documento }} </p>
@@ -19,7 +19,7 @@
 
           <q-separator vertical inset class="q-mx-lg" />
 
-          <div class="column items-center">
+          <div class="column items-center" style="min-width: 90px;">
             <q-avatar size="72px">
               <img src="https://cdn.quasar.dev/img/avatar4.jpg">
             </q-avatar>
@@ -60,6 +60,10 @@ export default {
 
       let roles = data.roles.map(x=>x.nombre)
       let us = data.usuario;
+      if(!us.apellido2) us.apellido2 = '';
+      if(!us.celular) us.celular = '';
+      if(!us.documento) us.documento = '';
+      if(!us.correo) us.correo = '';
       datos.value.usuario = `${us.nombres} ${us.apellido1} ${us.apellido2}`;
       datos.value.documento = `${us.documento}`;
       datos.value.celular = `${us.celular}`;

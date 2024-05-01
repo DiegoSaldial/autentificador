@@ -18,6 +18,7 @@ type Usuario {
   fecha_registro: Time! 
   fecha_update: Time! 
   estado: Boolean! 
+  last_login: Time
 } 
 
 type Rol { 
