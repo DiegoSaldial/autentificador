@@ -1,5 +1,6 @@
 
 export const parseFecha = (fecha:string, ful:boolean) => {
+  if(!fecha) return '?';
   const partes = fecha.split('T')
   const fs = partes[0].split('-')
   let date = `${fs[2]}/${fs[1]}/${fs[0]}`

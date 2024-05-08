@@ -184,6 +184,7 @@ export default {
       delete us.estado;
       delete us.fecha_registro;
       delete us.fecha_update;
+      delete us.last_login;
       us.password = '';
       input.value = us;
       roles_sel.value = xroles;
