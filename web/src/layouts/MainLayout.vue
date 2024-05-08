@@ -5,9 +5,9 @@
         <q-btn v-if="store.dataUser.usuario" flat dense round @click="toggleLeftDrawer" aria-label="Menu" icon="menu" />
 
         <q-btn flat no-caps no-wrap class="q-ml-xs" v-if="$q.screen.gt.xs && store.dataUser.usuario" to="/">
-          <q-icon :name="fabYoutube" color="red" size="28px" />
+          <!-- <q-icon :name="fabYoutube" color="red" size="28px" /> -->
           <q-toolbar-title shrink class="text-weight-bold">
-            Sladia
+            Auth 
           </q-toolbar-title>
         </q-btn>
 
@@ -41,28 +41,6 @@
               <q-separator v-if="i+1==t.length" class="q-my-md" />
             </template>
           </template>
-
-          <!-- <q-item v-for="link in links3" :key="link.text" v-ripple clickable :to="link.path" active-class="text-purple">
-            <q-item-section avatar >
-              <q-icon color="purple" :name="link.icon" />
-            </q-item-section>
-            <q-item-section >
-              <q-item-label>{{ link.text }}</q-item-label>
-            </q-item-section>
-          </q-item>
-
-          <q-separator class="q-my-md" />
-
-          <q-item v-for="link in links4" :key="link.text" v-ripple clickable>
-            <q-item-section avatar>
-              <q-icon color="accent" :name="link.icon" />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>{{ link.text }}</q-item-label>
-            </q-item-section>
-          </q-item>
-
-          <q-separator class="q-mt-md q-mb-lg" /> -->
 
         </q-list>
       </q-scroll-area>

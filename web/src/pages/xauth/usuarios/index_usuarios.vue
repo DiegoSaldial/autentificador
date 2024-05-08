@@ -12,7 +12,7 @@
       :loading="loading">
 
       <template v-slot:top-left>
-        <q-toggle v-model="more_datos" @update:model-value="columnas()" color="orange" label="mostrar otros datos" class="q-my-none" />
+        <q-toggle v-model="more_datos" @update:model-value="columnas()" color="orange" label="mostrar mas columnas" class="q-my-none" />
       </template>
 
       <template v-slot:top-right>
@@ -136,7 +136,7 @@ export default {
       }
       let res = await usuariosService.usuarios(query).then(u=>u).catch(e=>e)
       if(res.usuarios) rows.value = res.usuarios;
-      loading.value = false;
+      loading.value = false; 
     }
 
     const listarRoles = async () => {
@@ -167,7 +167,7 @@ export default {
 
     onMounted(()=>{
       columnas();
-      listar();
+      // listar();
       listarRoles();
     })
 

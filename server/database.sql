@@ -97,7 +97,7 @@ CREATE INDEX idx_username ON usuarios (username);
 -- VALORES POR DEFECTO
 INSERT INTO `usuarios` (`nombres`, `apellido1`, `username`, `password`)
 VALUES
-    ('Admin', '', 'admin', SHA2('admin', 256));
+    ('User', 'Admin', 'admin', SHA2('admin', 256));
 
 INSERT INTO `roles` (`nombre`, `descripcion`, `jerarquia`)
 VALUES

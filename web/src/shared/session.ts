@@ -17,10 +17,10 @@ export default {
       const currentTime = Date.now() / 1000;
       const expirationTime = decodedToken.exp || 0;
       const timeRemaining = expirationTime - currentTime;
-      // console.log( '>>>>>>>>>>>>>>>>', timeRemaining);
-      setTimeLabel(store.token, store.refreshToken);
+      // console.log('>>>>>>>>>>>>>>>>', timeRemaining);
+      setTimeLabel(store.token + '', store.refreshToken + '');
       if (timeRemaining < 0) {
-        store.setToken();
+        store.setToken('', '');
         Notify.create({
           message: 'Session expirada, por favor vuelva a ingresar.',
           color: 'red',

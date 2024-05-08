@@ -7,19 +7,19 @@
 
       <q-card-section class="q-pt-none">
         <div class="row">
-          <!-- <div class="col col-sm-6"> <p class="q-mb-xs"> <b>Nombre:</b> {{ input.nombre }} </p> </div> -->
-          <div class="col col-sm-6">
+          <!-- <div class="col col-xs-6"> <p class="q-mb-xs"> <b>Nombre:</b> {{ input.nombre }} </p> </div> -->
+          <div class="col col-xs-6">
             <p class="q-mb-xs"><b>Jerarquia:</b> {{ input.jerarquia }}</p>
           </div>
-          <div class="col col-sm-12">
+          <div class="col col-xs-12">
             <p class="q-mb-xs"><b>Descripcion:</b> {{ input.descripcion }}</p>
           </div>
-          <div class="col col-sm-12">
+          <div class="col col-xs-12">
             <p class="q-mt-lg"><b>Permisos:</b></p>
           </div>
 
           <template v-for="(r, i) in permisos_sel" :key="i">
-            <div class="col col-sm-4">
+            <div class="col-xs-12 col-sm-4">
               <p class="q-mb-xs">{{ r.nombre }}</p>
             </div>
           </template>

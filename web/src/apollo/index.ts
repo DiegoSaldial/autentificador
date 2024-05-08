@@ -23,7 +23,7 @@ export /* async */ function getClientOptions() {
         const newToken = await relogin(token, refreshToken);
         token = newToken;
         store.setNewToken(token);
-        console.log('new token.....', token);
+        // console.log('new token.....', token);
       }
       setTimeLabel(token, refreshToken);
     }
