@@ -40,28 +40,21 @@
               <q-input filled v-model.trim="input.password" label="password" :placeholder="input.id ? 'vacio sin cambios' : ''" lazy-rules dense counter :rules="[(val) => validaciones.val_password(val, input)]" />
             </div>
 
-            <div class="col-xs-12 col-sm-12">
-              <q-list padding bordered>
-                <q-expansion-item popup header-class="text-purple" default-opened expand-separator icon="group_add" label="* Roles" caption="Un rol contiene un grupo de permisos" >
+            <div class="col-xs-12 col-sm-12 q-mt-md">
+              <q-list >
+                <q-expansion-item header-class="text-purple" default-opened expand-separator icon="group_add" label="* Roles" caption="Un rol contiene un grupo de permisos" >
                   <q-table flat color="orange" :loading="loading_roles" title="" hide-pagination :rows-per-page-options="[0]" dense :rows="roles" :columns="columnas_rols" row-key="nombre" selection="multiple" v-model:selected="roles_sel" />
                 </q-expansion-item>
 
-                <q-expansion-item popup header-class="text-orange" expand-separator icon="key" label="Permisos sueltos" caption="Independientes del rol" >
+                <q-expansion-item header-class="text-orange q-mt-lg" expand-separator icon="key" label="Permisos sueltos" caption="Independientes del rol" >
                   <q-table flat color="orange" :loading="loading_perms" title="" hide-pagination :rows-per-page-options="[0]" dense :rows="permisos" :columns="columnas_perm" row-key="metodo" selection="multiple" v-model:selected="permisos_sel" />
                 </q-expansion-item>
 
-                <q-expansion-item popup header-class="text-green" expand-separator icon="menu_open" label="Menus" caption="Opciones en el menu lateral" >
+                <q-expansion-item header-class="text-green q-mt-lg" expand-separator icon="menu_open" label="Menus" caption="Opciones en el menu lateral" >
                   <q-table flat color="orange" :loading="loading_menus" title="" hide-pagination :rows-per-page-options="[0]" dense :rows="menus" :columns="columnas_menu" row-key="label" selection="multiple" v-model:selected="menus_sel" />
                 </q-expansion-item>
               </q-list>
-            </div>
-
-            <!-- <div class="col col-sm-12">
-              <q-select filled v-model="roles_sel" multiple :options="roles" use-chips stack-label label="Roles" option-value="nombre" option-label="nombre" :loading="loading_roles"/>
-            </div>
-            <div class="col col-sm-12 q-pt-md">
-              <q-select filled v-model="permisos_sel" multiple :options="permisos" use-chips stack-label label="Permisos sueltos" option-value="metodo" option-label="metodo" :loading="loading_perms"/>
-            </div> -->
+            </div> 
           </div>
 
           <div class="q-mt-md" :align="'right'">

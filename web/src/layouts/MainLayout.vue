@@ -13,8 +13,7 @@
 
         <q-space />
         <q-toggle v-model="$q.dark.isActive" color="white" />
-        <small v-if="store.dataUser.usuario" v-html="store.tiempoSession"> </small>
-
+        <small v-if="store.dataUser.usuario && show_time" v-html="store.tiempoSession"> </small>
         <BtnPerfil v-if="store.dataUser.usuario"/>
       </q-toolbar>
     </q-header>
@@ -24,14 +23,14 @@
         <q-list padding>
 
           <q-item-label header class="text-weight-bold text-uppercase">
-            Admin
+            Menu
           </q-item-label>
 
           <template v-for="t in store.menus">
             <template v-for="(link,i) in t" :key="link.text" >
               <q-item v-ripple clickable :to="link.path" active-class="text-purple">
                 <q-item-section avatar >
-                  <q-icon color="primary" :name="link.icon" />
+                  <q-icon :color="link.color" :name="link.icon" />
                 </q-item-section>
                 <q-item-section >
                   <q-item-label>{{ link.label }}</q-item-label>
@@ -67,6 +66,7 @@ export default {
   setup () {
     const leftDrawerOpen = ref(false)
     const store = useLoginStore();
+    const show_time = ref(process.env.SHOW_TIME_LABEL)
 
     const toggleLeftDrawer = () => leftDrawerOpen.value = !leftDrawerOpen.value
 
@@ -74,6 +74,7 @@ export default {
       fabYoutube,
       leftDrawerOpen,
       store,
+      show_time,
       toggleLeftDrawer,
 
       links3: [

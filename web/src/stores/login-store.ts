@@ -2,14 +2,19 @@
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 
+const xtokenrefresh_name = process.env.XTOKENREFRESH_NAME || '';
+const xtoken_name = process.env.XTOKEN_NAME || '';
+const xdatauser_name = process.env.XDATAUSER_NAME || '';
+const xmenus_name = process.env.XMENUS_NAME || '';
+
 export const useLoginStore = defineStore('counter', {
   state: () => ({
-    token: ref(localStorage.getItem('xtoken') || null),
-    refreshToken: ref(localStorage.getItem('xrefreshToken') || null),
+    token: ref(localStorage.getItem(xtoken_name) || null),
+    refreshToken: ref(localStorage.getItem(xtokenrefresh_name) || null),
     dataUser: ref(
-      JSON.parse(localStorage.getItem('xdataUser') || '{}') || null
+      JSON.parse(localStorage.getItem(xdatauser_name) || '{}') || null
     ),
-    menus: ref(JSON.parse(localStorage.getItem('xmenus') || '[]') || null),
+    menus: ref(JSON.parse(localStorage.getItem(xmenus_name) || '[]') || null),
     tiempoSession: ref(''),
   }),
   getters: {
@@ -27,20 +32,20 @@ export const useLoginStore = defineStore('counter', {
       if (!xtoken) localStorage.clear();
       else {
         this.setNewToken(xtoken);
-        localStorage.setItem('xrefreshToken', xrefreshToken);
+        localStorage.setItem(xtokenrefresh_name, xrefreshToken);
         this.refreshToken = xrefreshToken;
       }
     },
     setNewToken(xtoken: string) {
-      localStorage.setItem('xtoken', xtoken);
+      localStorage.setItem(xtoken_name, xtoken);
       this.token = xtoken;
     },
     setUser(user: any) {
-      localStorage.setItem('xdataUser', JSON.stringify(user));
+      localStorage.setItem(xdatauser_name, JSON.stringify(user));
       this.dataUser = user;
     },
     setMenus(menus: any) {
-      localStorage.setItem('xmenus', JSON.stringify(menus));
+      localStorage.setItem(xmenus_name, JSON.stringify(menus));
       this.menus = menus;
     },
     setTiempoSession(str: string) {
