@@ -7,14 +7,23 @@ const xtoken_name = process.env.XTOKEN_NAME || '';
 const xdatauser_name = process.env.XDATAUSER_NAME || '';
 const xmenus_name = process.env.XMENUS_NAME || '';
 
+const get_storage_name_plain = (clave: string) => {
+  const r = localStorage.getItem(clave);
+  if (r) return atob(r);
+  return null;
+};
+const get_storage_name = (clave: string, defecto = '') => {
+  const r = localStorage.getItem(clave);
+  if (r) return JSON.parse(atob(r));
+  return defecto;
+};
+
 export const useLoginStore = defineStore('counter', {
   state: () => ({
-    token: ref(localStorage.getItem(xtoken_name) || null),
-    refreshToken: ref(localStorage.getItem(xtokenrefresh_name) || null),
-    dataUser: ref(
-      JSON.parse(localStorage.getItem(xdatauser_name) || '{}') || null
-    ),
-    menus: ref(JSON.parse(localStorage.getItem(xmenus_name) || '[]') || null),
+    token: ref(get_storage_name_plain(xtoken_name)),
+    refreshToken: ref(get_storage_name_plain(xtokenrefresh_name)),
+    dataUser: ref(get_storage_name(xdatauser_name, '{}')),
+    menus: ref(get_storage_name(xmenus_name, '[]')),
     tiempoSession: ref(''),
   }),
   getters: {
@@ -32,20 +41,20 @@ export const useLoginStore = defineStore('counter', {
       if (!xtoken) localStorage.clear();
       else {
         this.setNewToken(xtoken);
-        localStorage.setItem(xtokenrefresh_name, xrefreshToken);
+        localStorage.setItem(xtokenrefresh_name, btoa(xrefreshToken));
         this.refreshToken = xrefreshToken;
       }
     },
     setNewToken(xtoken: string) {
-      localStorage.setItem(xtoken_name, xtoken);
+      localStorage.setItem(xtoken_name, btoa(xtoken));
       this.token = xtoken;
     },
     setUser(user: any) {
-      localStorage.setItem(xdatauser_name, JSON.stringify(user));
+      localStorage.setItem(xdatauser_name, btoa(JSON.stringify(user)));
       this.dataUser = user;
     },
     setMenus(menus: any) {
-      localStorage.setItem(xmenus_name, JSON.stringify(menus));
+      localStorage.setItem(xmenus_name, btoa(JSON.stringify(menus)));
       this.menus = menus;
     },
     setTiempoSession(str: string) {

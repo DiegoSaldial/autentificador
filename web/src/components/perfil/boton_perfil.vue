@@ -1,9 +1,10 @@
 <template>
   <div class="q-pa-none q-ma-none">
-    <q-btn round flat>
+    <q-btn round flat class="q-ml-xs">
       <q-avatar size="26px">
         <img src="https://cdn.quasar.dev/img/boy-avatar.png">
       </q-avatar>
+      <span class="q-ml-xs"> {{ store.dataUser.usuario.username }} </span>
       <q-tooltip> Perfil </q-tooltip>
       <q-menu>
         <div class="row no-wrap q-pa-md">
