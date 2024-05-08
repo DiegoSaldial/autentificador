@@ -51,22 +51,8 @@
         </div>
 
         <div class="q-mt-md" :align="'right'">
-          <q-linear-progress
-            v-if="loading"
-            dark
-            rounded
-            indeterminate
-            color="secondary"
-            class="q-mb-sm"
-          />
-          <q-btn
-            label="cerrar"
-            color="red"
-            icon="close"
-            square
-            flat
-            @click="cerrar()"
-          />
+          <q-linear-progress v-if="loading" dark rounded indeterminate color="secondary" class="q-mb-sm" />
+          <q-btn label="cerrar" color="red" icon="close" square flat @click="cerrar()" />
         </div>
       </q-card-section>
     </q-card>
@@ -98,10 +84,7 @@ export default {
 
     const getUserById = async (id) => {
       loading.value = true;
-      let res = await usuarioService
-        .usuarioById(id)
-        .then((d) => d)
-        .catch((e) => e);
+      const res = await usuarioService.usuarioById(id);
       const xroles = res.usuarioById.roles.map((item) => item);
       const xpermisos = res.usuarioById.permisos_sueltos.map(
         (item) => item.nombre
@@ -110,7 +93,7 @@ export default {
         r.xpermisos = r.permisos.map((item) => item.nombre);
       });
 
-      let us = res.usuarioById.usuario;
+      const us = res.usuarioById.usuario;
       input.value = us;
       roles_sel.value = xroles;
       permisos_sel.value = xpermisos.join(', ');
@@ -134,4 +117,3 @@ export default {
   },
 };
 </script>
-../../../shared/session

@@ -94,7 +94,7 @@ export default {
     const listar = async () => {
       loading.value = true;
       rows.value = [];
-      let res = await rolesService.roles(true).then(u=>u).catch(e=>e)
+      const res = await rolesService.roles(true) 
       if(res.roles) rows.value = res.roles;
       loading.value = false;
     }

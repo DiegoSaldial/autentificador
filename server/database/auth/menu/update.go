@@ -17,20 +17,22 @@ func AsignarMenusUsuario(db *sql.DB, input model.AsignarMenusUsuario) (string, e
 		return "", nil
 	}
 
-	values := []interface{}{}
-	query := `insert into menus_usuario(usuario_id,menu_id) values `
+	if len(input.Menus) > 0 {
+		values := []interface{}{}
+		query := `insert into menus_usuario(usuario_id,menu_id) values `
 
-	for _, m := range input.Menus {
-		query += "(?,?),"
-		values = append(values, input.UserID, m)
-	}
+		for _, m := range input.Menus {
+			query += "(?,?),"
+			values = append(values, input.UserID, m)
+		}
 
-	query = query[:len(query)-1]
+		query = query[:len(query)-1]
 
-	_, err = tx.Exec(query, values...)
-	if err != nil {
-		tx.Rollback()
-		return "", err
+		_, err = tx.Exec(query, values...)
+		if err != nil {
+			tx.Rollback()
+			return "", err
+		}
 	}
 
 	err = tx.Commit()

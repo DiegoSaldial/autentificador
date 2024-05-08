@@ -55,12 +55,12 @@ export default {
     const openEdit = () => refEditarPerfil.value.open();
 
     const cargarDatos = () => {
-      let data = store.dataUser;
+      const data = store.dataUser;
       if(typeof(data) == 'string') data = JSON.parse(data);
       if(!data.roles) return;
 
-      let roles = data.roles.map(x=>x.nombre)
-      let us = data.usuario;
+      const roles = data.roles.map(x=>x.nombre)
+      const us = data.usuario;
       if(!us.apellido2) us.apellido2 = '';
       if(!us.celular) us.celular = '';
       if(!us.documento) us.documento = '';

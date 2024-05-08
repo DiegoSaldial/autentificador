@@ -67,7 +67,7 @@ export default {
 
     const me = async () => {
       loading.value = true;
-      let res = await perfilService.me(); 
+      const res = await perfilService.me(); 
       if(res && res.me){
         input.value.id = res.me.usuario.id;
         input.value.nombres = res.me.usuario.nombres;
@@ -83,7 +83,7 @@ export default {
 
     const onSubmit = async () => {
       loading.value = true;
-      let res = await perfilService.updateUsuarioPerfil(input.value)
+      const res = await perfilService.updateUsuarioPerfil(input.value)
       if(res && res.updateUsuarioPerfil) alert.value = false;
       loading.value = false;
     }

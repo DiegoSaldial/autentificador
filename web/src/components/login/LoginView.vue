@@ -7,30 +7,13 @@
 
       <q-card-section>
         <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
-          <q-input
-            filled
-            v-model.trim="username"
-            label="Nombre de usuario"
-            lazy-rules
-            dense
-            :color="$q.dark.isActive ? 'orange' : 'primary'"
-            :rules="[(val) => (val && val.length > 0) || 'dato obligatorio']"
-          >
+          <q-input filled v-model.trim="username" label="Nombre de usuario" lazy-rules dense :color="$q.dark.isActive ? 'orange' : 'primary'" :rules="[(val) => (val && val.length > 0) || 'dato obligatorio']" >
             <template v-slot:prepend>
               <q-icon name="person" />
             </template>
           </q-input>
 
-          <q-input
-            filled
-            :type="pwd"
-            v-model.trim="clave"
-            label="Clave de acceso"
-            lazy-rules
-            dense
-            :color="$q.dark.isActive ? 'orange' : 'primary'"
-            :rules="[(val) => (val && val.length > 0) || 'dato obligatorio']"
-          >
+          <q-input filled :type="pwd" v-model.trim="clave" label="Clave de acceso" lazy-rules dense :color="$q.dark.isActive ? 'orange' : 'primary'" :rules="[(val) => (val && val.length > 0) || 'dato obligatorio']" >
             <template v-slot:prepend>
               <q-icon name="key" />
             </template>
@@ -43,21 +26,8 @@
 
           <div class="column items-center">
             <q-linear-progress
-              v-if="loading"
-              dark
-              rounded
-              indeterminate
-              color="secondary"
-              class="q-mb-sm"
-            />
-            <q-btn
-              :disable="loading"
-              icon="person"
-              stretch
-              label="Ingresar"
-              type="submit"
-              color="orange"
-            />
+              v-if="loading" dark rounded indeterminate color="secondary" class="q-mb-sm" />
+            <q-btn :disable="loading" icon="person" stretch label="Ingresar" type="submit" color="orange" />
           </div>
         </q-form>
       </q-card-section>
@@ -85,10 +55,7 @@ export default {
 
     async function getMe() {
       loading.value = true;
-      let meres = await meService
-        .me()
-        .then((e) => e)
-        .catch((e) => e);
+      const meres = await meService.me();
       if (meres.me) {
         await cargarMenus(meres);
         useLogin.setUser(meres.me);
@@ -97,7 +64,7 @@ export default {
     }
 
     const cargarMenus = async (meres) => {
-      let menus = await menuService.menus_by_usuario(meres.me.usuario.id);
+      const menus = await menuService.menus_by_usuario(meres.me.usuario.id);
       const menuItemsAgrupados = menus.menus_by_usuario.reduce(
         (grupos, item) => {
           const grupoId = item.grupo;
@@ -131,10 +98,7 @@ export default {
 
       async onSubmit() {
         loading.value = true;
-        let res = await service
-          .login(username.value, clave.value)
-          .then((x) => x)
-          .catch((e) => e);
+        const res = await service.login(username.value, clave.value);
         loading.value = false;
 
         if (res.login) {
@@ -151,5 +115,4 @@ export default {
     };
   },
 };
-</script>
-src/pages/xauth/usuarios/menuService
+</script> 

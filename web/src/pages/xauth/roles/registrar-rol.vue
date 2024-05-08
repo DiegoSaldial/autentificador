@@ -81,10 +81,7 @@ export default {
 
     const cargarPermisos = async () => {
       loading_perms.value = true;
-      let res = await permisoService
-        .permisos()
-        .then((d) => d)
-        .catch((e) => e);
+      const res = await permisoService.permisos();
       permisos.value = res.permisos;
       loading_perms.value = false;
     };
@@ -92,12 +89,9 @@ export default {
     const getRolById = async (id) => {
       is_edit.value = true;
       loading.value = true;
-      let res = await rolesService
-        .rolById(id)
-        .then((d) => d)
-        .catch((e) => e);
+      const res = await rolesService.rolById(id);
       const xpermisos = res.rolById.permisos.map((item) => item);
-      let rol = res.rolById;
+      const rol = res.rolById;
       delete rol.estado;
       delete rol.fecha_registro;
       delete rol.fecha_update;
@@ -124,10 +118,7 @@ export default {
 
     const registrar = async () => {
       loading.value = true;
-      let res = await rolesService
-        .createRol(input.value)
-        .then((d) => d)
-        .catch((e) => e);
+      const res = await rolesService.createRol(input.value);
       loading.value = false;
       if (res.createRol) {
         cerrar();
@@ -137,10 +128,7 @@ export default {
 
     const actualizar = async () => {
       loading.value = true;
-      let res = await rolesService
-        .updateRol(input.value)
-        .then((d) => d)
-        .catch((e) => e);
+      const res = await rolesService.updateRol(input.value);
       loading.value = false;
       if (res.updateRol) {
         cerrar();
@@ -172,5 +160,4 @@ export default {
     };
   },
 };
-</script>
-src/pages/xauth/permisos/permisoService
+</script> 

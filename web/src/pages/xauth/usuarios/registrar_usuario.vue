@@ -135,42 +135,33 @@ export default {
 
     const cargarRoles = async () => {
       loading_roles.value = true;
-      let res = await rolesService
-        .roles(false)
-        .then((d) => d)
-        .catch((e) => e);
+      const res = await rolesService.roles(false);
       roles.value = res.roles;
       loading_roles.value = false;
     };
 
     const cargarPermisos = async () => {
       loading_perms.value = true;
-      let res = await permisoService
-        .permisos()
-        .then((d) => d)
-        .catch((e) => e);
+      const res = await permisoService.permisos();
       permisos.value = res.permisos;
       loading_perms.value = false;
     };
 
     const cargarMenus = async () => {
       loading_menus.value = true;
-      let res = await menuService.menus();
+      const res = await menuService.menus();
       menus.value = res.menus;
       loading_menus.value = false;
     };
 
     const getUserById = async (id) => {
       loading.value = true;
-      let rows = await menuService.menus_by_usuario(id);
-      let res = await usuarioService
-        .usuarioById(id)
-        .then((d) => d)
-        .catch((e) => e);
+      const rows = await menuService.menus_by_usuario(id);
+      const res = await usuarioService.usuarioById(id);
       const xroles = res.usuarioById.roles.map((item) => item);
       const xpermisos = res.usuarioById.permisos_sueltos.map((item) => item);
       const xmenus = rows.menus_by_usuario.map((item) => item);
-      let us = res.usuarioById.usuario;
+      const us = res.usuarioById.usuario;
       Object.entries(us).forEach(([key, value]) => {
         if (value === null) us[key] = '';
       });
@@ -205,10 +196,7 @@ export default {
 
     const registrar = async () => {
       loading.value = true;
-      let res = await usuarioService
-        .createUsuario(input.value)
-        .then((d) => d)
-        .catch((e) => e);
+      const res = await usuarioService.createUsuario(input.value);
       loading.value = false;
       if (res.createUsuario) {
         const xmenus = menus_sel.value.map((item) => item.id);
@@ -226,10 +214,7 @@ export default {
 
     const actualizar = async () => {
       loading.value = true;
-      let res = await usuarioService
-        .updateUsuario(input.value)
-        .then((d) => d)
-        .catch((e) => e);
+      const res = await usuarioService.updateUsuario(input.value);
       loading.value = false;
       if (res.updateUsuario) {
         const xmenus = menus_sel.value.map((item) => item.id);
@@ -274,5 +259,3 @@ export default {
   },
 };
 </script>
-../../../shared/session
-src/pages/xauth/permisos/permisoService

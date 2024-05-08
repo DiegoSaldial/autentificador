@@ -134,17 +134,17 @@ export default {
       const query = {
         rol: route.query.rol?route.query.rol:null,
       }
-      let res = await usuariosService.usuarios(query).then(u=>u).catch(e=>e)
+      const res = await usuariosService.usuarios(query)
       if(res.usuarios) rows.value = res.usuarios;
       loading.value = false; 
     }
 
     const listarRoles = async () => {
       loading_roles.value = true;
-      let res = await rolesService.roles(false)
+      const res = await rolesService.roles(false)
       roles.value = res.roles;
       loading_roles.value = false;
-      let r = route.query.rol?route.query.rol:null;
+      const r = route.query.rol?route.query.rol:null;
       rol_select.value = roles.value.find(x=>x.nombre==r);
     }
 
@@ -192,5 +192,4 @@ export default {
     }
   }
 }
-</script>
-../../roles/rolesService
+</script> 
