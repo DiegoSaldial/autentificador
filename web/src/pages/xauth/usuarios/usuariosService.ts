@@ -77,6 +77,7 @@ export default class UsuariosService {
             fecha_update
             estado
           }
+          menus{id label path icon grupo}
           roles{nombre permisos{metodo, nombre}}
           permisos_sueltos{metodo, nombre}
         }

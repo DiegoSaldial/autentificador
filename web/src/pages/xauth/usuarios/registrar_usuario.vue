@@ -156,11 +156,10 @@ export default {
 
     const getUserById = async (id) => {
       loading.value = true;
-      const rows = await menuService.menus_by_usuario(id);
       const res = await usuarioService.usuarioById(id);
       const xroles = res.usuarioById.roles.map((item) => item);
       const xpermisos = res.usuarioById.permisos_sueltos.map((item) => item);
-      const xmenus = rows.menus_by_usuario.map((item) => item);
+      const xmenus = res.usuarioById.menus.map((item) => item);
       const us = res.usuarioById.usuario;
       Object.entries(us).forEach(([key, value]) => {
         if (value === null) us[key] = '';

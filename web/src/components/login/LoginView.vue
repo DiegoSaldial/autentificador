@@ -39,7 +39,6 @@
 import { ref } from 'vue';
 import LoginService from './loginService';
 import { useLoginStore } from 'stores/login-store';
-import MenusService from 'pages/xauth/usuarios/menuService';
 import MeService from './meService';
 
 export default {
@@ -49,7 +48,6 @@ export default {
     const loading = ref(false);
     const service = new LoginService();
     const meService = new MeService();
-    const menuService = new MenusService();
     const useLogin = useLoginStore();
     const pwd = ref('password');
 
@@ -57,31 +55,27 @@ export default {
       loading.value = true;
       const meres = await meService.me();
       if (meres.me) {
-        await cargarMenus(meres);
+        cargarMenus(meres.me.menus);
         useLogin.setUser(meres.me);
       }
       loading.value = false;
     }
 
-    const cargarMenus = async (meres) => {
-      const menus = await menuService.menus_by_usuario(meres.me.usuario.id);
-      const menuItemsAgrupados = menus.menus_by_usuario.reduce(
-        (grupos, item) => {
-          const grupoId = item.grupo;
-          const grupoExistente = grupos.find((grupo) =>
-            grupo.some((obj) => obj.grupo === grupoId)
-          );
+    const cargarMenus = async (menus) => {
+      const menuItemsAgrupados = menus.reduce((grupos, item) => {
+        const grupoId = item.grupo;
+        const grupoExistente = grupos.find((grupo) =>
+          grupo.some((obj) => obj.grupo === grupoId)
+        );
 
-          if (grupoExistente) {
-            grupoExistente.push(item);
-          } else {
-            grupos.push([item]);
-          }
+        if (grupoExistente) {
+          grupoExistente.push(item);
+        } else {
+          grupos.push([item]);
+        }
 
-          return grupos;
-        },
-        []
-      );
+        return grupos;
+      }, []);
 
       useLogin.setMenus(menuItemsAgrupados);
     };
@@ -115,4 +109,4 @@ export default {
     };
   },
 };
-</script> 
+</script>

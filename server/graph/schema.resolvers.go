@@ -143,15 +143,6 @@ func (r *queryResolver) Menus(ctx context.Context) ([]*model.Menus, error) {
 	return menu.Listar(r.DB)
 }
 
-// MenusByUsuario is the resolver for the menus_by_usuario field.
-func (r *queryResolver) MenusByUsuario(ctx context.Context, id string) ([]*model.Menus, error) {
-	_, err := xauth.CtxValue(ctx, r.DB, "menus_by_usuario")
-	if err != nil {
-		return nil, err
-	}
-	return menu.ListarAsignados(r.DB, id)
-}
-
 // Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 

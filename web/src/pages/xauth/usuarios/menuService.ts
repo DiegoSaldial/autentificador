@@ -19,23 +19,6 @@ export default class MenusService {
       .catch((e: any) => e);
   }
 
-  async menus_by_usuario(id: string) {
-    const sql = gql`
-      query menus_by_usuario($id: ID!) {
-        menus_by_usuario(id: $id) {
-          id
-          label
-          path
-          icon
-          grupo
-        }
-      }
-    `;
-    return await query(sql, { id: id })
-      .then((d: any) => d)
-      .catch((e: any) => e);
-  }
-
   async asignarMenusUsuario(input: any) {
     const sql = gql`
       mutation asignarMenusUsuario($input: AsignarMenusUsuario!) {

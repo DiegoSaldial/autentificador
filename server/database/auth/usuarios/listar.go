@@ -1,6 +1,7 @@
 package usuarios
 
 import (
+	"auth/database/auth/menu"
 	"auth/database/auth/permisos"
 	"auth/database/auth/roles"
 	"auth/graph/model"
@@ -103,6 +104,12 @@ func GetMe(db *sql.DB, input model.InputMe, userid string) (*model.ResponseMe, e
 		}
 	}
 
+	mens, err := menu.ListarAsignados(db, us.ID)
+	if err != nil {
+		return nil, err
+	}
+	user.Menus = mens
+
 	return &user, nil
 }
 
@@ -135,27 +142,8 @@ func GetUsuarios(db *sql.DB, query model.QueryUsuarios) ([]*model.Usuario, error
 }
 
 func GetById2(db *sql.DB, input model.GetUser) (*model.ResponseMe, error) {
-	us, err := GetById(db, input.ID)
-	if err != nil {
-		return nil, err
-	}
-
-	user := model.ResponseMe{}
-	user.Usuario = us
-
-	if input.ShowRoles {
-		user.Roles, err = roles.GetRolesByUsuario(db, us.ID, input.ShowPermisos)
-		if err != nil {
-			return nil, errors.Join(err, errors.New("error al cargar roles al usuario"))
-		}
-	}
-
-	if input.ShowPermisos {
-		user.PermisosSueltos, err = permisos.GetPermisosSueltosByUser(db, us.ID)
-		if err != nil {
-			return nil, errors.Join(err, errors.New("error al cargar permisos sueltos del usuario"))
-		}
-	}
-
-	return &user, nil
+	q := model.InputMe{}
+	q.ShowPermisos = input.ShowPermisos
+	q.ShowRoles = input.ShowRoles
+	return GetMe(db, q, input.ID)
 }

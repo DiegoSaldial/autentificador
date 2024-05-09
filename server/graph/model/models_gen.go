@@ -82,6 +82,7 @@ type ResponseLogin struct {
 
 type ResponseMe struct {
 	Usuario         *Usuario             `json:"usuario"`
+	Menus           []*Menus             `json:"menus"`
 	Roles           []*ResponseRolMe     `json:"roles"`
 	PermisosSueltos []*ResponsePermisoMe `json:"permisos_sueltos"`
 }

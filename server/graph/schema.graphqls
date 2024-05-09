@@ -69,6 +69,7 @@ type ResponseRolMe {
 
 type ResponseMe {
   usuario: Usuario!
+  menus: [Menus!]!
   roles: [ResponseRolMe]!
   permisos_sueltos: [ResponsePermisoMe]!
 } 
@@ -173,7 +174,7 @@ type Query {
   usuarioById(input:GetUser!): ResponseMe!
   rolById(rol:String!): ResponseRolCreate!
   menus: [Menus!]!
-  menus_by_usuario(id:ID!): [Menus!]!
+  # menus_by_usuario(id:ID!): [Menus!]!
 }
 
 # =================================
