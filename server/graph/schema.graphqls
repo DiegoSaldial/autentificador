@@ -164,7 +164,7 @@ input AsignarMenusUsuario {
 
 # go run github.com/99designs/gqlgen generate
 # CGO_ENABLED=0 go build -ldflags="-s -w" -o auth server.go 
-# scp auth root@8.12.22.222:/root/apps/auth/
+# scp auth root@144.202.34.58:/root/apps/auth/
 # =================================
 type Query {
   me(input:InputMe!): ResponseMe!
@@ -174,7 +174,6 @@ type Query {
   usuarioById(input:GetUser!): ResponseMe!
   rolById(rol:String!): ResponseRolCreate!
   menus: [Menus!]!
-  # menus_by_usuario(id:ID!): [Menus!]!
 }
 
 # =================================
