@@ -43,8 +43,8 @@ import MeService from './meService';
 
 export default {
   setup() {
-    const username = ref('admin');
-    const clave = ref('admin');
+    const username = ref('');
+    const clave = ref('');
     const loading = ref(false);
     const service = new LoginService();
     const meService = new MeService();

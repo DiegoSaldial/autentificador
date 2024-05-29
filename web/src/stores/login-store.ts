@@ -49,6 +49,10 @@ export const useLoginStore = defineStore('counter', {
       localStorage.setItem(xtoken_name, btoa(xtoken));
       this.token = xtoken;
     },
+    setNewTokenRefresh(xrefreshToken: string) {
+      localStorage.setItem(xtokenrefresh_name, btoa(xrefreshToken));
+      this.refreshToken = xrefreshToken;
+    },
     setUser(user: any) {
       localStorage.setItem(xdatauser_name, btoa(JSON.stringify(user)));
       this.dataUser = user;
