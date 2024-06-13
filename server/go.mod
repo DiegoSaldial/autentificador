@@ -3,13 +3,13 @@ module auth
 go 1.21.1
 
 require (
-	github.com/99designs/gqlgen v0.17.48
+	github.com/99designs/gqlgen v0.17.49
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/go-chi/chi v1.5.5
 	github.com/go-sql-driver/mysql v1.8.1
 	github.com/joho/godotenv v1.5.1
 	github.com/rs/cors v1.11.0
-	github.com/vektah/gqlparser/v2 v2.5.13
+	github.com/vektah/gqlparser/v2 v2.5.16
 )
 
 require (
