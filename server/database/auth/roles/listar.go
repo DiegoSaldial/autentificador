@@ -1,6 +1,7 @@
 package roles
 
 import (
+	"auth/database/auth/menu"
 	"auth/database/auth/permisos"
 	"auth/graph/model"
 	"database/sql"
@@ -101,6 +102,10 @@ func GetRolById2(db *sql.DB, rol string, show_permisos bool) (*model.ResponseRol
 	r.Jerarquia = ro.Jerarquia
 	r.FechaRegistro = ro.FechaRegistro
 	r.Permisos, err = permisos.GetPermisosByRol(db, r.Nombre)
+	if err != nil {
+		return nil, err
+	}
+	r.Menus, err = menu.GetMenusbyRol(db, r.Nombre)
 	if err != nil {
 		return nil, err
 	}

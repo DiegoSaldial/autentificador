@@ -38,6 +38,25 @@ func Crear(db *sql.DB, input model.NewRol) (*model.ResponseRolCreate, error) {
 		return nil, err
 	}
 
+	// ================================================
+	sql = "insert into rol_menus(rol, menu_id) values %s"
+	places = make([]string, len(input.Menus))
+	args = make([]interface{}, len(input.Menus)*2)
+
+	for i, m := range input.Menus {
+		places[i] = "(?,?)"
+		args[i*2] = input.Nombre
+		args[i*2+1] = m
+	}
+
+	sql = fmt.Sprintf(sql, strings.Join(places, ", "))
+	_, err = tx.Exec(sql, args...)
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+	// =================================================
+
 	err = tx.Commit()
 	if err != nil {
 		tx.Rollback()

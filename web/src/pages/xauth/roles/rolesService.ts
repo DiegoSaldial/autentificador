@@ -51,6 +51,7 @@ export default class RolesService {
           jerarquia
           fecha_registro
           permisos{metodo nombre descripcion}
+          menus{id label icon grupo}
         }
       }
       `;

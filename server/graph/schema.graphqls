@@ -55,7 +55,7 @@ type ResponsePermisoMe {
   descripcion: String
   fecha_registro: Time! 
   fecha_asignado: Time!
-}
+} 
 
 type ResponseRolMe { 
   nombre: String!
@@ -80,6 +80,7 @@ type ResponseRolCreate {
   jerarquia: Int! 
   fecha_registro: Time! 
   permisos: [ResponsePermisoMe]!
+  menus: [Menus!]!
 } 
 # =================================
 
@@ -147,6 +148,7 @@ input NewRol {
   descripcion: String
   jerarquia: Int = 1
   permisos: [String!]!
+  menus: [Int!]!
 }
 
 input GetUser { 

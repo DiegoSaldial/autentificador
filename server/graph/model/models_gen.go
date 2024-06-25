@@ -44,6 +44,7 @@ type NewRol struct {
 	Descripcion *string  `json:"descripcion,omitempty"`
 	Jerarquia   *int     `json:"jerarquia,omitempty"`
 	Permisos    []string `json:"permisos"`
+	Menus       []int    `json:"menus"`
 }
 
 type NewUsuario struct {
@@ -101,6 +102,7 @@ type ResponseRolCreate struct {
 	Jerarquia     int                  `json:"jerarquia"`
 	FechaRegistro time.Time            `json:"fecha_registro"`
 	Permisos      []*ResponsePermisoMe `json:"permisos"`
+	Menus         []*Menus             `json:"menus"`
 }
 
 type ResponseRolMe struct {

@@ -79,6 +79,15 @@ create table `menus_usuario`(
     foreign key(`menu_id`) references `menus`(`id`)
 );
 
+create table `rol_menus`(
+    `id` tinyint unsigned auto_increment not null primary key,
+    `rol` varchar(50) not null,
+    `menu_id` tinyint unsigned not null,
+    `fecha_registro` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00'),
+    foreign key(`rol`) references `roles`(`nombre`),
+    foreign key(`menu_id`) references `menus`(`id`)
+);
+
 
 
 
