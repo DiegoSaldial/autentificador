@@ -40,6 +40,7 @@ import { ref } from 'vue';
 import LoginService from './loginService';
 import { useLoginStore } from 'stores/login-store';
 import MeService from './meService';
+import { cargarMenus } from './utils'
 
 export default {
   setup() {
@@ -55,30 +56,12 @@ export default {
       loading.value = true;
       const meres = await meService.me();
       if (meres.me) {
-        cargarMenus(meres.me.menus);
+        const menuItemsAgrupados = await cargarMenus(meres.me.menus);
+        useLogin.setMenus(menuItemsAgrupados);
         useLogin.setUser(meres.me);
       }
       loading.value = false;
-    }
-
-    const cargarMenus = async (menus) => {
-      const menuItemsAgrupados = menus.reduce((grupos, item) => {
-        const grupoId = item.grupo;
-        const grupoExistente = grupos.find((grupo) =>
-          grupo.some((obj) => obj.grupo === grupoId)
-        );
-
-        if (grupoExistente) {
-          grupoExistente.push(item);
-        } else {
-          grupos.push([item]);
-        }
-
-        return grupos;
-      }, []);
-
-      useLogin.setMenus(menuItemsAgrupados);
-    };
+    } 
 
     const changePWD = () =>
       pwd.value == 'text' ? (pwd.value = 'password') : (pwd.value = 'text');

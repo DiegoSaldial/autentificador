@@ -42,6 +42,8 @@
 import { ref } from 'vue';
 import { useLoginStore } from 'stores/login-store';
 import LoginService from 'src/components/login/loginService';
+import MeService from 'src/components/login/meService';
+import { cargarMenus } from 'src/components/login/utils';
 
 export default {
   name: 're_login',
@@ -53,6 +55,7 @@ export default {
     const pwd = ref('password');
     const service = new LoginService();
     const useLogin = useLoginStore();
+    const meService = new MeService();
     let resolvePromise;
 
     const changePWD = () =>
@@ -71,9 +74,14 @@ export default {
       const res = await service.login(username.value, clave.value);
       if (res.login) {
         const l = res.login;
-        // console.log('res', l.token);
         useLogin.setNewToken(l.token);
         useLogin.setNewTokenRefresh(l.refreshToken);
+        const meres = await meService.me();
+        if (meres.me) {
+          const menuItemsAgrupados = await cargarMenus(meres.me.menus);
+          useLogin.setMenus(menuItemsAgrupados);
+        }
+
         resolvePromise(true);
       } else {
         resolvePromise(false);
