@@ -34,6 +34,7 @@ func parseRow(row *sql.Row, t *model.Rol) error {
 	)
 }
 
+/*
 func parseRows(rows *sql.Rows, t *model.Rol) error {
 	return rows.Scan(
 		&t.Nombre,
@@ -42,3 +43,4 @@ func parseRows(rows *sql.Rows, t *model.Rol) error {
 		&t.FechaRegistro,
 	)
 }
+*/
