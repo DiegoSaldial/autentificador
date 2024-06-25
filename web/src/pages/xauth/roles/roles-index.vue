@@ -35,6 +35,12 @@
         </q-td>
       </template>
 
+      <template v-slot:body-cell-menus="props">
+        <q-td :props="props">
+          {{ props.row.menus.length }}
+        </q-td>
+      </template>
+
       <template v-slot:body-cell-opt="props">
         <q-td :props="props">
           <q-btn color="green-10" square flat icon="more_vert" size="small">
@@ -78,6 +84,7 @@ const columns = [
   { name: 'jerarquia', label: 'jerarquia', field: 'jerarquia' },
   { name: 'fecha_registro', label: 'registro', field: 'fecha_registro' },
   { name: 'permisos', label: 'permisos', field: 'permisos' },
+  { name: 'menus', label: 'menus', field: 'menus' },
   { name: 'opt', label: '', field: 'opt' },
 ]
 

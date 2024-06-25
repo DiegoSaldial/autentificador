@@ -73,6 +73,10 @@ func GetRoles(db *sql.DB, show_permisos bool) ([]*model.ResponseRolCreate, error
 				return nil, er
 			}
 		}
+		r.Menus, er = menu.GetMenusbyRol(db, r.Nombre)
+		if er != nil {
+			return nil, er
+		}
 
 		roles = append(roles, &r)
 	}

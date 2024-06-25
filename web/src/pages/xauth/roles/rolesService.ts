@@ -13,6 +13,7 @@ export default class RolesService {
           jerarquia
           fecha_registro
           permisos{metodo nombre}
+          menus{id}
         }
       }
       `;

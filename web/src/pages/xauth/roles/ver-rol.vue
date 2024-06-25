@@ -15,12 +15,24 @@
             <p class="q-mb-xs"><b>Descripcion:</b> {{ input.descripcion }}</p>
           </div>
           <div class="col col-xs-12">
-            <p class="q-mt-lg"><b>Permisos:</b></p>
+            <p class="q-mt-lg q-mb-xs"><b>Permisos:</b></p>
           </div>
 
           <template v-for="(r, i) in permisos_sel" :key="i">
             <div class="col-xs-12 col-sm-4">
               <p class="q-mb-xs">{{ r.nombre }}</p>
+            </div>
+          </template>
+
+          <div class="col col-xs-12">
+            <p class="q-mt-lg q-mb-xs"><b>Menus:</b></p>
+          </div>
+          <template v-for="(r, i) in input.menus" :key="i">
+            <div class="col-xs-12 col-sm-4">
+              <p class="q-mb-xs"> 
+                <q-icon :color="r.color" :name="r.icon" /> 
+                {{ r.label }}
+              </p>
             </div>
           </template>
         </div>
