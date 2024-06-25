@@ -81,7 +81,7 @@ func GetByUserPass(db *sql.DB, user, pass string) (*model.Usuario, error) {
 	return &us, nil
 }
 
-func GetMe(db *sql.DB, input model.InputMe, userid string) (*model.ResponseMe, error) {
+func GetMe(db *sql.DB, input model.InputMe, userid string, only_user bool) (*model.ResponseMe, error) {
 	us, err := GetById(db, userid)
 	if err != nil {
 		return nil, err
@@ -104,7 +104,7 @@ func GetMe(db *sql.DB, input model.InputMe, userid string) (*model.ResponseMe, e
 		}
 	}
 
-	mens, err := menu.ListarAsignados(db, us.ID)
+	mens, err := menu.ListarAsignados(db, us.ID, only_user)
 	if err != nil {
 		return nil, err
 	}
@@ -145,5 +145,6 @@ func GetById2(db *sql.DB, input model.GetUser) (*model.ResponseMe, error) {
 	q := model.InputMe{}
 	q.ShowPermisos = input.ShowPermisos
 	q.ShowRoles = input.ShowRoles
-	return GetMe(db, q, input.ID)
+	menus_only_user := true
+	return GetMe(db, q, input.ID, menus_only_user)
 }

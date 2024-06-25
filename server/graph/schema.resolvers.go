@@ -86,7 +86,8 @@ func (r *queryResolver) Me(ctx context.Context, input model.InputMe) (*model.Res
 		return nil, err
 	}
 	userid := tok.Usuario.ID
-	return usuarios.GetMe(r.DB, input, userid)
+	menus_only_user := false
+	return usuarios.GetMe(r.DB, input, userid, menus_only_user)
 }
 
 // Roles is the resolver for the roles field.
