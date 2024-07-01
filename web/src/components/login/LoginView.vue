@@ -6,7 +6,7 @@
       </q-card-section>
 
       <q-card-section>
-        <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
+        <q-form @submit="onSubmit()" @reset="onReset" class="q-gutter-md">
           <q-input filled v-model.trim="username" label="Nombre de usuario" lazy-rules dense :color="$q.dark.isActive ? 'orange' : 'primary'" :rules="[(val) => (val && val.length > 0) || 'dato obligatorio']" >
             <template v-slot:prepend>
               <q-icon name="person" />
@@ -30,6 +30,15 @@
             <q-btn :disable="loading" icon="person" stretch label="Ingresar" type="submit" color="orange" />
           </div>
         </q-form>
+
+        <div class="row text-right" >
+          <div class="col-12">
+            <q-btn flat class="q-mt-md q-pr-xs" size="sm" color="grey" :loading="loading" @click="googleLogin()">
+              <q-icon name="hive" size="xs" left></q-icon>
+              Acceder con Google
+            </q-btn>
+          </div>
+        </div>
       </q-card-section>
     </q-card>
   </div>
@@ -40,7 +49,8 @@ import { ref } from 'vue';
 import LoginService from './loginService';
 import { useLoginStore } from 'stores/login-store';
 import MeService from './meService';
-import { cargarMenus } from './utils'
+import { cargarMenus } from './utils';
+import { loginGoogle } from './xfirebase';
 
 export default {
   setup() {
@@ -52,6 +62,24 @@ export default {
     const useLogin = useLoginStore();
     const pwd = ref('password');
 
+    const onSubmit = async (u=null,p=null) => {
+      console.log('>>>',u,p);
+      loading.value = true;
+      let user = username.value;
+      let pass = clave.value;
+      if(u) user = u;
+      if(p) pass = p;
+
+      const res = await service.login(user, pass);
+      loading.value = false;
+
+      if (res.login) {
+        const l = res.login;
+        useLogin.setToken(l.token, l.refreshToken);
+        getMe();
+      }
+    };
+
     async function getMe() {
       loading.value = true;
       const meres = await meService.me();
@@ -61,10 +89,22 @@ export default {
         useLogin.setUser(meres.me);
       }
       loading.value = false;
-    } 
+    }
 
     const changePWD = () =>
       pwd.value == 'text' ? (pwd.value = 'password') : (pwd.value = 'text');
+
+    const googleLogin = async () => {
+      loading.value = true;
+      const d = await loginGoogle();
+      if (d) {
+        const res = await service.createOauth(d);
+        if(res && res.createOauth){
+          onSubmit(d.username,d.password)
+        }
+      }
+      loading.value = false;
+    };
 
     return {
       username,
@@ -72,18 +112,8 @@ export default {
       loading,
       pwd,
       changePWD,
-
-      async onSubmit() {
-        loading.value = true;
-        const res = await service.login(username.value, clave.value);
-        loading.value = false;
-
-        if (res.login) {
-          const l = res.login;
-          useLogin.setToken(l.token, l.refreshToken);
-          getMe();
-        }
-      },
+      googleLogin,
+      onSubmit,
 
       onReset() {
         username.value = null;

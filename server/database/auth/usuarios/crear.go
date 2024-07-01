@@ -4,11 +4,12 @@ import (
 	"auth/graph/model"
 	"database/sql"
 	"fmt"
+	"os"
 	"strconv"
 	"strings"
 )
 
-func Crear(db *sql.DB, input model.NewUsuario) (*model.Usuario, error) {
+func Crear(db *sql.DB, input model.NewUsuario, oauth_id *string) (*model.Usuario, error) {
 	if err := permisos_obligatorios(input.Roles, input.PermisosSueltos); err != nil {
 		return nil, err
 	}
@@ -18,8 +19,8 @@ func Crear(db *sql.DB, input model.NewUsuario) (*model.Usuario, error) {
 	}
 
 	sql := `
-	INSERT INTO usuarios(nombres, apellido1, apellido2, documento, celular, correo, sexo, direccion, username, password)
-	VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, SHA2(?, 256));
+	INSERT INTO usuarios(nombres, apellido1, apellido2, documento, celular, correo, sexo, direccion, username, password,oauth_id)
+	VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, SHA2(?, 256),?);
 	`
 	res, err := tx.Exec(sql,
 		input.Nombres,
@@ -32,6 +33,7 @@ func Crear(db *sql.DB, input model.NewUsuario) (*model.Usuario, error) {
 		input.Direccion,
 		input.Username,
 		input.Password,
+		oauth_id,
 	)
 
 	if err != nil {
@@ -67,6 +69,31 @@ func Crear(db *sql.DB, input model.NewUsuario) (*model.Usuario, error) {
 	}
 
 	return GetById(db, strconv.FormatInt(id, 10))
+}
+
+func CrearOauth(db *sql.DB, input model.NewUsuarioOauth) (*model.Usuario, error) {
+	var id, oauth *string
+	xsql := "select id, oauth_id from usuarios where oauth_id=?"
+	err := db.QueryRow(xsql, input.Username).Scan(&id, &oauth)
+	if err != nil && err != sql.ErrNoRows {
+		return nil, err
+	}
+
+	if id != nil {
+		return GetById(db, *id)
+	}
+
+	rol := os.Getenv("DEFAULT_ROL_OAUTH")
+	data := model.NewUsuario{}
+	data.Nombres = input.Nombres
+	data.Apellido1 = ""
+	data.Celular = input.Celular
+	data.Correo = input.Correo
+	data.Username = input.Username
+	data.Password = input.Password
+	data.Roles = []string{rol}
+
+	return Crear(db, data, &data.Username)
 }
 
 func asignarRoles(tx *sql.Tx, roles []string, userid int64) error {

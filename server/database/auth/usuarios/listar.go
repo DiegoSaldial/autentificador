@@ -25,6 +25,7 @@ func GetById(db *sql.DB, id string) (*model.Usuario, error) {
 		u.estado,
 		u.username,
 		u.last_login,
+		u.oauth_id,
 		u.fecha_registro,
 		u.fecha_update
 		from usuarios u 
@@ -60,6 +61,7 @@ func GetByUserPass(db *sql.DB, user, pass string) (*model.Usuario, error) {
 		u.estado,
 		u.username,
 		u.last_login,
+		u.oauth_id,
 		u.fecha_registro,
 		u.fecha_update
 		from usuarios u 
@@ -120,7 +122,7 @@ func GetUsuarios(db *sql.DB, query model.QueryUsuarios) ([]*model.Usuario, error
 		filter_by_rol = fmt.Sprintf(filter_by_rol, *query.Rol)
 	}
 
-	sql := `select id, nombres,apellido1,apellido2,documento,celular,correo,sexo,direccion,estado,username,last_login,fecha_registro,fecha_update from usuarios %s`
+	sql := `select id, nombres,apellido1,apellido2,documento,celular,correo,sexo,direccion,estado,username,last_login,oauth_id,fecha_registro,fecha_update from usuarios %s`
 	sql = fmt.Sprintf(sql, filter_by_rol)
 	rows, err := db.Query(sql)
 	if err != nil {

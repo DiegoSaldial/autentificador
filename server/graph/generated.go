@@ -59,6 +59,7 @@ type ComplexityRoot struct {
 
 	Mutation struct {
 		AsignarMenusUsuario func(childComplexity int, input model.AsignarMenusUsuario) int
+		CreateOauth         func(childComplexity int, input model.NewUsuarioOauth) int
 		CreateRol           func(childComplexity int, input model.NewRol) int
 		CreateUsuario       func(childComplexity int, input model.NewUsuario) int
 		Login               func(childComplexity int, input model.NewLogin) int
@@ -144,6 +145,7 @@ type ComplexityRoot struct {
 		ID            func(childComplexity int) int
 		LastLogin     func(childComplexity int) int
 		Nombres       func(childComplexity int) int
+		OauthID       func(childComplexity int) int
 		Sexo          func(childComplexity int) int
 		Username      func(childComplexity int) int
 	}
@@ -153,6 +155,7 @@ type MutationResolver interface {
 	Login(ctx context.Context, input model.NewLogin) (*model.ResponseLogin, error)
 	Refreshtoken(ctx context.Context, token string, refreshToken string) (string, error)
 	CreateUsuario(ctx context.Context, input model.NewUsuario) (*model.Usuario, error)
+	CreateOauth(ctx context.Context, input model.NewUsuarioOauth) (*model.Usuario, error)
 	UpdateUsuario(ctx context.Context, input model.UpdateUsuario) (*model.Usuario, error)
 	UpdateUsuarioPerfil(ctx context.Context, input model.UpdatePerfil) (*model.Usuario, error)
 	CreateRol(ctx context.Context, input model.NewRol) (*model.ResponseRolCreate, error)
@@ -241,6 +244,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.AsignarMenusUsuario(childComplexity, args["input"].(model.AsignarMenusUsuario)), true
+
+	case "Mutation.createOauth":
+		if e.complexity.Mutation.CreateOauth == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createOauth_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateOauth(childComplexity, args["input"].(model.NewUsuarioOauth)), true
 
 	case "Mutation.createRol":
 		if e.complexity.Mutation.CreateRol == nil {
@@ -708,6 +723,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Usuario.Nombres(childComplexity), true
 
+	case "Usuario.oauth_id":
+		if e.complexity.Usuario.OauthID == nil {
+			break
+		}
+
+		return e.complexity.Usuario.OauthID(childComplexity), true
+
 	case "Usuario.sexo":
 		if e.complexity.Usuario.Sexo == nil {
 			break
@@ -736,6 +758,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputNewLogin,
 		ec.unmarshalInputNewRol,
 		ec.unmarshalInputNewUsuario,
+		ec.unmarshalInputNewUsuarioOauth,
 		ec.unmarshalInputQueryUsuarios,
 		ec.unmarshalInputUpdatePerfil,
 		ec.unmarshalInputUpdateUsuario,
@@ -862,6 +885,21 @@ func (ec *executionContext) field_Mutation_asignarMenusUsuario_args(ctx context.
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
 		arg0, err = ec.unmarshalNAsignarMenusUsuario2authᚋgraphᚋmodelᚐAsignarMenusUsuario(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createOauth_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.NewUsuarioOauth
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNNewUsuarioOauth2authᚋgraphᚋmodelᚐNewUsuarioOauth(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1559,6 +1597,8 @@ func (ec *executionContext) fieldContext_Mutation_createUsuario(ctx context.Cont
 				return ec.fieldContext_Usuario_estado(ctx, field)
 			case "last_login":
 				return ec.fieldContext_Usuario_last_login(ctx, field)
+			case "oauth_id":
+				return ec.fieldContext_Usuario_oauth_id(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Usuario", field.Name)
 		},
@@ -1571,6 +1611,93 @@ func (ec *executionContext) fieldContext_Mutation_createUsuario(ctx context.Cont
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_createUsuario_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createOauth(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createOauth(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateOauth(rctx, fc.Args["input"].(model.NewUsuarioOauth))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Usuario)
+	fc.Result = res
+	return ec.marshalNUsuario2ᚖauthᚋgraphᚋmodelᚐUsuario(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createOauth(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Usuario_id(ctx, field)
+			case "nombres":
+				return ec.fieldContext_Usuario_nombres(ctx, field)
+			case "apellido1":
+				return ec.fieldContext_Usuario_apellido1(ctx, field)
+			case "apellido2":
+				return ec.fieldContext_Usuario_apellido2(ctx, field)
+			case "documento":
+				return ec.fieldContext_Usuario_documento(ctx, field)
+			case "celular":
+				return ec.fieldContext_Usuario_celular(ctx, field)
+			case "correo":
+				return ec.fieldContext_Usuario_correo(ctx, field)
+			case "sexo":
+				return ec.fieldContext_Usuario_sexo(ctx, field)
+			case "direccion":
+				return ec.fieldContext_Usuario_direccion(ctx, field)
+			case "username":
+				return ec.fieldContext_Usuario_username(ctx, field)
+			case "fecha_registro":
+				return ec.fieldContext_Usuario_fecha_registro(ctx, field)
+			case "fecha_update":
+				return ec.fieldContext_Usuario_fecha_update(ctx, field)
+			case "estado":
+				return ec.fieldContext_Usuario_estado(ctx, field)
+			case "last_login":
+				return ec.fieldContext_Usuario_last_login(ctx, field)
+			case "oauth_id":
+				return ec.fieldContext_Usuario_oauth_id(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Usuario", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createOauth_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -1644,6 +1771,8 @@ func (ec *executionContext) fieldContext_Mutation_updateUsuario(ctx context.Cont
 				return ec.fieldContext_Usuario_estado(ctx, field)
 			case "last_login":
 				return ec.fieldContext_Usuario_last_login(ctx, field)
+			case "oauth_id":
+				return ec.fieldContext_Usuario_oauth_id(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Usuario", field.Name)
 		},
@@ -1729,6 +1858,8 @@ func (ec *executionContext) fieldContext_Mutation_updateUsuarioPerfil(ctx contex
 				return ec.fieldContext_Usuario_estado(ctx, field)
 			case "last_login":
 				return ec.fieldContext_Usuario_last_login(ctx, field)
+			case "oauth_id":
+				return ec.fieldContext_Usuario_oauth_id(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Usuario", field.Name)
 		},
@@ -2368,6 +2499,8 @@ func (ec *executionContext) fieldContext_Query_usuarios(ctx context.Context, fie
 				return ec.fieldContext_Usuario_estado(ctx, field)
 			case "last_login":
 				return ec.fieldContext_Usuario_last_login(ctx, field)
+			case "oauth_id":
+				return ec.fieldContext_Usuario_oauth_id(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Usuario", field.Name)
 		},
@@ -2862,6 +2995,8 @@ func (ec *executionContext) fieldContext_ResponseMe_usuario(_ context.Context, f
 				return ec.fieldContext_Usuario_estado(ctx, field)
 			case "last_login":
 				return ec.fieldContext_Usuario_last_login(ctx, field)
+			case "oauth_id":
+				return ec.fieldContext_Usuario_oauth_id(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Usuario", field.Name)
 		},
@@ -4627,6 +4762,47 @@ func (ec *executionContext) fieldContext_Usuario_last_login(_ context.Context, f
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Time does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Usuario_oauth_id(ctx context.Context, field graphql.CollectedField, obj *model.Usuario) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Usuario_oauth_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.OauthID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Usuario_oauth_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Usuario",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
 		},
 	}
 	return fc, nil
@@ -6711,6 +6887,61 @@ func (ec *executionContext) unmarshalInputNewUsuario(ctx context.Context, obj in
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputNewUsuarioOauth(ctx context.Context, obj interface{}) (model.NewUsuarioOauth, error) {
+	var it model.NewUsuarioOauth
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"nombres", "celular", "correo", "username", "password"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "nombres":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nombres"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Nombres = data
+		case "celular":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("celular"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Celular = data
+		case "correo":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("correo"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Correo = data
+		case "username":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("username"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Username = data
+		case "password":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("password"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Password = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputQueryUsuarios(ctx context.Context, obj interface{}) (model.QueryUsuarios, error) {
 	var it model.QueryUsuarios
 	asMap := map[string]interface{}{}
@@ -7054,6 +7285,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "createUsuario":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createUsuario(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createOauth":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createOauth(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -7763,6 +8001,8 @@ func (ec *executionContext) _Usuario(ctx context.Context, sel ast.SelectionSet, 
 			}
 		case "last_login":
 			out.Values[i] = ec._Usuario_last_login(ctx, field, obj)
+		case "oauth_id":
+			out.Values[i] = ec._Usuario_oauth_id(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -8302,6 +8542,11 @@ func (ec *executionContext) unmarshalNNewRol2authᚋgraphᚋmodelᚐNewRol(ctx c
 
 func (ec *executionContext) unmarshalNNewUsuario2authᚋgraphᚋmodelᚐNewUsuario(ctx context.Context, v interface{}) (model.NewUsuario, error) {
 	res, err := ec.unmarshalInputNewUsuario(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNNewUsuarioOauth2authᚋgraphᚋmodelᚐNewUsuarioOauth(ctx context.Context, v interface{}) (model.NewUsuarioOauth, error) {
+	res, err := ec.unmarshalInputNewUsuarioOauth(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 

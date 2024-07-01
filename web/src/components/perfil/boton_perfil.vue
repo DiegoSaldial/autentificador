@@ -1,10 +1,10 @@
 <template>
   <div class="q-pa-none q-ma-none">
-    <q-btn round flat class="q-ml-xs">
+    <q-btn flat class="q-pl-xs q-pr-none">
       <q-avatar size="26px">
         <img src="https://cdn.quasar.dev/img/boy-avatar.png">
       </q-avatar>
-      <span class="q-ml-xs"> {{ store.dataUser.usuario.username }} </span>
+      <span class="q-ml-xs ellipsis" style="max-width: 9em;"> {{ store.dataUser.usuario.username }} </span>
       <q-tooltip> Perfil </q-tooltip>
       <q-menu>
         <div class="row no-wrap q-pa-md">
@@ -42,6 +42,7 @@
 import { onMounted, ref } from 'vue'
 import { useLoginStore } from 'src/stores/login-store';
 import EditarPerfil from './editar_perfil.vue'
+import { useRouter } from 'vue-router';
 
 export default {
   components:{ EditarPerfil },
@@ -49,8 +50,12 @@ export default {
     const store = useLoginStore()
     const datos = ref({})
     const refEditarPerfil = ref()
+    const router = useRouter();
 
-    const logout = ()=> store.setToken()
+    const logout = ()=> {
+      router.push('/');
+      store.setToken()
+    }
 
     const openEdit = () => refEditarPerfil.value.open();
 

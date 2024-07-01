@@ -18,13 +18,15 @@
     "@vue/apollo-composable": "^4.0.0",
     "axios": "^1.2.1",
     "dotenv": "^16.4.5",
+    "firebase": "^10.12.2",
     "graphql": "^16.8.1",
     "graphql-tag": "^2.12.6",
     "jwt-decode": "^4.0.0",
     "pinia": "^2.0.11",
     "quasar": "^2.8.0",
     "vue": "^3.4.18",
-    "vue-router": "^4.0.12"
+    "vue-router": "^4.0.12",
+    "vuefire": "^3.1.23"
   },
   "devDependencies": {
     "@quasar/app-vite": "^1.4.3",

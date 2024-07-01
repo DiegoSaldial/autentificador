@@ -12,6 +12,7 @@ create table `usuarios`(
     `username` varchar(30) unique not null,
     `password` varchar(64) not null, -- hash
     `last_login` datetime,
+    `oauth_id` varchar(80),
     `fecha_registro` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00'),
     `fecha_update` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00') ON UPDATE CURRENT_TIMESTAMP
 );
@@ -110,7 +111,8 @@ VALUES
 
 INSERT INTO `roles` (`nombre`, `descripcion`, `jerarquia`)
 VALUES
-    ('Administrador', 'Tiene acceso total al sistema.', 0);
+    ('Administrador', 'Tiene acceso total al sistema.', 0),
+    ('Invitado', 'Acceso parcial, generalmente se autentifica con cuenta de google', 1);
 
 INSERT INTO `permisos` (`metodo`, `nombre`, `descripcion`)
 VALUES
@@ -142,7 +144,13 @@ values
     ('Administrador','rolById'),
     ('Administrador','asignarMenusUsuario'),
     ('Administrador','menus'),
-    ('Administrador','menus_by_usuario');
+    ('Administrador','menus_by_usuario'),
+    ('Invitado','usuarios'),
+    ('Invitado','permisos'), 
+    ('Invitado','roles'), 
+    ('Invitado','usuarioById'), 
+    ('Invitado','menus'),
+    ('Invitado','menus_by_usuario');
 
 insert into `rol_usuario`(`rol`,`usuario_id`)
 values 
@@ -162,6 +170,9 @@ insert into `menus`(`label`,`path`,`icon`,`grupo`,`color`) values
 insert into `menus_usuario`(usuario_id,menu_id) values 
 (1,1),
 (1,2);
+
+insert into `rol_menus`(rol,menu_id) values 
+('Invitado',1);
 
 
 

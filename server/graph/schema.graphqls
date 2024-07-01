@@ -19,6 +19,7 @@ type Usuario {
   fecha_update: Time! 
   estado: Boolean! 
   last_login: Time
+  oauth_id: String
 } 
 
 type Rol { 
@@ -97,6 +98,14 @@ input NewLogin {
 input InputMe{ 
   show_roles: Boolean!
   show_permisos: Boolean!
+}
+
+input NewUsuarioOauth { 
+  nombres: String! 
+  celular: String
+  correo: String 
+  username: String!
+  password: String! 
 }
 
 input NewUsuario { 
@@ -183,6 +192,7 @@ type Mutation {
   login(input:NewLogin!): ResponseLogin!
   refreshtoken(token:String!, refreshToken:String!): String!
   createUsuario(input:NewUsuario!): Usuario!
+  createOauth(input:NewUsuarioOauth!): Usuario!
   updateUsuario(input:UpdateUsuario!): Usuario!
   updateUsuarioPerfil(input:UpdatePerfil!): Usuario!
   createRol(input:NewRol!): ResponseRolCreate!

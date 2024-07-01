@@ -62,6 +62,14 @@ type NewUsuario struct {
 	PermisosSueltos []string `json:"permisos_sueltos"`
 }
 
+type NewUsuarioOauth struct {
+	Nombres  string  `json:"nombres"`
+	Celular  *string `json:"celular,omitempty"`
+	Correo   *string `json:"correo,omitempty"`
+	Username string  `json:"username"`
+	Password string  `json:"password"`
+}
+
 type Permiso struct {
 	Metodo        string    `json:"metodo"`
 	Nombre        string    `json:"nombre"`
@@ -167,4 +175,5 @@ type Usuario struct {
 	FechaUpdate   time.Time  `json:"fecha_update"`
 	Estado        bool       `json:"estado"`
 	LastLogin     *time.Time `json:"last_login,omitempty"`
+	OauthID       *string    `json:"oauth_id,omitempty"`
 }

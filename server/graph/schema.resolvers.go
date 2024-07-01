@@ -31,7 +31,12 @@ func (r *mutationResolver) CreateUsuario(ctx context.Context, input model.NewUsu
 	if err != nil {
 		return nil, err
 	}
-	return usuarios.Crear(r.DB, input)
+	return usuarios.Crear(r.DB, input, nil)
+}
+
+// CreateOauth is the resolver for the createOauth field.
+func (r *mutationResolver) CreateOauth(ctx context.Context, input model.NewUsuarioOauth) (*model.Usuario, error) {
+	return usuarios.CrearOauth(r.DB, input)
 }
 
 // UpdateUsuario is the resolver for the updateUsuario field.
