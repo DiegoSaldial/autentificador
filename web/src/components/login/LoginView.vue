@@ -31,8 +31,8 @@
           </div>
         </q-form>
 
-        <div class="row text-right" >
-          <div class="col-12">
+        <div class="row text-right" v-if="accept_oauth">
+          <div class="col-12"> 
             <q-btn flat class="q-mt-md q-pr-xs" size="sm" color="grey" :loading="loading" @click="googleLogin()">
               <q-icon name="hive" size="xs" left></q-icon>
               Acceder con Google
@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import LoginService from './loginService';
 import { useLoginStore } from 'stores/login-store';
 import MeService from './meService';
@@ -61,6 +61,7 @@ export default {
     const meService = new MeService();
     const useLogin = useLoginStore();
     const pwd = ref('password');
+    const accept_oauth = ref(false);
 
     const onSubmit = async (u=null,p=null) => {
       console.log('>>>',u,p);
@@ -106,11 +107,16 @@ export default {
       loading.value = false;
     };
 
+    onMounted(()=>{
+      accept_oauth.value = process.env.ACCEPT_OAUTH;
+    })
+
     return {
       username,
       clave,
       loading,
       pwd,
+      accept_oauth,
       changePWD,
       googleLogin,
       onSubmit,
