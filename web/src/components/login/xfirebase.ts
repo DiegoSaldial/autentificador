@@ -1,5 +1,10 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+} from 'firebase/auth';
 
 const firebaseConfig = initializeApp({
   apiKey: 'AIzaSyD2muOLjhasMAyrYPsn-jNkNMCmmIdP86A',
@@ -17,6 +22,8 @@ auth.languageCode = 'es';
 const provider = new GoogleAuthProvider();
 
 export const loginGoogle = async () => {
+  await signOut(auth);
+
   const res = await signInWithPopup(auth, provider)
     .then((d) => d)
     .catch((e) => e);
@@ -25,13 +32,13 @@ export const loginGoogle = async () => {
 
   if (res && res.user) {
     const result = res;
-    const credential = GoogleAuthProvider.credentialFromResult(result);
-    let token = null;
-    if (credential) token = credential.accessToken;
-
     const user = result.user;
-    console.log('USERRR', user);
-    console.log('TOKK', token);
+    // const credential = GoogleAuthProvider.credentialFromResult(result);
+    // let token = null;
+    // if (credential) token = credential.accessToken;
+
+    // console.log('USERRR', user);
+    // console.log('TOKK', token);
 
     const forCreate = {
       nombres: user.displayName,

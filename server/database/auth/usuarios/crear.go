@@ -84,9 +84,11 @@ func CrearOauth(db *sql.DB, input model.NewUsuarioOauth) (*model.Usuario, error)
 	}
 
 	rol := os.Getenv("DEFAULT_ROL_OAUTH")
+	nombres, aps := splitName(input.Nombres)
+
 	data := model.NewUsuario{}
-	data.Nombres = input.Nombres
-	data.Apellido1 = ""
+	data.Nombres = cut_string(nombres, 30)
+	data.Apellido1 = cut_string(aps, 30)
 	data.Celular = input.Celular
 	data.Correo = input.Correo
 	data.Username = input.Username
