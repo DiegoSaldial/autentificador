@@ -12,6 +12,9 @@
         </q-btn>
 
         <q-space />
+        <span v-if="storeClima.getClima && storeClima.getClima.ciudad">
+          {{ storeClima.getClima }} 
+        </span>
         <q-toggle v-model="$q.dark.isActive" color="white" />
         <small v-if="store.dataUser.usuario && show_time" v-html="store.tiempoSession"> </small>
         <BtnPerfil v-if="store.dataUser.usuario"/>
@@ -53,9 +56,10 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { fabYoutube } from '@quasar/extras/fontawesome-v6'
 import {useLoginStore} from 'stores/login-store'
+import {useClimaStore} from 'stores/clima-store'
 import LoginView from 'components/login/LoginView.vue'
 import BtnPerfil from 'components/perfil/boton_perfil.vue'
 
@@ -66,13 +70,19 @@ export default {
   setup () {
     const leftDrawerOpen = ref(false)
     const store = useLoginStore();
+    const storeClima = useClimaStore();
     const show_time = ref(process.env.SHOW_TIME_LABEL)
 
     const toggleLeftDrawer = () => leftDrawerOpen.value = !leftDrawerOpen.value
 
+    onMounted(()=>{
+      storeClima.setearClima();
+    })
+
     return {
       fabYoutube,
       leftDrawerOpen,
+      storeClima,
       store,
       show_time,
       toggleLeftDrawer,

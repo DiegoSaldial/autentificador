@@ -50,7 +50,7 @@ import LoginService from './loginService';
 import { useLoginStore } from 'stores/login-store';
 import MeService from './meService';
 import { cargarMenus } from './utils';
-import { loginGoogle } from './xfirebase';
+import { loginGoogle } from './xfirebaseAuth';
 
 export default {
   setup() {
@@ -108,7 +108,7 @@ export default {
     };
 
     onMounted(()=>{
-      accept_oauth.value = process.env.ACCEPT_OAUTH;
+      accept_oauth.value = process.env.ACCEPT_OAUTH; 
     })
 
     return {
@@ -129,3 +129,4 @@ export default {
   },
 };
 </script>
+./xfirebaseAuth
