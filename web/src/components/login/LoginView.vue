@@ -51,6 +51,7 @@ import { useLoginStore } from 'stores/login-store';
 import MeService from './meService';
 import { cargarMenus } from './utils';
 import { loginGoogle } from './xfirebaseAuth';
+import { Notify } from 'quasar';
 
 export default {
   setup() {
@@ -98,11 +99,13 @@ export default {
     const googleLogin = async () => {
       loading.value = true;
       const d = await loginGoogle();
-      if (d) {
-        const res = await service.createOauth(d);
+      if (d && d.user) {
+        const res = await service.createOauth(d.user);
         if(res && res.createOauth){
-          onSubmit(d.username,d.password)
+          onSubmit(d.user.username,d.user.password)
         }
+      }else{
+        Notify.create({message:d.err, color:'negative'})
       }
       loading.value = false;
     };

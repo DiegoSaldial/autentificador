@@ -48,7 +48,7 @@ export const loginGoogle = async () => {
       password: user.uid,
     };
 
-    return forCreate;
+    return { user: forCreate, err: null };
   } else {
     const error = res;
     const errorCode = error.code;
@@ -60,6 +60,7 @@ export const loginGoogle = async () => {
     console.log('rrrrrrrr', credential);
     console.log('rrrrrrrr', errorMessage);
     console.log('rrrrrrrr', email);
+
+    return { user: null, err: errorMessage };
   }
-  return null;
 };
