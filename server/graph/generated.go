@@ -9,6 +9,7 @@ import (
 	"embed"
 	"errors"
 	"fmt"
+	"io"
 	"strconv"
 	"sync"
 	"sync/atomic"
@@ -42,6 +43,7 @@ type Config struct {
 type ResolverRoot interface {
 	Mutation() MutationResolver
 	Query() QueryResolver
+	Subscription() SubscriptionResolver
 }
 
 type DirectiveRoot struct {
@@ -62,6 +64,7 @@ type ComplexityRoot struct {
 		CreateOauth         func(childComplexity int, input model.NewUsuarioOauth) int
 		CreateRol           func(childComplexity int, input model.NewRol) int
 		CreateUsuario       func(childComplexity int, input model.NewUsuario) int
+		EnviarNotificacion  func(childComplexity int, input model.XNotificacionEnvio) int
 		Login               func(childComplexity int, input model.NewLogin) int
 		Refreshtoken        func(childComplexity int, token string, refreshToken string) int
 		UpdateRol           func(childComplexity int, input model.NewRol) int
@@ -132,6 +135,10 @@ type ComplexityRoot struct {
 		Nombre        func(childComplexity int) int
 	}
 
+	Subscription struct {
+		NotificacionesSubs func(childComplexity int) int
+	}
+
 	Usuario struct {
 		Apellido1     func(childComplexity int) int
 		Apellido2     func(childComplexity int) int
@@ -149,6 +156,11 @@ type ComplexityRoot struct {
 		Sexo          func(childComplexity int) int
 		Username      func(childComplexity int) int
 	}
+
+	XNotificacion struct {
+		DataJSON func(childComplexity int) int
+		Title    func(childComplexity int) int
+	}
 }
 
 type MutationResolver interface {
@@ -161,6 +173,7 @@ type MutationResolver interface {
 	CreateRol(ctx context.Context, input model.NewRol) (*model.ResponseRolCreate, error)
 	UpdateRol(ctx context.Context, input model.NewRol) (*model.ResponseRolCreate, error)
 	AsignarMenusUsuario(ctx context.Context, input model.AsignarMenusUsuario) (string, error)
+	EnviarNotificacion(ctx context.Context, input model.XNotificacionEnvio) (bool, error)
 }
 type QueryResolver interface {
 	Me(ctx context.Context, input model.InputMe) (*model.ResponseMe, error)
@@ -170,6 +183,9 @@ type QueryResolver interface {
 	UsuarioByID(ctx context.Context, input model.GetUser) (*model.ResponseMe, error)
 	RolByID(ctx context.Context, rol string) (*model.ResponseRolCreate, error)
 	Menus(ctx context.Context) ([]*model.Menus, error)
+}
+type SubscriptionResolver interface {
+	NotificacionesSubs(ctx context.Context) (<-chan *model.XNotificacion, error)
 }
 
 type executableSchema struct {
@@ -280,6 +296,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.CreateUsuario(childComplexity, args["input"].(model.NewUsuario)), true
+
+	case "Mutation.enviarNotificacion":
+		if e.complexity.Mutation.EnviarNotificacion == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_enviarNotificacion_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.EnviarNotificacion(childComplexity, args["input"].(model.XNotificacionEnvio)), true
 
 	case "Mutation.login":
 		if e.complexity.Mutation.Login == nil {
@@ -639,6 +667,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Rol.Nombre(childComplexity), true
 
+	case "Subscription.notificaciones_subs":
+		if e.complexity.Subscription.NotificacionesSubs == nil {
+			break
+		}
+
+		return e.complexity.Subscription.NotificacionesSubs(childComplexity), true
+
 	case "Usuario.apellido1":
 		if e.complexity.Usuario.Apellido1 == nil {
 			break
@@ -744,6 +779,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Usuario.Username(childComplexity), true
 
+	case "XNotificacion.data_json":
+		if e.complexity.XNotificacion.DataJSON == nil {
+			break
+		}
+
+		return e.complexity.XNotificacion.DataJSON(childComplexity), true
+
+	case "XNotificacion.title":
+		if e.complexity.XNotificacion.Title == nil {
+			break
+		}
+
+		return e.complexity.XNotificacion.Title(childComplexity), true
+
 	}
 	return 0, false
 }
@@ -762,6 +811,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputQueryUsuarios,
 		ec.unmarshalInputUpdatePerfil,
 		ec.unmarshalInputUpdateUsuario,
+		ec.unmarshalInputXNotificacionEnvio,
 	)
 	first := true
 
@@ -805,6 +855,23 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 			ctx = graphql.WithUnmarshalerMap(ctx, inputUnmarshalMap)
 			data := ec._Mutation(ctx, rc.Operation.SelectionSet)
 			var buf bytes.Buffer
+			data.MarshalGQL(&buf)
+
+			return &graphql.Response{
+				Data: buf.Bytes(),
+			}
+		}
+	case ast.Subscription:
+		next := ec._Subscription(ctx, rc.Operation.SelectionSet)
+
+		var buf bytes.Buffer
+		return func(ctx context.Context) *graphql.Response {
+			buf.Reset()
+			data := next(ctx)
+
+			if data == nil {
+				return nil
+			}
 			data.MarshalGQL(&buf)
 
 			return &graphql.Response{
@@ -930,6 +997,21 @@ func (ec *executionContext) field_Mutation_createUsuario_args(ctx context.Contex
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
 		arg0, err = ec.unmarshalNNewUsuario2authᚋgraphᚋmodelᚐNewUsuario(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_enviarNotificacion_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.XNotificacionEnvio
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNXNotificacionEnvio2authᚋgraphᚋmodelᚐXNotificacionEnvio(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -2065,6 +2147,61 @@ func (ec *executionContext) fieldContext_Mutation_asignarMenusUsuario(ctx contex
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_asignarMenusUsuario_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_enviarNotificacion(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_enviarNotificacion(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().EnviarNotificacion(rctx, fc.Args["input"].(model.XNotificacionEnvio))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_enviarNotificacion(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_enviarNotificacion_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -4172,6 +4309,70 @@ func (ec *executionContext) fieldContext_Rol_fecha_registro(_ context.Context, f
 	return fc, nil
 }
 
+func (ec *executionContext) _Subscription_notificaciones_subs(ctx context.Context, field graphql.CollectedField) (ret func(ctx context.Context) graphql.Marshaler) {
+	fc, err := ec.fieldContext_Subscription_notificaciones_subs(ctx, field)
+	if err != nil {
+		return nil
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = nil
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Subscription().NotificacionesSubs(rctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return nil
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return nil
+	}
+	return func(ctx context.Context) graphql.Marshaler {
+		select {
+		case res, ok := <-resTmp.(<-chan *model.XNotificacion):
+			if !ok {
+				return nil
+			}
+			return graphql.WriterFunc(func(w io.Writer) {
+				w.Write([]byte{'{'})
+				graphql.MarshalString(field.Alias).MarshalGQL(w)
+				w.Write([]byte{':'})
+				ec.marshalNXNotificacion2ᚖauthᚋgraphᚋmodelᚐXNotificacion(ctx, field.Selections, res).MarshalGQL(w)
+				w.Write([]byte{'}'})
+			})
+		case <-ctx.Done():
+			return nil
+		}
+	}
+}
+
+func (ec *executionContext) fieldContext_Subscription_notificaciones_subs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Subscription",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "title":
+				return ec.fieldContext_XNotificacion_title(ctx, field)
+			case "data_json":
+				return ec.fieldContext_XNotificacion_data_json(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type XNotificacion", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Usuario_id(ctx context.Context, field graphql.CollectedField, obj *model.Usuario) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Usuario_id(ctx, field)
 	if err != nil {
@@ -4798,6 +4999,94 @@ func (ec *executionContext) _Usuario_oauth_id(ctx context.Context, field graphql
 func (ec *executionContext) fieldContext_Usuario_oauth_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Usuario",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _XNotificacion_title(ctx context.Context, field graphql.CollectedField, obj *model.XNotificacion) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_XNotificacion_title(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Title, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_XNotificacion_title(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "XNotificacion",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _XNotificacion_data_json(ctx context.Context, field graphql.CollectedField, obj *model.XNotificacion) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_XNotificacion_data_json(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.DataJSON, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_XNotificacion_data_json(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "XNotificacion",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -7177,6 +7466,40 @@ func (ec *executionContext) unmarshalInputUpdateUsuario(ctx context.Context, obj
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputXNotificacionEnvio(ctx context.Context, obj interface{}) (model.XNotificacionEnvio, error) {
+	var it model.XNotificacionEnvio
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"title", "data_json"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "title":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("title"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Title = data
+		case "data_json":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("data_json"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DataJSON = data
+		}
+	}
+
+	return it, nil
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -7327,6 +7650,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "asignarMenusUsuario":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_asignarMenusUsuario(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "enviarNotificacion":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_enviarNotificacion(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -7941,6 +8271,26 @@ func (ec *executionContext) _Rol(ctx context.Context, sel ast.SelectionSet, obj 
 	return out
 }
 
+var subscriptionImplementors = []string{"Subscription"}
+
+func (ec *executionContext) _Subscription(ctx context.Context, sel ast.SelectionSet) func(ctx context.Context) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, subscriptionImplementors)
+	ctx = graphql.WithFieldContext(ctx, &graphql.FieldContext{
+		Object: "Subscription",
+	})
+	if len(fields) != 1 {
+		ec.Errorf(ctx, "must subscribe to exactly one stream")
+		return nil
+	}
+
+	switch fields[0].Name {
+	case "notificaciones_subs":
+		return ec._Subscription_notificaciones_subs(ctx, fields[0])
+	default:
+		panic("unknown field " + strconv.Quote(fields[0].Name))
+	}
+}
+
 var usuarioImplementors = []string{"Usuario"}
 
 func (ec *executionContext) _Usuario(ctx context.Context, sel ast.SelectionSet, obj *model.Usuario) graphql.Marshaler {
@@ -8003,6 +8353,50 @@ func (ec *executionContext) _Usuario(ctx context.Context, sel ast.SelectionSet, 
 			out.Values[i] = ec._Usuario_last_login(ctx, field, obj)
 		case "oauth_id":
 			out.Values[i] = ec._Usuario_oauth_id(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var xNotificacionImplementors = []string{"XNotificacion"}
+
+func (ec *executionContext) _XNotificacion(ctx context.Context, sel ast.SelectionSet, obj *model.XNotificacion) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, xNotificacionImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("XNotificacion")
+		case "title":
+			out.Values[i] = ec._XNotificacion_title(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "data_json":
+			out.Values[i] = ec._XNotificacion_data_json(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -8899,6 +9293,25 @@ func (ec *executionContext) marshalNUsuario2ᚖauthᚋgraphᚋmodelᚐUsuario(ct
 		return graphql.Null
 	}
 	return ec._Usuario(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNXNotificacion2authᚋgraphᚋmodelᚐXNotificacion(ctx context.Context, sel ast.SelectionSet, v model.XNotificacion) graphql.Marshaler {
+	return ec._XNotificacion(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNXNotificacion2ᚖauthᚋgraphᚋmodelᚐXNotificacion(ctx context.Context, sel ast.SelectionSet, v *model.XNotificacion) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._XNotificacion(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNXNotificacionEnvio2authᚋgraphᚋmodelᚐXNotificacionEnvio(ctx context.Context, v interface{}) (model.XNotificacionEnvio, error) {
+	res, err := ec.unmarshalInputXNotificacionEnvio(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) marshalN__Directive2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐDirective(ctx context.Context, sel ast.SelectionSet, v introspection.Directive) graphql.Marshaler {

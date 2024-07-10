@@ -3,6 +3,7 @@ package main
 import (
 	"auth/database/auth/xauth"
 	"auth/graph"
+	"auth/graph/model"
 	"database/sql"
 	"fmt"
 	"log"
@@ -11,9 +12,11 @@ import (
 	"time"
 
 	"github.com/99designs/gqlgen/graphql/handler"
+	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/go-chi/chi"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/gorilla/websocket"
 	"github.com/joho/godotenv"
 	"github.com/rs/cors"
 )
@@ -63,14 +66,29 @@ func main() {
 		Debug:            false,
 	}).Handler)
 
-	resolver := &graph.Resolver{DB: db}
+	subs := make(map[string]chan *model.XNotificacion)
+	resolver := &graph.Resolver{DB: db, Subscriptores: subs}
 	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: resolver}))
+
+	// websocket
+	srvws := handler.New(graph.NewExecutableSchema(graph.Config{Resolvers: resolver}))
+	srvws.AddTransport(&transport.Websocket{
+		KeepAlivePingInterval: 40 * time.Second,
+		Upgrader: websocket.Upgrader{
+			CheckOrigin: func(r *http.Request) bool {
+				return true
+			},
+		},
+		InitFunc: xauth.UaserIDMiddleware(db),
+	})
+	// fin websocket
 
 	show_playground := os.Getenv("PLAYGROUND")
 	if show_playground == "1" {
 		router.Handle("/", playground.Handler("GraphQL playground", "/query"))
 	}
 	router.Handle("/query", srv)
+	router.Handle("/ws", srvws)
 
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
 	log.Fatal(http.ListenAndServe(":"+port, router))

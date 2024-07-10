@@ -130,6 +130,9 @@ type Rol struct {
 	FechaRegistro time.Time `json:"fecha_registro"`
 }
 
+type Subscription struct {
+}
+
 type UpdatePerfil struct {
 	ID        string  `json:"id"`
 	Nombres   string  `json:"nombres"`
@@ -176,4 +179,14 @@ type Usuario struct {
 	Estado        bool       `json:"estado"`
 	LastLogin     *time.Time `json:"last_login,omitempty"`
 	OauthID       *string    `json:"oauth_id,omitempty"`
+}
+
+type XNotificacion struct {
+	Title    string `json:"title"`
+	DataJSON string `json:"data_json"`
+}
+
+type XNotificacionEnvio struct {
+	Title    string `json:"title"`
+	DataJSON string `json:"data_json"`
 }

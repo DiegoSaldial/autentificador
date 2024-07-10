@@ -7,13 +7,13 @@
         <q-btn flat no-caps no-wrap class="q-ml-xs" v-if="$q.screen.gt.xs && store.dataUser.usuario" to="/">
           <!-- <q-icon :name="fabYoutube" color="red" size="28px" /> -->
           <q-toolbar-title shrink class="text-weight-bold">
-            Auth 
+            Auth
           </q-toolbar-title>
         </q-btn>
 
         <q-space />
         <span v-if="storeClima.getClima && storeClima.getClima.ciudad">
-          {{ storeClima.getClima }} 
+          {{ storeClima.getClima }}
         </span>
         <q-toggle v-model="$q.dark.isActive" color="white" />
         <small v-if="store.dataUser.usuario && show_time" v-html="store.tiempoSession"> </small>
@@ -48,6 +48,8 @@
       </q-scroll-area>
     </q-drawer>
 
+    <Notificaciones ref="refNotificaciones" />
+
     <q-page-container>
       <LoginView v-if="!store.dataUser.usuario" />
       <router-view v-else />
@@ -62,21 +64,23 @@ import {useLoginStore} from 'stores/login-store'
 import {useClimaStore} from 'stores/clima-store'
 import LoginView from 'components/login/LoginView.vue'
 import BtnPerfil from 'components/perfil/boton_perfil.vue'
+import Notificaciones from 'pages/xauth/notificaciones/index_notificaciones.vue'
 
 export default {
   name: 'MyLayout',
-  components:{ LoginView,BtnPerfil },
+  components:{ LoginView,BtnPerfil,Notificaciones },
 
   setup () {
     const leftDrawerOpen = ref(false)
     const store = useLoginStore();
     const storeClima = useClimaStore();
     const show_time = ref(process.env.SHOW_TIME_LABEL)
+    const refNotificaciones = ref()
 
     const toggleLeftDrawer = () => leftDrawerOpen.value = !leftDrawerOpen.value
 
     onMounted(()=>{
-      storeClima.setearClima();
+      storeClima.setearClima(); 
     })
 
     return {
@@ -85,6 +89,7 @@ export default {
       storeClima,
       store,
       show_time,
+      refNotificaciones,
       toggleLeftDrawer,
 
       links3: [

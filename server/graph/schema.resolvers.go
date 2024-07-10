@@ -11,6 +11,7 @@ import (
 	"auth/database/auth/usuarios"
 	"auth/database/auth/xauth"
 	"auth/database/auth/xlogin"
+	"auth/database/auth/xnotificaciones"
 	"auth/graph/model"
 	"context"
 )
@@ -84,6 +85,11 @@ func (r *mutationResolver) AsignarMenusUsuario(ctx context.Context, input model.
 	return menu.AsignarMenusUsuario(r.DB, input)
 }
 
+// EnviarNotificacion is the resolver for the enviarNotificacion field.
+func (r *mutationResolver) EnviarNotificacion(ctx context.Context, input model.XNotificacionEnvio) (bool, error) {
+	return xnotificaciones.EnviarNotificacion(ctx, &r.Mu, r.Subscriptores, input)
+}
+
 // Me is the resolver for the me field.
 func (r *queryResolver) Me(ctx context.Context, input model.InputMe) (*model.ResponseMe, error) {
 	tok, err := xauth.CtxValue(ctx, r.DB, "")
@@ -149,11 +155,25 @@ func (r *queryResolver) Menus(ctx context.Context) ([]*model.Menus, error) {
 	return menu.Listar(r.DB)
 }
 
+// NotificacionesSubs is the resolver for the notificaciones_subs field.
+func (r *subscriptionResolver) NotificacionesSubs(ctx context.Context) (<-chan *model.XNotificacion, error) {
+	tok, err := xauth.CtxValueWs(ctx, r.DB, "")
+	if err != nil {
+		return nil, err
+	}
+	userid := tok.Usuario.ID
+	return xnotificaciones.NotificacionesSubs(ctx, userid, &r.Mu, r.Subscriptores)
+}
+
 // Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 
 // Query returns QueryResolver implementation.
 func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
+// Subscription returns SubscriptionResolver implementation.
+func (r *Resolver) Subscription() SubscriptionResolver { return &subscriptionResolver{r} }
+
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
+type subscriptionResolver struct{ *Resolver }

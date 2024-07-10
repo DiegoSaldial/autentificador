@@ -1,85 +1,114 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { ApolloClientOptions } from '@apollo/client/core';
-import { createHttpLink, InMemoryCache } from '@apollo/client/core';
+import { createHttpLink, InMemoryCache, split } from '@apollo/client/core';
 // import type { BootFileParams } from '@quasar/app-vite'
 import { useLoginStore } from 'stores/login-store';
 import { setContext } from '@apollo/client/link/context';
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import axios from 'axios';
+import { createClient } from 'graphql-ws';
 import { getTimeExp, setTimeLabel } from 'src/shared/login-time';
+import { getMainDefinition } from '@apollo/client/utilities';
 
-export /* async */ function getClientOptions() {
-  const store = useLoginStore();
+const relogin = async (token: string, refreshToken: string) => {
+  const query =
+    'mutation refreshtoken($token:String!, $refreshToken: String!){ refreshtoken(token:$token, refreshToken:$refreshToken) } ';
 
-  const authLink = setContext(async (_, { headers }) => {
-    let token = store.getToken.value || '';
-
-    if (token) {
-      const refreshToken = store.getRefreshToken.value || '';
-      const exp = getTimeExp(token);
-      const expTotal = getTimeExp(refreshToken);
-
-      if (exp < 0 && expTotal < 0) token = refreshToken;
-      if (exp < 0 && expTotal > 0) {
-        const newToken = await relogin(token, refreshToken);
-        token = newToken;
-        store.setNewToken(token);
-        // console.log('new token.....', token);
-      }
-      setTimeLabel(token, refreshToken);
-    }
-
-    return {
-      headers: {
-        ...headers,
-        authorization: `Bearer ${token}`,
-      },
-    };
+  const data = JSON.stringify({
+    query: query,
+    variables: {
+      token: token,
+      refreshToken: refreshToken,
+    },
   });
 
-  const relogin = async (token: string, refreshToken: string) => {
-    const query =
-      'mutation refreshtoken($token:String!, $refreshToken: String!){ refreshtoken(token:$token, refreshToken:$refreshToken) } ';
-
-    const data = JSON.stringify({
-      query: query,
-      variables: {
-        token: token,
-        refreshToken: refreshToken,
-      },
-    });
-
-    const config = {
-      method: 'post',
-      url: process.env.GRAPHQL_URI,
-      data: data,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
-
-    const res = await axios(config)
-      .then(({ data }) => data)
-      .catch((e: any) => e);
-    if (res && res.data) return res.data.refreshtoken;
-
-    return token;
+  const config = {
+    method: 'post',
+    url: process.env.GRAPHQL_URI,
+    data: data,
+    headers: {
+      'Content-Type': 'application/json',
+    },
   };
+
+  const res = await axios(config)
+    .then(({ data }) => data)
+    .catch((e: any) => e);
+  if (res && res.data) return res.data.refreshtoken;
+
+  return token;
+};
+
+const authLink = setContext(async (_, { headers }) => {
+  const store = useLoginStore();
+  let token = store.getToken.value || '';
+
+  if (token) {
+    const refreshToken = store.getRefreshToken.value || '';
+    const exp = getTimeExp(token);
+    const expTotal = getTimeExp(refreshToken);
+
+    if (exp < 0 && expTotal < 0) token = refreshToken;
+    if (exp < 0 && expTotal > 0) {
+      const newToken = await relogin(token, refreshToken);
+      token = newToken;
+      store.setNewToken(token);
+      // console.log('new token.....', token);
+    }
+    setTimeLabel(token, refreshToken);
+  }
+
+  return {
+    headers: {
+      ...headers,
+      authorization: `Bearer ${token}`,
+    },
+  };
+});
+
+export async function getClientOptions() {
+  const store = useLoginStore();
+
+  const wsLink = new GraphQLWsLink(
+    createClient({
+      url: '' + process.env.GRAPHQL_WSS,
+      connectionParams: () => {
+        const store = useLoginStore();
+        const token = store.token;
+
+        return {
+          Authorization: `Bearer ${token}`,
+        };
+      },
+    })
+  );
+
+  const httpLink = authLink.concat(
+    createHttpLink({
+      uri: process.env.GRAPHQL_URI,
+      headers: {
+        authorization: `Bearer ${store.token}`,
+      },
+    })
+  );
+
+  const link = split(
+    ({ query }) => {
+      const definition = getMainDefinition(query);
+      return (
+        definition.kind === 'OperationDefinition' &&
+        definition.operation === 'subscription'
+      );
+    },
+    wsLink,
+    httpLink
+  );
 
   ///* {app, router, ...} */ options?: Partial<BootFileParams<any>>
   return <ApolloClientOptions<unknown>>Object.assign(
     // General options.
     <ApolloClientOptions<unknown>>{
-      link: authLink.concat(
-        createHttpLink({
-          uri:
-            process.env.GRAPHQL_URI ||
-            // Change to your graphql endpoint.
-            'http://localhost:8020/query',
-          headers: {
-            authorization: `Bearer ${store.token}`,
-          },
-        })
-      ),
+      link: link,
 
       cache: new InMemoryCache(),
       defaultOptions: {

@@ -83,10 +83,20 @@ type ResponseRolCreate {
   permisos: [ResponsePermisoMe]!
   menus: [Menus!]!
 } 
+
+type XNotificacion {
+  title: String!
+  data_json: String!
+}
 # =================================
 
 input QueryUsuarios {
   rol: ID
+}
+
+input XNotificacionEnvio {
+  title: String!
+  data_json: String!
 }
 
 # =================================
@@ -175,7 +185,7 @@ input AsignarMenusUsuario {
 
 # go run github.com/99designs/gqlgen generate
 # CGO_ENABLED=0 go build -ldflags="-s -w" -o auth server.go 
-# scp auth root@144.202.34.58:/root/apps/auth/
+# scp auth root@185.203.216.16:/root/apps/auth/
 # =================================
 type Query {
   me(input:InputMe!): ResponseMe!
@@ -198,4 +208,10 @@ type Mutation {
   createRol(input:NewRol!): ResponseRolCreate!
   updateRol(input:NewRol!): ResponseRolCreate!
   asignarMenusUsuario(input:AsignarMenusUsuario!): String!
+  enviarNotificacion(input:XNotificacionEnvio!): Boolean!
+}
+
+# =================================
+type Subscription {
+  notificaciones_subs: XNotificacion!
 }
