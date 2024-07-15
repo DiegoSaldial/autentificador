@@ -103,6 +103,7 @@ input XNotificacionEnvio {
 input NewLogin {
   username: String!
   password: String!
+  external: Boolean! = false
 }
 
 input InputMe{ 

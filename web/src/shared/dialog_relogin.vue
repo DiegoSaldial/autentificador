@@ -16,7 +16,7 @@
               </template>
             </q-input>
 
-            <q-input filled :type="pwd" v-model.trim="clave" label="Clave de acceso" lazy-rules dense :color="$q.dark.isActive ? 'orange' : 'primary'" :rules="[(val) => (val && val.length > 0) || 'dato obligatorio']">
+            <q-input filled :type="pwd" :disable="loading" v-model.trim="clave" label="Clave de acceso" lazy-rules dense :color="$q.dark.isActive ? 'orange' : 'primary'" :rules="[(val) => (val && val.length > 0) || 'dato obligatorio']">
               <template v-slot:prepend>
                 <q-icon name="key" />
               </template>
@@ -31,8 +31,18 @@
               <q-linear-progress v-if="loading" dark rounded indeterminate color="secondary" class="q-mb-sm" />
               <q-btn :disable="loading" icon="person" stretch label="Ingresar" type="submit" color="orange" />
             </div>
+
+            <div class="row text-right" v-if="accept_oauth">
+              <div class="col-12"> 
+                <q-btn flat class="q-mt-none q-pr-xs" size="sm" color="grey" :loading="loading" @click="googleLogin()">
+                  <q-icon name="hive" size="xs" left></q-icon>
+                  Acceder con Google
+                </q-btn>
+              </div>
+            </div>
           </q-form>
-        </q-card-section>
+
+          </q-card-section>
       </q-card>
     </q-dialog>
   </div>
@@ -44,6 +54,8 @@ import { useLoginStore } from 'stores/login-store';
 import LoginService from 'src/components/login/loginService';
 import MeService from 'src/components/login/meService';
 import { cargarMenus } from 'src/components/login/utils';
+import { loginGoogle } from 'src/components/login/xfirebaseAuth';
+import { Notify } from 'quasar';
 
 export default {
   name: 're_login',
@@ -56,6 +68,7 @@ export default {
     const service = new LoginService();
     const useLogin = useLoginStore();
     const meService = new MeService();
+    const accept_oauth = ref(false);
     let resolvePromise;
 
     const changePWD = () =>
@@ -63,6 +76,7 @@ export default {
 
     const openDialog = () => {
       dialog.value = true;
+      accept_oauth.value = process.env.ACCEPT_OAUTH; 
 
       return new Promise((resolve) => {
         resolvePromise = resolve;
@@ -95,14 +109,30 @@ export default {
       dialog.value = false;
     };
 
+    const googleLogin = async () => {
+      loading.value = true;
+      const d = await loginGoogle();
+      if (d && d.user) {
+        username.value = d.user.username;
+        clave.value = d.user.password;
+        pwd.value = 'password';
+        handleAccept();
+      }else{
+        Notify.create({message:d.err, color:'negative'})
+      }
+      loading.value = false;
+    };
+
     return {
       dialog,
       openDialog,
       handleAccept,
       handleCancel,
+      googleLogin,
       username,
       clave,
       loading,
+      accept_oauth,
       pwd,
       changePWD,
       onReset() {

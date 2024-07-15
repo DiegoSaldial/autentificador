@@ -4,18 +4,29 @@
 
 <!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref, watch } from 'vue';
 import { subs } from 'src/stores/serverws';
+import { useLoginStore } from 'stores/login-store';
 import gql from 'graphql-tag';
 import { Notify } from 'quasar';
 
 const msg = ref();
 const subscription2 = ref();
+const useLogin = useLoginStore();
+
+watch(
+  () => useLogin.token,
+  () => {
+    // console.log('::>>>>', subscription2.value);
+
+    if (useLogin.token) notificaciones_subs();
+  }
+);
 
 const notificaciones_subs = async () => {
   const nots = process.env.NOTIFICACIONES_SUBS;
-  // console.log('log', nots);
   if (!nots) return;
+  if (!useLogin.token) return;
 
   const sql = gql`
     subscription notificaciones_subs {
@@ -41,9 +52,10 @@ const notificaciones_subs = async () => {
     },
   });
 
-  // console.log('aaa', a);
+  if (subscription2.value) {
+    subscription2.value.unsubscribe();
+  }
   subscription2.value = a;
-  // console.log('aaa', subscription2.value);
 };
 
 onMounted(() => {

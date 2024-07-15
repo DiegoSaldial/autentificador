@@ -1,9 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import gql from 'graphql-tag';
 import { mutar } from 'stores/server';
 
 export default class LoginService {
-  async login(username: string, password: string) {
+  async login(username: string, password: string, external: boolean) {
     const sql = gql`
       mutation login($input: NewLogin!) {
         login(input: $input) {
@@ -13,7 +13,9 @@ export default class LoginService {
       }
     `;
 
-    const v = { input: { username: username, password: password } };
+    const v = {
+      input: { username: username, password: password, external: external },
+    };
     return await mutar(sql, v)
       .then((d) => d)
       .catch((e) => e);

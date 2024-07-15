@@ -37,6 +37,7 @@ type Mutation struct {
 type NewLogin struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
+	External bool   `json:"external"`
 }
 
 type NewRol struct {

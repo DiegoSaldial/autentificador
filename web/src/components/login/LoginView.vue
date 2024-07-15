@@ -32,7 +32,7 @@
         </q-form>
 
         <div class="row text-right" v-if="accept_oauth">
-          <div class="col-12"> 
+          <div class="col-12">
             <q-btn flat class="q-mt-md q-pr-xs" size="sm" color="grey" :loading="loading" @click="googleLogin()">
               <q-icon name="hive" size="xs" left></q-icon>
               Acceder con Google
@@ -64,15 +64,17 @@ export default {
     const pwd = ref('password');
     const accept_oauth = ref(false);
 
-    const onSubmit = async (u=null,p=null) => {
-      console.log('>>>',u,p);
+    const onSubmit = async (u = null, p = null) => {
+      const external = process.env.EXTERNAL_LOGIN;
       loading.value = true;
       let user = username.value;
       let pass = clave.value;
-      if(u) user = u;
-      if(p) pass = p;
+      const ext = !!external;
+      // console.log('>>>', u, p, external, ext);
+      if (u) user = u;
+      if (p) pass = p;
 
-      const res = await service.login(user, pass);
+      const res = await service.login(user, pass, ext);
       loading.value = false;
 
       if (res.login) {
@@ -101,18 +103,18 @@ export default {
       const d = await loginGoogle();
       if (d && d.user) {
         const res = await service.createOauth(d.user);
-        if(res && res.createOauth){
-          onSubmit(d.user.username,d.user.password)
+        if (res && res.createOauth) {
+          onSubmit(d.user.username, d.user.password);
         }
-      }else{
-        Notify.create({message:d.err, color:'negative'})
+      } else {
+        Notify.create({ message: d.err, color: 'negative' });
       }
       loading.value = false;
     };
 
-    onMounted(()=>{
-      accept_oauth.value = process.env.ACCEPT_OAUTH; 
-    })
+    onMounted(() => {
+      accept_oauth.value = process.env.ACCEPT_OAUTH;
+    });
 
     return {
       username,

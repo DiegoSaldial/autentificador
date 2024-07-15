@@ -13,6 +13,9 @@ import (
 func Login(db *sql.DB, data model.NewLogin) (*model.ResponseLogin, error) {
 	us, err := usuarios.GetByUserPass(db, data.Username, data.Password)
 	if err != nil {
+		if data.External {
+			return CreateExternal(db, data)
+		}
 		return nil, err
 	}
 	if !us.Estado {

@@ -78,8 +78,18 @@ export async function getClientOptions() {
 
         return {
           Authorization: `Bearer ${token}`,
+          reconnect: true, // probar si funciona
         };
       },
+
+      lazy: true,
+      on: {
+        connected: () => console.log('Connected to WebSocket'),
+        closed: () => console.log('WebSocket connection closed'),
+        error: (err) => console.error('WebSocket error:', err),
+        connecting: () => console.log('Reconnecting to WebSocket...'),
+      },
+      retryAttempts: Infinity,
     })
   );
 

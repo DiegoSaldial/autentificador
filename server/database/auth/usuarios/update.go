@@ -10,6 +10,11 @@ func Actualizar(db *sql.DB, input model.UpdateUsuario) (*model.Usuario, error) {
 	if err := permisos_obligatorios(input.Roles, input.PermisosSueltos); err != nil {
 		return nil, err
 	}
+	us, err := GetById(db, input.ID)
+	if err != nil {
+		return nil, err
+	}
+
 	tx, err := db.Begin()
 	if err != nil {
 		return nil, err
@@ -24,8 +29,7 @@ func Actualizar(db *sql.DB, input model.UpdateUsuario) (*model.Usuario, error) {
 	celular=?, 
 	correo=?, 
 	sexo=?, 
-	direccion=?, 
-	username=?
+	direccion=? 
 	where id= ? 
 	`
 	_, err = tx.Exec(sql,
@@ -37,7 +41,6 @@ func Actualizar(db *sql.DB, input model.UpdateUsuario) (*model.Usuario, error) {
 		input.Correo,
 		input.Sexo,
 		input.Direccion,
-		input.Username,
 		input.ID,
 	)
 
@@ -46,8 +49,16 @@ func Actualizar(db *sql.DB, input model.UpdateUsuario) (*model.Usuario, error) {
 		return nil, err
 	}
 
-	if len(input.Password) > 0 {
+	if len(input.Password) > 0 && us.OauthID == nil {
 		_, err = tx.Exec("update usuarios set password=SHA2(?, 256) where id = ?", input.Password, input.ID)
+		if err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+	}
+
+	if len(input.Username) > 0 && us.OauthID == nil {
+		_, err = tx.Exec("update usuarios set username=? where id = ?", input.Username, input.ID)
 		if err != nil {
 			tx.Rollback()
 			return nil, err
@@ -96,6 +107,10 @@ func Actualizar(db *sql.DB, input model.UpdateUsuario) (*model.Usuario, error) {
 }
 
 func UpdatePerfil(db *sql.DB, input model.UpdatePerfil) (*model.Usuario, error) {
+	user, err := GetById(db, input.ID)
+	if err != nil {
+		return nil, err
+	}
 	tx, err := db.Begin()
 	if err != nil {
 		return nil, err
@@ -130,19 +145,21 @@ func UpdatePerfil(db *sql.DB, input model.UpdatePerfil) (*model.Usuario, error) 
 		return nil, err
 	}
 
-	if input.Username != nil && len(*input.Username) > 0 {
-		_, err = tx.Exec("update usuarios set username=? where id=?", input.Username, input.ID)
-		if err != nil {
-			tx.Rollback()
-			return nil, err
+	if user.OauthID == nil {
+		if input.Username != nil && len(*input.Username) > 0 {
+			_, err = tx.Exec("update usuarios set username=? where id=?", input.Username, input.ID)
+			if err != nil {
+				tx.Rollback()
+				return nil, err
+			}
 		}
-	}
 
-	if input.Password != nil && len(*input.Password) > 0 {
-		_, err = tx.Exec("update usuarios set password=SHA2(?, 256) where id = ?", input.Password, input.ID)
-		if err != nil {
-			tx.Rollback()
-			return nil, err
+		if input.Password != nil && len(*input.Password) > 0 {
+			_, err = tx.Exec("update usuarios set password=SHA2(?, 256) where id = ?", input.Password, input.ID)
+			if err != nil {
+				tx.Rollback()
+				return nil, err
+			}
 		}
 	}
 

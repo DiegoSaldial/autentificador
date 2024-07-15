@@ -6986,7 +6986,11 @@ func (ec *executionContext) unmarshalInputNewLogin(ctx context.Context, obj inte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"username", "password"}
+	if _, present := asMap["external"]; !present {
+		asMap["external"] = false
+	}
+
+	fieldsInOrder := [...]string{"username", "password", "external"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -7007,6 +7011,13 @@ func (ec *executionContext) unmarshalInputNewLogin(ctx context.Context, obj inte
 				return it, err
 			}
 			it.Password = data
+		case "external":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("external"))
+			data, err := ec.unmarshalNBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.External = data
 		}
 	}
 
