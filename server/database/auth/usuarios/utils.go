@@ -75,9 +75,10 @@ func cut_string(name string, max int) string {
 
 func oauth_emails_permitidos(email *string) error {
 	emails := os.Getenv("OAUTH_EMAILS_PERM")
+	emails = strings.Trim(emails, " ")
 	perms := strings.Split(emails, ",")
 
-	if len(perms) == 0 {
+	if len(emails) == 0 {
 		return nil
 	}
 
