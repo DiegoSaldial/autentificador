@@ -3,22 +3,27 @@ package xnotificaciones
 import (
 	"auth/graph/model"
 	"context"
-	"sync"
 )
 
-func NotificacionesSubs(ctx context.Context, userid string, mu *sync.Mutex, subs map[string]chan *model.XNotificacion) (<-chan *model.XNotificacion, error) {
+func NotificacionesSubs(ctx context.Context, userid string) (<-chan *model.XNotificacion, error) {
+
+	cha := GetGlobal()
+	cha.Mu.Lock()
+
 	ch := make(chan *model.XNotificacion, 1)
-	mu.Lock()
+	// mu.Lock()
 
-	subs[userid] = ch
+	// subs[userid] = ch
+	cha.Subscriptores[userid] = ch
 
-	mu.Unlock()
+	// mu.Unlock()
+	cha.Mu.Unlock()
 
 	go func() {
 		<-ctx.Done()
-		mu.Lock()
-		delete(subs, userid)
-		mu.Unlock()
+		cha.Mu.Lock()
+		delete(cha.Subscriptores, userid)
+		cha.Mu.Unlock()
 	}()
 
 	return ch, nil

@@ -4,6 +4,7 @@ import (
 	"auth/graph/model"
 	"database/sql"
 	"errors"
+	"os"
 	"strings"
 )
 
@@ -70,4 +71,31 @@ func cut_string(name string, max int) string {
 		return name[:max]
 	}
 	return name
+}
+
+func oauth_emails_permitidos(email *string) error {
+	emails := os.Getenv("OAUTH_EMAILS_PERM")
+	perms := strings.Split(emails, ",")
+
+	if len(perms) == 0 {
+		return nil
+	}
+
+	if email == nil {
+		return errors.New("el correo no debe ser vacio")
+	}
+
+	parts := strings.Split(*email, "@")
+	if len(parts) != 2 {
+		return errors.New("email no válido")
+	}
+	domain := parts[1]
+
+	for _, perm := range perms {
+		if strings.TrimSpace(perm) == domain {
+			return nil
+		}
+	}
+
+	return errors.New("utilice su correo de estos dominios: " + emails)
 }

@@ -4,24 +4,28 @@ import (
 	"auth/graph/model"
 	"context"
 	"fmt"
-	"sync"
 )
 
-func EnviarNotificacion(ctx context.Context, mu *sync.Mutex, subs map[string]chan *model.XNotificacion, mensaje model.XNotificacionEnvio) (bool, error) {
+func EnviarNotificacion(ctx context.Context, mensaje model.XNotificacionEnvio) (bool, error) {
 
-	mu.Lock()
+	// mu.Lock()
 
-	for _, ch := range subs {
-		xn := model.XNotificacion{
+	cha := GetGlobal()
+	cha.Mu.Lock()
+	// defer ch.Mu.Unlock()
+
+	for _, ch := range cha.Subscriptores {
+		xn := &model.XNotificacion{
 			Title:    mensaje.Title,
 			DataJSON: mensaje.DataJSON,
 		}
-		ch <- &xn
+		ch <- xn
 	}
 
-	mu.Unlock()
+	// mu.Unlock()
+	cha.Mu.Unlock()
 
-	fmt.Printf("%+v\n\n", subs)
+	fmt.Printf("-> %+v\n", cha.Subscriptores)
 
 	return true, nil
 }

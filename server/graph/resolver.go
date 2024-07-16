@@ -1,9 +1,7 @@
 package graph
 
 import (
-	"auth/graph/model"
 	"database/sql"
-	"sync"
 )
 
 // This file will not be regenerated automatically.
@@ -13,6 +11,6 @@ import (
 type Resolver struct {
 	DB *sql.DB
 
-	Mu            sync.Mutex
-	Subscriptores map[string]chan *model.XNotificacion
+	/* Mu            sync.Mutex
+	Subscriptores map[string]chan *model.XNotificacion */
 }

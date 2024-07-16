@@ -87,7 +87,7 @@ func (r *mutationResolver) AsignarMenusUsuario(ctx context.Context, input model.
 
 // EnviarNotificacion is the resolver for the enviarNotificacion field.
 func (r *mutationResolver) EnviarNotificacion(ctx context.Context, input model.XNotificacionEnvio) (bool, error) {
-	return xnotificaciones.EnviarNotificacion(ctx, &r.Mu, r.Subscriptores, input)
+	return xnotificaciones.EnviarNotificacion(ctx, input)
 }
 
 // Me is the resolver for the me field.
@@ -162,7 +162,7 @@ func (r *subscriptionResolver) NotificacionesSubs(ctx context.Context) (<-chan *
 		return nil, err
 	}
 	userid := tok.Usuario.ID
-	return xnotificaciones.NotificacionesSubs(ctx, userid, &r.Mu, r.Subscriptores)
+	return xnotificaciones.NotificacionesSubs(ctx, userid)
 }
 
 // Mutation returns MutationResolver implementation.

@@ -72,6 +72,11 @@ func Crear(db *sql.DB, input model.NewUsuario, oauth_id *string) (*model.Usuario
 }
 
 func CrearOauth(db *sql.DB, input model.NewUsuarioOauth) (*model.Usuario, error) {
+
+	if err := oauth_emails_permitidos(input.Correo); err != nil {
+		return nil, err
+	}
+
 	var id, oauth *string
 	xsql := "select id, oauth_id from usuarios where oauth_id=?"
 	err := db.QueryRow(xsql, input.Username).Scan(&id, &oauth)

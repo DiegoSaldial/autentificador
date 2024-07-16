@@ -2,8 +2,8 @@ package main
 
 import (
 	"auth/database/auth/xauth"
+	"auth/database/auth/xnotificaciones"
 	"auth/graph"
-	"auth/graph/model"
 	"database/sql"
 	"fmt"
 	"log"
@@ -66,8 +66,9 @@ func main() {
 		Debug:            false,
 	}).Handler)
 
-	subs := make(map[string]chan *model.XNotificacion)
-	resolver := &graph.Resolver{DB: db, Subscriptores: subs}
+	// subs := make(map[string]chan *model.XNotificacion)
+	xnotificaciones.InitializeGlobal()
+	resolver := &graph.Resolver{DB: db}
 	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: resolver}))
 
 	// websocket
