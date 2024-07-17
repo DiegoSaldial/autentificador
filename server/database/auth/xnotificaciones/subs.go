@@ -11,21 +11,27 @@ func NotificacionesSubs(ctx context.Context, userid string) (<-chan *model.XNoti
 	cha.Mu.Lock()
 
 	ch := make(chan *model.XNotificacion, 1)
-	// mu.Lock()
+	cha.Subscriptores[userid] = append(cha.Subscriptores[userid], ch)
 
-	// subs[userid] = ch
-	cha.Subscriptores[userid] = ch
-
-	// mu.Unlock()
 	cha.Mu.Unlock()
 
 	go func() {
 		<-ctx.Done()
 		cha.Mu.Lock()
-		delete(cha.Subscriptores, userid)
-		cha.Mu.Unlock()
+		defer cha.Mu.Unlock()
+		channels := cha.Subscriptores[userid]
+		for i, subscriber := range channels {
+			if subscriber == ch {
+				cha.Subscriptores[userid] = append(channels[:i], channels[i+1:]...)
+				break
+			}
+		}
+		// Remove the userID key if there are no more channels
+		if len(cha.Subscriptores[userid]) == 0 {
+			delete(cha.Subscriptores, userid)
+		}
+		close(ch)
 	}()
 
 	return ch, nil
-
 }

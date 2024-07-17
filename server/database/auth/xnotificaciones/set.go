@@ -7,23 +7,25 @@ import (
 )
 
 func EnviarNotificacion(ctx context.Context, mensaje model.XNotificacionEnvio) (bool, error) {
-
-	// mu.Lock()
-
 	cha := GetGlobal()
 	cha.Mu.Lock()
-	// defer ch.Mu.Unlock()
+	defer cha.Mu.Unlock()
 
-	for _, ch := range cha.Subscriptores {
+	for userID, channels := range cha.Subscriptores {
 		xn := &model.XNotificacion{
 			Title:    mensaje.Title,
 			DataJSON: mensaje.DataJSON,
 		}
-		ch <- xn
+		for _, ch := range channels {
+			select {
+			case ch <- xn:
+				// Successfully sent the notification
+			default:
+				// Channel is full, consider logging this event
+				fmt.Printf("Notification channel for user %s is full.\n", userID)
+			}
+		}
 	}
-
-	// mu.Unlock()
-	cha.Mu.Unlock()
 
 	fmt.Printf("-> %+v\n", cha.Subscriptores)
 

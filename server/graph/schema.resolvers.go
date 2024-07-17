@@ -155,6 +155,11 @@ func (r *queryResolver) Menus(ctx context.Context) ([]*model.Menus, error) {
 	return menu.Listar(r.DB)
 }
 
+// ConexionesWs is the resolver for the conexiones_ws field.
+func (r *queryResolver) ConexionesWs(ctx context.Context) (string, error) {
+	return xnotificaciones.VerConexiones()
+}
+
 // NotificacionesSubs is the resolver for the notificaciones_subs field.
 func (r *subscriptionResolver) NotificacionesSubs(ctx context.Context) (<-chan *model.XNotificacion, error) {
 	tok, err := xauth.CtxValueWs(ctx, r.DB, "")

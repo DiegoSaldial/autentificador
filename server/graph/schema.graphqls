@@ -196,6 +196,7 @@ type Query {
   usuarioById(input:GetUser!): ResponseMe!
   rolById(rol:String!): ResponseRolCreate!
   menus: [Menus!]!
+  conexiones_ws: String!
 }
 
 # =================================
