@@ -8,6 +8,11 @@
           <!-- <q-icon :name="fabYoutube" color="red" size="28px" /> -->
           <q-toolbar-title shrink class="text-weight-bold">
             Auth
+            <q-badge rounded :color="colorWs(store.ws_noti_status)">
+              <q-tooltip class="bg-purple">
+                <span>Estado de notificaciones</span>
+              </q-tooltip>
+            </q-badge>
           </q-toolbar-title>
         </q-btn>
 
@@ -79,6 +84,16 @@ export default {
 
     const toggleLeftDrawer = () => leftDrawerOpen.value = !leftDrawerOpen.value
 
+    const colorWs = (str) => {
+      const d = {
+        'connected':'green',
+        'closed':'negative',
+        'error':'red',
+        'connecting':'orange',
+      }
+      return d[str];
+    }
+
     onMounted(()=>{
       storeClima.setearClima(); 
     })
@@ -90,6 +105,7 @@ export default {
       store,
       show_time,
       refNotificaciones,
+      colorWs,
       toggleLeftDrawer,
 
       links3: [

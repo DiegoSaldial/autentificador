@@ -25,6 +25,7 @@ export const useLoginStore = defineStore('counter', {
     dataUser: ref(get_storage_name(xdatauser_name, '{}')),
     menus: ref(get_storage_name(xmenus_name, '[]')),
     tiempoSession: ref(''),
+    ws_noti_status: ref(''),
   }),
   getters: {
     getToken: (state) => computed(() => state.token),
@@ -32,6 +33,7 @@ export const useLoginStore = defineStore('counter', {
     getDataUser: (state) => computed(() => state.dataUser),
     getMenus: (state) => computed(() => state.menus),
     getTiempoSession: (state) => computed(() => state.tiempoSession),
+    getWsNoti: (state) => computed(() => state.ws_noti_status),
   },
   actions: {
     setToken(xtoken: string, xrefreshToken: string) {
@@ -64,5 +66,8 @@ export const useLoginStore = defineStore('counter', {
     setTiempoSession(str: string) {
       this.tiempoSession = str;
     },
+    setWsNoti(e:string){
+      this.ws_noti_status = e;
+    }
   },
 });

@@ -84,10 +84,10 @@ export async function getClientOptions() {
 
       lazy: true,
       on: {
-        connected: () => console.log('Connected to WebSocket'),
-        closed: () => console.log('WebSocket connection closed'),
-        error: (err) => console.error('WebSocket error:', err),
-        connecting: () => console.log('Reconnecting to WebSocket...'),
+        connected: () => { store.setWsNoti('connected'); console.log('Connected to WebSocket') },
+        closed: () => { store.setWsNoti('closed'); console.log('WebSocket connection closed') },
+        error: (err) => { store.setWsNoti('error'); console.error('WebSocket error:', err) },
+        connecting: () => { store.setWsNoti('connecting'); console.log('Reconnecting to WebSocket...') },
       },
       retryAttempts: Infinity,
     })

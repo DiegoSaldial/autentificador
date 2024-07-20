@@ -14,7 +14,7 @@ create table `usuarios`(
     `last_login` datetime,
     `oauth_id` varchar(80),
     `fecha_registro` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00'),
-    `fecha_update` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00') ON UPDATE CURRENT_TIMESTAMP
+    `fecha_update` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00') ON UPDATE CONVERT_TZ(NOW(), @@session.time_zone, '-4:00')
 );
 
 create table `roles`(
