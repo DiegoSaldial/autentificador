@@ -6,6 +6,7 @@ import (
 	"errors"
 	"os"
 	"strings"
+	"unicode"
 )
 
 func parseRow(row *sql.Row, t *model.Usuario) error {
@@ -99,4 +100,32 @@ func oauth_emails_permitidos(email *string) error {
 	}
 
 	return errors.New("utilice su correo de estos dominios: " + emails)
+}
+
+func esCaracterValido(r rune) error {
+	if unicode.IsSpace(r) {
+		return errors.New("contiene espacios")
+	}
+
+	if r == 'ñ' || r == 'Ñ' {
+		return errors.New("contiene ñ")
+	}
+
+	tildes := "áéíóúÁÉÍÓÚ"
+	for _, t := range tildes {
+		if r == t {
+			return errors.New("contiene tildes")
+		}
+	}
+
+	return nil
+}
+
+func validarCadena(cadena, field string) error {
+	for _, r := range cadena {
+		if err := esCaracterValido(r); err != nil {
+			return errors.New(field + ": " + err.Error())
+		}
+	}
+	return nil
 }

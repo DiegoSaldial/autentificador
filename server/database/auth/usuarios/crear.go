@@ -13,6 +13,13 @@ func Crear(db *sql.DB, input model.NewUsuario, oauth_id *string) (*model.Usuario
 	if err := permisos_obligatorios(input.Roles, input.PermisosSueltos); err != nil {
 		return nil, err
 	}
+	if err := validarCadena(input.Username, "username"); err != nil {
+		return nil, err
+	}
+	if err := validarCadena(input.Password, "password"); err != nil {
+		return nil, err
+	}
+
 	tx, err := db.Begin()
 	if err != nil {
 		return nil, err
