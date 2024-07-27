@@ -181,6 +181,7 @@ type Usuario struct {
 	Estado        bool       `json:"estado"`
 	LastLogin     *time.Time `json:"last_login,omitempty"`
 	OauthID       *string    `json:"oauth_id,omitempty"`
+	Conexiones    int        `json:"conexiones"`
 }
 
 type XNotificacion struct {

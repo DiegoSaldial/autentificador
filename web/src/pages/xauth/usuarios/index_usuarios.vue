@@ -53,6 +53,18 @@
         </q-td>
       </template>
 
+      <template v-slot:body-cell-conexiones="props">
+        <q-td :props="props"> 
+          <q-badge color="green" v-if="props.row.conexiones>0">
+            {{ props.row.conexiones }}
+            <q-tooltip class="bg-purple">
+              <span>Conexiones WebSockets</span>
+            </q-tooltip>
+          </q-badge>
+          <span v-else> {{ props.row.conexiones }} </span>
+        </q-td>
+      </template>
+
       <template v-slot:body-cell-opt="props">
         <q-td :props="props">
           <q-btn color="green-10" square flat icon="more_vert" size="small">
@@ -107,6 +119,7 @@ const columns = [
   { name: 'fecha_registro', label: 'registro', field: 'fecha_registro' },
   { name: 'fecha_update', label: 'modificado', field: 'fecha_update' },
   { name: 'estado', label: 'estado', field: 'estado' },
+  { name: 'conexiones', label: 'conexiones', field: 'conexiones' },
   { name: 'opt', label: '', field: 'opt' },
 ]
 
@@ -153,8 +166,8 @@ export default {
     const visualizar = (item) => refVer.value.open(item.id);
 
     const columnas = () => {
-      if(more_datos.value) visibleColumns.value = ['id','nombres','apellido1','apellido2','documento','celular','correo','sexo','direccion','username','last_login','fecha_registro','fecha_update','estado','opt'];
-      else visibleColumns.value = ['id','nombres','apellido1','apellido2','last_login','opt'];
+      if(more_datos.value) visibleColumns.value = ['id','nombres','apellido1','apellido2','documento','celular','correo','sexo','direccion','username','last_login','fecha_registro','fecha_update','estado','conexiones','opt'];
+      else visibleColumns.value = ['id','nombres','apellido1','apellido2','last_login','conexiones','opt'];
     }
 
     const setParams = async ()=> {

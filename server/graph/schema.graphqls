@@ -20,6 +20,7 @@ type Usuario {
   estado: Boolean! 
   last_login: Time
   oauth_id: String
+  conexiones: Int!
 } 
 
 type Rol { 

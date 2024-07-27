@@ -145,6 +145,7 @@ type ComplexityRoot struct {
 		Apellido1     func(childComplexity int) int
 		Apellido2     func(childComplexity int) int
 		Celular       func(childComplexity int) int
+		Conexiones    func(childComplexity int) int
 		Correo        func(childComplexity int) int
 		Direccion     func(childComplexity int) int
 		Documento     func(childComplexity int) int
@@ -711,6 +712,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Usuario.Celular(childComplexity), true
+
+	case "Usuario.conexiones":
+		if e.complexity.Usuario.Conexiones == nil {
+			break
+		}
+
+		return e.complexity.Usuario.Conexiones(childComplexity), true
 
 	case "Usuario.correo":
 		if e.complexity.Usuario.Correo == nil {
@@ -1742,6 +1750,8 @@ func (ec *executionContext) fieldContext_Mutation_createUsuario(ctx context.Cont
 				return ec.fieldContext_Usuario_last_login(ctx, field)
 			case "oauth_id":
 				return ec.fieldContext_Usuario_oauth_id(ctx, field)
+			case "conexiones":
+				return ec.fieldContext_Usuario_conexiones(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Usuario", field.Name)
 		},
@@ -1829,6 +1839,8 @@ func (ec *executionContext) fieldContext_Mutation_createOauth(ctx context.Contex
 				return ec.fieldContext_Usuario_last_login(ctx, field)
 			case "oauth_id":
 				return ec.fieldContext_Usuario_oauth_id(ctx, field)
+			case "conexiones":
+				return ec.fieldContext_Usuario_conexiones(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Usuario", field.Name)
 		},
@@ -1916,6 +1928,8 @@ func (ec *executionContext) fieldContext_Mutation_updateUsuario(ctx context.Cont
 				return ec.fieldContext_Usuario_last_login(ctx, field)
 			case "oauth_id":
 				return ec.fieldContext_Usuario_oauth_id(ctx, field)
+			case "conexiones":
+				return ec.fieldContext_Usuario_conexiones(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Usuario", field.Name)
 		},
@@ -2003,6 +2017,8 @@ func (ec *executionContext) fieldContext_Mutation_updateUsuarioPerfil(ctx contex
 				return ec.fieldContext_Usuario_last_login(ctx, field)
 			case "oauth_id":
 				return ec.fieldContext_Usuario_oauth_id(ctx, field)
+			case "conexiones":
+				return ec.fieldContext_Usuario_conexiones(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Usuario", field.Name)
 		},
@@ -2699,6 +2715,8 @@ func (ec *executionContext) fieldContext_Query_usuarios(ctx context.Context, fie
 				return ec.fieldContext_Usuario_last_login(ctx, field)
 			case "oauth_id":
 				return ec.fieldContext_Usuario_oauth_id(ctx, field)
+			case "conexiones":
+				return ec.fieldContext_Usuario_conexiones(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Usuario", field.Name)
 		},
@@ -3241,6 +3259,8 @@ func (ec *executionContext) fieldContext_ResponseMe_usuario(_ context.Context, f
 				return ec.fieldContext_Usuario_last_login(ctx, field)
 			case "oauth_id":
 				return ec.fieldContext_Usuario_oauth_id(ctx, field)
+			case "conexiones":
+				return ec.fieldContext_Usuario_conexiones(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Usuario", field.Name)
 		},
@@ -5115,6 +5135,50 @@ func (ec *executionContext) fieldContext_Usuario_oauth_id(_ context.Context, fie
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Usuario_conexiones(ctx context.Context, field graphql.CollectedField, obj *model.Usuario) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Usuario_conexiones(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Conexiones, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Usuario_conexiones(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Usuario",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -8502,6 +8566,11 @@ func (ec *executionContext) _Usuario(ctx context.Context, sel ast.SelectionSet, 
 			out.Values[i] = ec._Usuario_last_login(ctx, field, obj)
 		case "oauth_id":
 			out.Values[i] = ec._Usuario_oauth_id(ctx, field, obj)
+		case "conexiones":
+			out.Values[i] = ec._Usuario_conexiones(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

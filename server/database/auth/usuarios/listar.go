@@ -4,6 +4,7 @@ import (
 	"auth/database/auth/menu"
 	"auth/database/auth/permisos"
 	"auth/database/auth/roles"
+	"auth/database/auth/xnotificaciones"
 	"auth/graph/model"
 	"database/sql"
 	"errors"
@@ -130,6 +131,10 @@ func GetUsuarios(db *sql.DB, query model.QueryUsuarios) ([]*model.Usuario, error
 	}
 	defer rows.Close()
 
+	cha := xnotificaciones.GetGlobal()
+	cha.Mu.Lock()
+	defer cha.Mu.Unlock()
+
 	usuarios := []*model.Usuario{}
 	for rows.Next() {
 		u := model.Usuario{}
@@ -137,6 +142,9 @@ func GetUsuarios(db *sql.DB, query model.QueryUsuarios) ([]*model.Usuario, error
 		if er != nil {
 			return nil, er
 		}
+
+		cons := len(cha.Subscriptores[u.ID])
+		u.Conexiones = cons
 		usuarios = append(usuarios, &u)
 	}
 

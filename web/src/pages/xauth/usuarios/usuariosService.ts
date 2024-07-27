@@ -22,6 +22,7 @@ export default class UsuariosService {
           fecha_registro
           fecha_update
           estado
+          conexiones
         }
       }
       `;
