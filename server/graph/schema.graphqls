@@ -43,6 +43,7 @@ type Menus {
     icon: String!
     color: String!
     grupo: Int!
+    orden: Int!
 }
 
 # =================================

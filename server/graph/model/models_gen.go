@@ -29,6 +29,7 @@ type Menus struct {
 	Icon  string `json:"icon"`
 	Color string `json:"color"`
 	Grupo int    `json:"grupo"`
+	Orden int    `json:"orden"`
 }
 
 type Mutation struct {

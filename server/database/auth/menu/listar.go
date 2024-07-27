@@ -7,7 +7,7 @@ import (
 )
 
 func Listar(db *sql.DB) ([]*model.Menus, error) {
-	sql := `select id,label,path,icon,color,grupo from menus order by grupo,id`
+	sql := `select id,label,path,icon,color,grupo, orden from menus order by grupo,orden,id`
 	rows, err := db.Query(sql)
 	if err != nil {
 		return nil, err
@@ -27,26 +27,15 @@ func Listar(db *sql.DB) ([]*model.Menus, error) {
 }
 
 func ListarAsignados(db *sql.DB, userid string, only_user bool) ([]*model.Menus, error) {
-	/* sql := `
-	select m.id,m.label,m.path,m.icon,m.color,m.grupo
-		from menus m
-		inner join menus_usuario mu on mu.menu_id = m.id
-		left join rol_usuario ru on ru.usuario_id = mu.usuario_id
-		left join rol_menus rm on rm.rol = ru.rol
-		where mu.usuario_id = ?
-		group by m.id
-		order by m.grupo,m.id
-	` */
-
 	xsql := `
-	SELECT DISTINCT m.id, m.label, m.path, m.icon, m.color, m.grupo
+	SELECT DISTINCT m.id, m.label, m.path, m.icon, m.color, m.grupo, m.orden
 	FROM menus m
 	LEFT JOIN menus_usuario mu ON mu.menu_id = m.id AND mu.usuario_id = ?
 	LEFT JOIN rol_menus rm ON rm.menu_id = m.id
 	LEFT JOIN roles r ON r.nombre = rm.rol
 	LEFT JOIN rol_usuario ru ON ru.rol = r.nombre AND ru.usuario_id = ?
 	WHERE (mu.usuario_id IS NOT NULL OR ru.usuario_id IS NOT NULL) %s
-	ORDER BY m.grupo, m.id
+	ORDER BY m.grupo, m.orden, m.id
 	`
 
 	from_user := ""
@@ -76,7 +65,7 @@ func ListarAsignados(db *sql.DB, userid string, only_user bool) ([]*model.Menus,
 
 func GetMenusbyRol(db *sql.DB, rol string) ([]*model.Menus, error) {
 	sql := `
-	select m.id,m.label,m.path,m.icon,m.color,m.grupo 
+	select m.id,m.label,m.path,m.icon,m.color,m.grupo, m.orden 
 	from menus m
 	inner join rol_menus rm on rm.menu_id = m.id
 	where rm.rol = ?

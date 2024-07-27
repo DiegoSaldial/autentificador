@@ -14,7 +14,7 @@ create table `usuarios`(
     `last_login` datetime,
     `oauth_id` varchar(80),
     `fecha_registro` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00'),
-    `fecha_update` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00') ON UPDATE CONVERT_TZ(NOW(), @@session.time_zone, '-4:00')
+    `fecha_update` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00') ON UPDATE now()
 );
 
 create table `roles`(
@@ -68,7 +68,8 @@ create table `menus`(
     `path` varchar(40) not null,
     `icon` varchar(40) not null,
     `color` varchar(40) not null,
-    `grupo` tinyint(1) unsigned not null default 1
+    `grupo` tinyint(1) unsigned not null default 1,
+    `orden` tinyint(1) unsigned not null default 1
 );
 
 create table `menus_usuario`(
@@ -128,7 +129,7 @@ VALUES
     ('rolById', 'Listar rol por id', 'Listar los datos de un rol en el sistema.'),
     ('asignarMenusUsuario', 'Asignar', 'Asignar permisos al usuario en el sistema.'),
     ('menus', 'menus', 'Listar menus en el sistema.'),
-    ('menus_by_usuario', 'menus_by_usuario', 'Menus de usuario en el sistema.');
+    ('menus_by_usuario', 'Listar menus por usuario', 'Menus de usuario en el sistema.');
 
 insert into `rol_permiso`(`rol`,`metodo`)
 values 
@@ -159,12 +160,9 @@ values
 
 
 
-
-
-
-insert into `menus`(`label`,`path`,`icon`,`grupo`,`color`) values 
-('Usuarios','/usuarios','group',1,'primary'),
-('Roles','/roles','local_movies',1,'primary');
+insert into `menus`(`id`,`label`,`path`,`icon`,`grupo`,`color`,`orden`) values 
+(1,'Usuarios','/usuarios','group',1,'primary',1),
+(2,'Roles','/roles','local_movies',1,'primary',2);
 
 
 insert into `menus_usuario`(usuario_id,menu_id) values 

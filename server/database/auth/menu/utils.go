@@ -13,5 +13,6 @@ func parseRows(rows *sql.Rows, t *model.Menus) error {
 		&t.Icon,
 		&t.Color,
 		&t.Grupo,
+		&t.Orden,
 	)
 }

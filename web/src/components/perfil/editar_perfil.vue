@@ -2,32 +2,32 @@
   <q-dialog v-model="alert" persistent square>
     <q-card flat bordered v-on:click="checkClickSession()">
       <q-card-section>
-        <div class="text-h6"> Editar Info Personal </div>
+        <div class="text-h6"> Editar Información Personal </div>
       </q-card-section>
 
       <q-card-section class="q-pt-none">
         <q-form @submit="onSubmit">
           <div class="row q-col-gutter-xs">
             <div class="col-xs-12 col-sm-6">
-              <q-input filled v-model.trim="input.nombres" label="* Nombres:" required lazy-rules dense :rules="[(val) => validaciones.val_nombre(val)]" />
+              <q-input outlined v-model.trim="input.nombres" label="* Nombres:" required lazy-rules dense :rules="[(val) => validaciones.val_nombre(val)]" />
             </div>
             <div class="col-xs-12 col-sm-6">
-              <q-input filled v-model.trim="input.apellido1" label="* Apellido 1:" required lazy-rules dense :rules="[(val) => validaciones.val_apellido1(val)]" />
+              <q-input outlined v-model.trim="input.apellido1" label="* Apellido 1:" required lazy-rules dense :rules="[(val) => validaciones.val_apellido1(val)]" />
             </div>
             <div class="col-xs-12 col-sm-6">
-              <q-input filled v-model.trim="input.apellido2" label="Apellido 2:" dense lazy-rules :rules="[(val) => validaciones.val_apellido2(val)]" />
+              <q-input outlined v-model.trim="input.apellido2" label="Apellido 2:" dense lazy-rules :rules="[(val) => validaciones.val_apellido2(val)]" />
             </div>
             <div class="col-xs-12 col-sm-6">
-              <q-input filled v-model.trim="input.celular" label="* Celular:" dense required lazy-rules :rules="[(val) => validaciones.val_celular(val)]" />
+              <q-input outlined v-model.trim="input.celular" label="* Celular:" dense required lazy-rules :rules="[(val) => validaciones.val_celular(val)]" />
             </div>
             <div class="col-xs-12 col-sm-6">
-              <q-input filled v-model.trim="input.correo" label="Correo:" dense lazy-rules :rules="[(val) => validaciones.val_correo(val)]" />
+              <q-input outlined v-model.trim="input.correo" label="Correo:" dense lazy-rules :rules="[(val) => validaciones.val_correo(val)]" />
             </div>
             <div class="col-xs-12 col-sm-6">
-              <q-input filled v-model.trim="input.documento" label="Documento:" dense lazy-rules :rules="[(val) => validaciones.val_documento(val)]" />
+              <q-input outlined v-model.trim="input.documento" label="Documento:" dense lazy-rules :rules="[(val) => validaciones.val_documento(val)]" />
             </div>
             <div class="col-xs-12 col-sm-12">
-              <q-input filled v-model.trim="input.direccion" label="Direccion:" dense lazy-rules :rules="[(val) => validaciones.val_direccion(val)]" />
+              <q-input outlined v-model.trim="input.direccion" label="Direccion:" dense lazy-rules :rules="[(val) => validaciones.val_direccion(val)]" />
             </div> 
           </div>
 

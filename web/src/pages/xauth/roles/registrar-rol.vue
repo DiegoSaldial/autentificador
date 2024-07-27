@@ -9,13 +9,13 @@
         <q-form @submit="onSubmit">
           <div class="row q-col-gutter-xs">
             <div class="col-xs-12 col-sm-6">
-              <q-input filled v-model.trim="input.nombre" label="Nombre" lazy-rules dense :rules="[(val) => validaciones.val_nombre(val)]" />
+              <q-input outlined v-model.trim="input.nombre" label="Nombre" lazy-rules dense :rules="[(val) => validaciones.val_nombre(val)]" />
             </div>
             <div class="col-xs-12 col-sm-6">
-              <q-input filled v-model.trim="input.descripcion" label="Descripcion" lazy-rules dense counter :rules="[(val) => validaciones.val_descripcion(val)]" />
+              <q-input outlined v-model.trim="input.descripcion" label="Descripcion" lazy-rules dense counter :rules="[(val) => validaciones.val_descripcion(val)]" />
             </div>
             <div class="col-xs-12 col-sm-6">
-              <q-input filled v-model.number="input.jerarquia" label="Jerarquia" type="number" lazy-rules dense counter :rules="[(val) => validaciones.val_jerarquia(val)]" />
+              <q-input outlined v-model.number="input.jerarquia" label="Jerarquia" type="number" lazy-rules dense counter :rules="[(val) => validaciones.val_jerarquia(val)]" />
             </div>
 
             <div class="col-xs-12 col-sm-12">

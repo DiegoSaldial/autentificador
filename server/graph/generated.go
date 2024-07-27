@@ -56,6 +56,7 @@ type ComplexityRoot struct {
 		ID    func(childComplexity int) int
 		Icon  func(childComplexity int) int
 		Label func(childComplexity int) int
+		Orden func(childComplexity int) int
 		Path  func(childComplexity int) int
 	}
 
@@ -243,6 +244,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Menus.Label(childComplexity), true
+
+	case "Menus.orden":
+		if e.complexity.Menus.Orden == nil {
+			break
+		}
+
+		return e.complexity.Menus.Orden(childComplexity), true
 
 	case "Menus.path":
 		if e.complexity.Menus.Path == nil {
@@ -1493,6 +1501,50 @@ func (ec *executionContext) _Menus_grupo(ctx context.Context, field graphql.Coll
 }
 
 func (ec *executionContext) fieldContext_Menus_grupo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Menus",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Menus_orden(ctx context.Context, field graphql.CollectedField, obj *model.Menus) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Menus_orden(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Orden, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Menus_orden(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Menus",
 		Field:      field,
@@ -2850,6 +2902,8 @@ func (ec *executionContext) fieldContext_Query_menus(_ context.Context, field gr
 				return ec.fieldContext_Menus_color(ctx, field)
 			case "grupo":
 				return ec.fieldContext_Menus_grupo(ctx, field)
+			case "orden":
+				return ec.fieldContext_Menus_orden(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Menus", field.Name)
 		},
@@ -3245,6 +3299,8 @@ func (ec *executionContext) fieldContext_ResponseMe_menus(_ context.Context, fie
 				return ec.fieldContext_Menus_color(ctx, field)
 			case "grupo":
 				return ec.fieldContext_Menus_grupo(ctx, field)
+			case "orden":
+				return ec.fieldContext_Menus_orden(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Menus", field.Name)
 		},
@@ -3865,6 +3921,8 @@ func (ec *executionContext) fieldContext_ResponseRolCreate_menus(_ context.Conte
 				return ec.fieldContext_Menus_color(ctx, field)
 			case "grupo":
 				return ec.fieldContext_Menus_grupo(ctx, field)
+			case "orden":
+				return ec.fieldContext_Menus_orden(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Menus", field.Name)
 		},
@@ -7610,6 +7668,11 @@ func (ec *executionContext) _Menus(ctx context.Context, sel ast.SelectionSet, ob
 			}
 		case "grupo":
 			out.Values[i] = ec._Menus_grupo(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "orden":
+			out.Values[i] = ec._Menus_orden(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}

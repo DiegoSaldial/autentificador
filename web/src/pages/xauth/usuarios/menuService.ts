@@ -11,6 +11,7 @@ export default class MenusService {
           label
           icon
           grupo
+          orden
         }
       }
     `;
