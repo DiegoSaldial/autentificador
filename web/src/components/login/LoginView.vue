@@ -52,6 +52,7 @@ import MeService from './meService';
 import { cargarMenus } from './utils';
 import { loginGoogle } from './xfirebaseAuth';
 import { Notify } from 'quasar';
+import { useIndexedStore } from 'stores/indexed-store'
 
 export default {
   setup() {
@@ -63,6 +64,7 @@ export default {
     const useLogin = useLoginStore();
     const pwd = ref('password');
     const accept_oauth = ref(false);
+    const useIndexed = useIndexedStore();
 
     const onSubmit = async (u = null, p = null) => {
       const external = process.env.EXTERNAL_LOGIN;
@@ -80,6 +82,7 @@ export default {
       if (res.login) {
         const l = res.login;
         useLogin.setToken(l.token, l.refreshToken);
+        useIndexed.setToken(l.token, l.refreshToken);
         getMe();
       }
     };
@@ -122,6 +125,7 @@ export default {
       loading,
       pwd,
       accept_oauth,
+      useIndexed,
       changePWD,
       googleLogin,
       onSubmit,
@@ -133,5 +137,4 @@ export default {
     };
   },
 };
-</script>
-./xfirebaseAuth
+</script> 

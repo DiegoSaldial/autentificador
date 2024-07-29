@@ -21,7 +21,7 @@ export const useClimaStore = defineStore('counterClima', {
   },
   actions: {
     async setearClima() {
-      console.log('>>>', this.clima);
+      // console.log('>>>', this.clima);
 
       if (!this.clima.ciudad && keep_clima) {
         const xclima = await clima();

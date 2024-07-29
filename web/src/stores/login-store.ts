@@ -40,8 +40,9 @@ export const useLoginStore = defineStore('counter', {
       this.token = null;
       this.refreshToken = null;
       this.dataUser = {};
-      if (!xtoken) localStorage.clear();
-      else {
+      if (!xtoken) {
+        this.clearStore();
+      } else {
         this.setNewToken(xtoken);
         localStorage.setItem(xtokenrefresh_name, btoa(xrefreshToken));
         this.refreshToken = xrefreshToken;
@@ -66,8 +67,16 @@ export const useLoginStore = defineStore('counter', {
     setTiempoSession(str: string) {
       this.tiempoSession = str;
     },
-    setWsNoti(e:string){
+    setWsNoti(e: string) {
       this.ws_noti_status = e;
-    }
+    },
+    clearStore() {
+      // localStorage.clear();
+      for (const clave in process.env) {
+        if (process.env.hasOwnProperty(clave)) {
+          localStorage.removeItem(process.env[clave] + '');
+        }
+      }
+    },
   },
 });
