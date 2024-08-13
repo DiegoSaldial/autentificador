@@ -44,7 +44,9 @@ const notificaciones_subs = async () => {
       Notify.create({
         message: msg.value,
         position: 'top-right',
-        color: 'orange',
+        color: 'green',
+        progress: true,
+        progressClass: 'bg-white text-white',
       });
     },
     error(err) {

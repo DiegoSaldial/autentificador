@@ -6,6 +6,7 @@
       :rows="rows"
       :columns="columns"
       row-key="id"
+      dense
       hide-pagination :rows-per-page-options="[0]"
       :visible-columns="visibleColumns"
       :filter="filter"

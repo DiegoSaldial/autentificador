@@ -1,11 +1,19 @@
 package utils
 
 import (
+	"bytes"
 	"encoding/base64"
 	"errors"
+	"image"
 	"os"
 	"path/filepath"
+	"strings"
 
+	_ "image/jpeg"
+	_ "image/png"
+
+	"github.com/chai2010/webp"
+	"github.com/nfnt/resize"
 	"github.com/vincent-petithory/dataurl"
 )
 
@@ -30,12 +38,12 @@ func SubirImagen(img64, prefix, idbol string) (string, error) {
 
 	sizeInBytes := len(mydataurl.Data)
 	sizeInKB := float64(sizeInBytes) / 1024.0
-	if sizeInKB > 1024 {
-		return "", errors.New("la imagen no debe exceder 1 MB")
+	if sizeInKB > 2048 {
+		return "", errors.New("la imagen no debe exceder 2 MB")
 	}
 
 	dir := "res"
-	fileName := prefix + "-" + idbol + ".png"
+	fileName := prefix + "-" + idbol + ".webp"
 	filePath := filepath.Join(dir, fileName)
 
 	// Crear la carpeta si no existe
@@ -49,7 +57,12 @@ func SubirImagen(img64, prefix, idbol string) (string, error) {
 	}
 	defer file.Close()
 
-	_, err = file.Write(mydataurl.Data)
+	image, err := reducirImageWebp(img64)
+	if err != nil {
+		return "", err
+	}
+
+	err = os.WriteFile(filePath, image, 0644)
 	if err != nil {
 		return "", err
 	}
@@ -57,16 +70,51 @@ func SubirImagen(img64, prefix, idbol string) (string, error) {
 	return filePath, nil
 }
 
+func reducirImageWebp(img64 string) ([]byte, error) {
+	index := strings.Index(img64, "base64,") + 7
+	img64 = img64[index:]
+
+	imgData, err := base64.StdEncoding.DecodeString(img64)
+	if err != nil {
+		return nil, err
+	}
+
+	img, _, err := image.Decode(bytes.NewReader(imgData))
+
+	if err != nil {
+		return nil, err
+	}
+
+	originalBounds := img.Bounds()
+	originalWidth := originalBounds.Dx()
+
+	maxAncho := 1024
+	if originalWidth > maxAncho {
+		img = resize.Resize(uint(maxAncho), 0, img, resize.Lanczos3)
+	}
+
+	var buf bytes.Buffer
+	if err := webp.Encode(&buf, img, &webp.Options{Lossless: false, Quality: 90}); err != nil {
+		return nil, err
+	}
+
+	return buf.Bytes(), nil
+}
+
 func GetImagen(url string) (string, error) {
 	data, err := os.ReadFile(url)
 	if err != nil {
-		return "", err
+		t := err.Error()
+		if strings.Contains(t, "no such") {
+			data = []byte("iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO")
+		} else {
+			return "", err
+		}
 	}
 
-	// Codifica el archivo en base64
 	base64Data := base64.StdEncoding.EncodeToString(data)
 
 	// Construye el Data URI
-	dataURI := "data:image/png;base64," + base64Data
+	dataURI := "data:image/webp;base64," + base64Data
 	return dataURI, nil
 }

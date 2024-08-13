@@ -46,7 +46,7 @@
               <q-input outlined v-model.trim="input.password" label="password" :placeholder="input.id ? 'vacio sin cambios' : ''" lazy-rules dense counter :rules="[(val) => validaciones.val_password(val, input)]" />
             </div>
             <div class="col-xs-12 col-sm-12">
-              <q-file style="min-width: 50px" clearable v-model="foto_file" dense accept="image/*" :disable="loading" square outlined color="orange" label="Seleccionar foto de perfil" max-file-size="1048576" @update:model-value="filevalue($event)" @rejected="onRejected" >
+              <q-file style="min-width: 50px" clearable v-model="foto_file" dense accept="image/*" :disable="loading" square outlined color="orange" label="Seleccionar foto de perfil" max-file-size="2097152" @update:model-value="filevalue($event)" @rejected="onRejected" >
                 <template v-slot:prepend>
                   <q-icon name="upload" />
                 </template>

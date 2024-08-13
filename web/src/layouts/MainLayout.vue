@@ -30,9 +30,15 @@
       <q-scroll-area class="fit">
         <q-list padding>
 
-          <q-item-label header class="text-weight-bold text-uppercase">
+          <!-- <q-item-label header class="text-weight-bold text-uppercase q-pb-none">
             Menu
-          </q-item-label>
+          </q-item-label> -->
+
+          <q-item class="justify-center">
+            <q-avatar v-if="foto_64" >
+              <q-img :src="foto_64" spinner-color="white" />
+            </q-avatar>
+          </q-item>
 
           <template v-for="t in store.menus">
             <template v-for="(link,i) in t" :key="link.text" >
@@ -63,10 +69,11 @@
 </template>
 
 <script>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { fabYoutube } from '@quasar/extras/fontawesome-v6'
 import {useLoginStore} from 'stores/login-store'
 import {useClimaStore} from 'stores/clima-store'
+import PerfilService from 'src/components/perfil/perfilService'
 import LoginView from 'components/login/LoginView.vue'
 import BtnPerfil from 'components/perfil/boton_perfil.vue'
 import Notificaciones from 'pages/xauth/notificaciones/index_notificaciones.vue'
@@ -81,6 +88,8 @@ export default {
     const storeClima = useClimaStore();
     const show_time = ref(process.env.SHOW_TIME_LABEL)
     const refNotificaciones = ref()
+    const perfilService = new PerfilService()
+    const foto_64 = ref('');
 
     const toggleLeftDrawer = () => leftDrawerOpen.value = !leftDrawerOpen.value
 
@@ -94,8 +103,27 @@ export default {
       return d[str];
     }
 
+    const getFoto = async () => {
+      foto_64.value = '';
+      const data = store.dataUser;
+      const us = data.usuario;
+      if(!us) return;
+      const url = us.foto_url;
+      if(!url) return;
+      const res = await perfilService.get_imagen(url); 
+      if(res && res.get_imagen) foto_64.value = res.get_imagen; 
+    }
+
+    watch(
+      () => store.dataUser,
+      () => { 
+        if (store.dataUser) getFoto();
+      }
+    );
+
     onMounted(()=>{
       storeClima.setearClima(); 
+      getFoto();
     })
 
     return {
@@ -105,6 +133,7 @@ export default {
       store,
       show_time,
       refNotificaciones,
+      foto_64,
       colorWs,
       toggleLeftDrawer,
 
