@@ -7,7 +7,7 @@ export default class PerfilService {
     const sql = gql`
       query{
         me(input:{show_roles:true, show_permisos:true}){
-          usuario{id nombres apellido1 apellido2 documento celular correo sexo direccion username fecha_registro fecha_update estado}
+          usuario{id nombres apellido1 apellido2 documento celular correo sexo direccion username fecha_registro fecha_update foto_url estado}
         }
       }
       `;
@@ -21,5 +21,16 @@ export default class PerfilService {
       }
       `;
       return await query(sql,{input:input}).then(d=>d).catch(e=>e)
+  }
+
+  async get_imagen(url: string) {
+    const sql = gql`
+      query get_imagen($url: String!) {
+        get_imagen(url: $url)
+      }
+    `;
+    return await query(sql, { url: url })
+      .then((d) => d)
+      .catch((e) => e);
   }
 }

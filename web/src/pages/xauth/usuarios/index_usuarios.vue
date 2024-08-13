@@ -29,6 +29,12 @@
         <q-inner-loading showing color="primary" />
       </template>
 
+      <template v-slot:body-cell-foto_url="props">
+        <q-td :props="props">
+          <img v-if="props.row.foto64" :src="props.row.foto64" alt="perfil" style="max-width: 50px;">
+        </q-td>
+      </template>
+      
       <template v-slot:body-cell-fecha_registro="props">
         <q-td :props="props">
           {{ parseFecha(props.row.fecha_registro, true) }}
@@ -106,6 +112,7 @@ import { useRoute, useRouter } from 'vue-router';
 
 const columns = [
   { name: 'id', align: 'center', label: 'ID', field: 'id', sortable: true },
+  { name: 'foto_url', label: '', field: 'foto_url', sortable: false  },
   { name: 'nombres', label: 'Nombres', field: 'nombres', sortable: true },
   { name: 'apellido1', label: 'apellido1', field: 'apellido1' },
   { name: 'apellido2', label: 'apellido2', field: 'apellido2' },
@@ -148,7 +155,16 @@ export default {
         rol: route.query.rol?route.query.rol:null,
       }
       const res = await usuariosService.usuarios(query)
-      if(res.usuarios) rows.value = res.usuarios;
+      if(res.usuarios) {
+        const us = res.usuarios;
+        for(let i=0;i<us.length;i++){
+          us[i].foto64 = ''; 
+        } 
+        rows.value = us;
+        rows.value.forEach(x=>{
+          getFoto(x)
+        })
+      }
       loading.value = false; 
     }
 
@@ -166,8 +182,15 @@ export default {
     const visualizar = (item) => refVer.value.open(item.id);
 
     const columnas = () => {
-      if(more_datos.value) visibleColumns.value = ['id','nombres','apellido1','apellido2','documento','celular','correo','sexo','direccion','username','last_login','fecha_registro','fecha_update','estado','conexiones','opt'];
-      else visibleColumns.value = ['id','nombres','apellido1','apellido2','last_login','conexiones','opt'];
+      if(more_datos.value) visibleColumns.value = ['id','foto_url','nombres','apellido1','apellido2','documento','celular','correo','sexo','direccion','username','last_login','fecha_registro','fecha_update','estado','conexiones','opt'];
+      else visibleColumns.value = ['id','foto_url','nombres','apellido1','apellido2','last_login','conexiones','opt'];
+    }
+
+    const getFoto = async (us) => {
+      const url = us.foto_url;
+      if(!url) return url;
+      const res = await usuariosService.get_imagen(url); 
+      if(res && res.get_imagen) us.foto64 = res.get_imagen; 
     }
 
     const setParams = async ()=> {
@@ -201,7 +224,7 @@ export default {
       registrar,
       actualizar,
       visualizar,
-      parseFecha
+      parseFecha, 
     }
   }
 }

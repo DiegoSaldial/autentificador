@@ -1,6 +1,7 @@
 package usuarios
 
 import (
+	"auth/database/auth/utils"
 	"auth/graph/model"
 	"database/sql"
 	"fmt"
@@ -49,6 +50,7 @@ func Crear(db *sql.DB, input model.NewUsuario, oauth_id *string) (*model.Usuario
 	}
 
 	id, _ := res.LastInsertId()
+	xid := strconv.FormatInt(id, 10)
 
 	// asignar roles
 	if len(input.Roles) > 0 {
@@ -58,7 +60,7 @@ func Crear(db *sql.DB, input model.NewUsuario, oauth_id *string) (*model.Usuario
 			return nil, err
 		}
 	}
-	// fi asignar roles
+	// fin asignar roles
 
 	// asignar permisos sueltos
 	if len(input.PermisosSueltos) > 0 {
@@ -69,6 +71,23 @@ func Crear(db *sql.DB, input model.NewUsuario, oauth_id *string) (*model.Usuario
 		}
 	}
 	// fin permisos sueltos
+
+	// subir foto perfil
+	if input.Foto64 != nil {
+		foto_url, err := utils.SubirImagen(*input.Foto64, "perfil", xid)
+		if err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+
+		sql = `update usuarios set foto_url=? where id=?`
+		_, err = tx.Exec(sql, foto_url, id)
+		if err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+	}
+	// fin subir foto perfil
 
 	err = tx.Commit()
 	if err != nil {

@@ -62,6 +62,7 @@ type NewUsuario struct {
 	Password        string   `json:"password"`
 	Roles           []string `json:"roles"`
 	PermisosSueltos []string `json:"permisos_sueltos"`
+	Foto64          *string  `json:"foto64,omitempty"`
 }
 
 type NewUsuarioOauth struct {
@@ -147,6 +148,7 @@ type UpdatePerfil struct {
 	Direccion *string `json:"direccion,omitempty"`
 	Username  *string `json:"username,omitempty"`
 	Password  *string `json:"password,omitempty"`
+	Foto64    *string `json:"foto64,omitempty"`
 }
 
 type UpdateUsuario struct {
@@ -163,6 +165,7 @@ type UpdateUsuario struct {
 	Password        string   `json:"password"`
 	Roles           []string `json:"roles"`
 	PermisosSueltos []string `json:"permisos_sueltos"`
+	Foto64          *string  `json:"foto64,omitempty"`
 }
 
 type Usuario struct {
@@ -181,6 +184,7 @@ type Usuario struct {
 	Estado        bool       `json:"estado"`
 	LastLogin     *time.Time `json:"last_login,omitempty"`
 	OauthID       *string    `json:"oauth_id,omitempty"`
+	FotoURL       *string    `json:"foto_url,omitempty"`
 	Conexiones    int        `json:"conexiones"`
 }
 

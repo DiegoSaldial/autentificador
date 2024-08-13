@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import gql from 'graphql-tag';
-import { query, mutar } from 'stores/server'
-import { NewUsuario,QueryUsuarios,UpdateUsuario } from './type_usuarios';
+import { query, mutar } from 'stores/server';
+import { NewUsuario, QueryUsuarios, UpdateUsuario } from './type_usuarios';
 
 export default class UsuariosService {
   async usuarios(xquery: QueryUsuarios) {
     const sql = gql`
-      query usuarios($query:QueryUsuarios!){
-        usuarios(query:$query){
+      query usuarios($query: QueryUsuarios!) {
+        usuarios(query: $query) {
           id
           nombres
           apellido1
@@ -19,42 +19,49 @@ export default class UsuariosService {
           direccion
           username
           last_login
+          foto_url
           fecha_registro
           fecha_update
           estado
           conexiones
         }
       }
-      `;
+    `;
 
-      return await query(sql,{query:xquery}).then((d:any)=>d).catch((e:any)=>e)
+    return await query(sql, { query: xquery })
+      .then((d: any) => d)
+      .catch((e: any) => e);
   }
 
-  async createUsuario(input:NewUsuario) {
+  async createUsuario(input: NewUsuario) {
     const sql = gql`
-      mutation createUsuario($input:NewUsuario!){
-        createUsuario(input:$input){
+      mutation createUsuario($input: NewUsuario!) {
+        createUsuario(input: $input) {
           id
           nombres
         }
       }
-      `;
-      return await mutar(sql,{input:input}).then(d=>d).catch(e=>e)
+    `;
+    return await mutar(sql, { input: input })
+      .then((d) => d)
+      .catch((e) => e);
   }
 
-  async updateUsuario(input:UpdateUsuario) {
+  async updateUsuario(input: UpdateUsuario) {
     const sql = gql`
-      mutation updateUsuario($input:UpdateUsuario!){
-        updateUsuario(input:$input){
+      mutation updateUsuario($input: UpdateUsuario!) {
+        updateUsuario(input: $input) {
           id
           nombres
         }
       }
-      `;
-      return await mutar(sql,{input:input}).then(d=>d).catch(e=>e)
+    `;
+    return await mutar(sql, { input: input })
+      .then((d) => d)
+      .catch((e) => e);
   }
 
-  async usuarioById(id:string) {
+  async usuarioById(id: string) {
     const sql = gql`
       query{
         usuarioById(input:{
@@ -74,6 +81,7 @@ export default class UsuariosService {
             direccion
             username
             last_login
+            foto_url
             fecha_registro
             fecha_update
             estado
@@ -84,6 +92,19 @@ export default class UsuariosService {
         }
       }
       `;
-      return await query(sql,{}).then(d=>d).catch(e=>e)
+    return await query(sql, {})
+      .then((d) => d)
+      .catch((e) => e);
+  }
+
+  async get_imagen(url: string) {
+    const sql = gql`
+      query get_imagen($url: String!) {
+        get_imagen(url: $url)
+      }
+    `;
+    return await query(sql, { url: url })
+      .then((d) => d)
+      .catch((e) => e);
   }
 }

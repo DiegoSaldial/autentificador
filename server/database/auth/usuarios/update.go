@@ -1,6 +1,7 @@
 package usuarios
 
 import (
+	"auth/database/auth/utils"
 	"auth/graph/model"
 	"database/sql"
 	"strconv"
@@ -98,6 +99,23 @@ func Actualizar(db *sql.DB, input model.UpdateUsuario) (*model.Usuario, error) {
 	}
 	// fin permisos sueltos
 
+	// subir foto perfil
+	if input.Foto64 != nil {
+		foto_url, err := utils.SubirImagen(*input.Foto64, "perfil", input.ID)
+		if err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+
+		sql = `update usuarios set foto_url=? where id=?`
+		_, err = tx.Exec(sql, foto_url, id)
+		if err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+	}
+	// fin subir foto perfil
+
 	err = tx.Commit()
 	if err != nil {
 		return nil, err
@@ -162,6 +180,23 @@ func UpdatePerfil(db *sql.DB, input model.UpdatePerfil) (*model.Usuario, error) 
 			}
 		}
 	}
+
+	// subir foto perfil
+	if input.Foto64 != nil {
+		foto_url, err := utils.SubirImagen(*input.Foto64, "perfil", input.ID)
+		if err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+
+		sql = `update usuarios set foto_url=? where id=?`
+		_, err = tx.Exec(sql, foto_url, input.ID)
+		if err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+	}
+	// fin subir foto perfil
 
 	err = tx.Commit()
 	if err != nil {

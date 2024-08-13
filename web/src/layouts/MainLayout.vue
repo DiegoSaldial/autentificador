@@ -8,13 +8,13 @@
           <!-- <q-icon :name="fabYoutube" color="red" size="28px" /> -->
           <q-toolbar-title shrink class="text-weight-bold">
             Auth
-            <q-badge rounded :color="colorWs(store.ws_noti_status)">
-              <q-tooltip class="bg-purple">
-                <span>Estado de notificaciones</span>
-              </q-tooltip>
-            </q-badge>
           </q-toolbar-title>
         </q-btn>
+        <q-badge rounded :color="colorWs(store.ws_noti_status)">
+          <q-tooltip class="bg-purple">
+            <span>Estado de notificaciones</span>
+          </q-tooltip>
+        </q-badge>
 
         <q-space />
         <span v-if="storeClima.getClima && storeClima.getClima.ciudad">

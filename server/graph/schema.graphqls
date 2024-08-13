@@ -20,6 +20,7 @@ type Usuario {
   estado: Boolean! 
   last_login: Time
   oauth_id: String
+  foto_url: String
   conexiones: Int!
 } 
 
@@ -134,6 +135,7 @@ input NewUsuario {
   password: String!
   roles: [String!]!
   permisos_sueltos: [String!]!
+  foto64: String
 }
 input UpdateUsuario {
   id: ID!
@@ -149,6 +151,7 @@ input UpdateUsuario {
   password: String!
   roles: [String!]!
   permisos_sueltos: [String!]!
+  foto64: String
 }
 input UpdatePerfil {
   id: ID!
@@ -162,6 +165,7 @@ input UpdatePerfil {
   direccion: String
   username: String
   password: String 
+  foto64: String
 }
 
 
@@ -199,6 +203,7 @@ type Query {
   rolById(rol:String!): ResponseRolCreate!
   menus: [Menus!]!
   conexiones_ws: String!
+  get_imagen(url:String!): String!
 }
 
 # =================================

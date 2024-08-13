@@ -6,7 +6,13 @@
       </q-card-section>
 
       <q-card-section class="q-pt-none">
-        <div class="row">
+        <div class="row justify-center">
+          <div class="col-xs-12 col-sm-8 ">
+            <q-img
+              v-if="foto_64" :src="foto_64"
+              spinner-color="white" 
+            />
+          </div>
           <div class="col-xs-12 col-sm-6">
             <p class="q-mb-xs"><b>Nombres:</b> {{ input.nombres }}</p>
           </div>
@@ -73,12 +79,14 @@ export default {
     const usuarioService = new UsuariosService();
     const roles_sel = ref([]);
     const permisos_sel = ref([]);
+    const foto_64 = ref('');
 
     const open = (id = null) => {
       loading.value = false;
       alert.value = true;
       roles_sel.value = [];
       permisos_sel.value = [];
+      foto_64.value = '';
       if (id) getUserById(id);
     };
 
@@ -94,11 +102,19 @@ export default {
       });
 
       const us = res.usuarioById.usuario;
+      getFoto(us);
       input.value = us;
       roles_sel.value = xroles;
       permisos_sel.value = xpermisos.join(', ');
       loading.value = false;
     };
+
+    const getFoto = async (us) => {
+      const url = us.foto_url;
+      if(!url) return url;
+      const res = await usuarioService.get_imagen(url); 
+      if(res && res.get_imagen) foto_64.value = res.get_imagen; 
+    }
 
     const cerrar = () => {
       alert.value = false;
@@ -110,6 +126,7 @@ export default {
       input,
       roles_sel,
       permisos_sel,
+      foto_64,
       open,
       cerrar,
       checkClickSession: click.setup().checkClickSession,

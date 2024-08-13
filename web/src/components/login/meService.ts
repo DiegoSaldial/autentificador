@@ -7,7 +7,7 @@ export default class MeService {
     const sql = gql`
       query{
         me(input:{show_roles:true, show_permisos:true}){
-          usuario{id nombres apellido1 apellido2 documento celular correo sexo direccion username fecha_registro fecha_update estado}
+          usuario{id nombres apellido1 apellido2 documento celular correo sexo direccion username fecha_registro fecha_update foto_url estado}
           menus{id label path icon grupo}
           roles{nombre jerarquia fecha_asignado permisos{metodo nombre fecha_asignado}}
           permisos_sueltos{metodo nombre fecha_asignado}

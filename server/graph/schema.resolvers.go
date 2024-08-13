@@ -9,6 +9,7 @@ import (
 	"auth/database/auth/permisos"
 	"auth/database/auth/roles"
 	"auth/database/auth/usuarios"
+	"auth/database/auth/utils"
 	"auth/database/auth/xauth"
 	"auth/database/auth/xlogin"
 	"auth/database/auth/xnotificaciones"
@@ -158,6 +159,11 @@ func (r *queryResolver) Menus(ctx context.Context) ([]*model.Menus, error) {
 // ConexionesWs is the resolver for the conexiones_ws field.
 func (r *queryResolver) ConexionesWs(ctx context.Context) (string, error) {
 	return xnotificaciones.VerConexiones()
+}
+
+// GetImagen is the resolver for the get_imagen field.
+func (r *queryResolver) GetImagen(ctx context.Context, url string) (string, error) {
+	return utils.GetImagen(url)
 }
 
 // NotificacionesSubs is the resolver for the notificaciones_subs field.

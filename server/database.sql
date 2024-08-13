@@ -13,6 +13,7 @@ create table `usuarios`(
     `password` varchar(64) not null, -- hash
     `last_login` datetime,
     `oauth_id` varchar(80),
+    `foto_url` varchar(80),
     `fecha_registro` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00'),
     `fecha_update` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00') ON UPDATE now()
 );
@@ -146,6 +147,7 @@ values
     ('Administrador','asignarMenusUsuario'),
     ('Administrador','menus'),
     ('Administrador','menus_by_usuario'),
+    ('Invitado','updateUsuarioPerfil'),
     ('Invitado','usuarios'),
     ('Invitado','permisos'), 
     ('Invitado','roles'), 

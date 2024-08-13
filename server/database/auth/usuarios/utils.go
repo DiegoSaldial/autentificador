@@ -24,6 +24,7 @@ func parseRow(row *sql.Row, t *model.Usuario) error {
 		&t.Username,
 		&t.LastLogin,
 		&t.OauthID,
+		&t.FotoURL,
 		&t.FechaRegistro,
 		&t.FechaUpdate,
 	)
@@ -44,6 +45,7 @@ func parseRows(rows *sql.Rows, t *model.Usuario) error {
 		&t.Username,
 		&t.LastLogin,
 		&t.OauthID,
+		&t.FotoURL,
 		&t.FechaRegistro,
 		&t.FechaUpdate,
 	)
