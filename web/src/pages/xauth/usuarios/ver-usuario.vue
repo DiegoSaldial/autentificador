@@ -8,7 +8,8 @@
       <q-card-section class="q-pt-none">
         <div class="row justify-center">
           <div class="col-xs-12 col-sm-8 ">
-            <q-img
+            <q-img 
+              class="zoomer"
               v-if="foto_64" :src="foto_64"
               spinner-color="white" 
             />
@@ -70,6 +71,8 @@ import { ref } from 'vue';
 import { InputNewUsuario } from './type_usuarios';
 import UsuariosService from './usuariosService';
 import click from 'src/shared/session';
+import './zoomer.css';
+import {init_zoomer} from './zoomer.js';
 
 export default {
   setup() {
@@ -114,6 +117,7 @@ export default {
       if(!url) return url;
       const res = await usuarioService.get_imagen(url); 
       if(res && res.get_imagen) foto_64.value = res.get_imagen; 
+      init_zoomer(); 
     }
 
     const cerrar = () => {

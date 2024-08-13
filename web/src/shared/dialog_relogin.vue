@@ -94,6 +94,7 @@ export default {
         if (meres.me) {
           const menuItemsAgrupados = await cargarMenus(meres.me.menus);
           useLogin.setMenus(menuItemsAgrupados);
+          useLogin.setUser(meres.me);
         }
 
         resolvePromise(true);

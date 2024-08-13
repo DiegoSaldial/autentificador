@@ -10,6 +10,7 @@
           <div class="row q-col-gutter-xs justify-center">
             <div class="col-xs-12 col-sm-8 ">
               <q-img
+                class="zoomer"
                 v-if="foto_64" :src="foto_64"
                 spinner-color="white" 
               />
@@ -64,6 +65,7 @@ import Validaciones from 'src/pages/xauth/usuarios/validador';
 import click from 'src/shared/session';
 import { ref } from 'vue';
 import {Notify} from 'quasar'
+import {init_zoomer} from 'src/pages/xauth/usuarios/zoomer';
 
 export default {
   setup() {
@@ -128,6 +130,7 @@ export default {
       if(!url) return url;
       const res = await perfilService.get_imagen(url); 
       if(res && res.get_imagen) foto_64.value = res.get_imagen; 
+      init_zoomer(); 
     }
 
     const onSubmit = async () => {
