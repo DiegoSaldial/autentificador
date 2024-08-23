@@ -192,6 +192,7 @@ input AsignarMenusUsuario {
 
 # go run github.com/99designs/gqlgen generate
 # CGO_ENABLED=0 go build -ldflags="-s -w" -o auth server.go 
+# CGO_ENABLED=0 go build -a -ldflags '-s -w' -o auth server.go
 # scp auth root@185.203.216.16:/root/apps/auth/
 # =================================
 type Query {
