@@ -1,2 +1,4 @@
 database-data.sql
 database-queries.sql
+res/
+.bin/
