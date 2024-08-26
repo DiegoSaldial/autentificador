@@ -4,7 +4,7 @@ go 1.23.0
 
 require (
 	github.com/99designs/gqlgen v0.17.49
-	github.com/chai2010/webp v1.1.1
+	// github.com/chai2010/webp v1.1.1
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/go-chi/chi v1.5.5
 	github.com/go-sql-driver/mysql v1.8.1
@@ -15,6 +15,8 @@ require (
 	github.com/vektah/gqlparser/v2 v2.5.16
 	github.com/vincent-petithory/dataurl v1.0.0
 )
+
+require github.com/kolesa-team/go-webp v1.0.4
 
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect

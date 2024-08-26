@@ -12,7 +12,9 @@ import (
 	_ "image/jpeg"
 	_ "image/png"
 
-	"github.com/chai2010/webp"
+	// "github.com/chai2010/webp"
+	"github.com/kolesa-team/go-webp/encoder"
+	"github.com/kolesa-team/go-webp/webp"
 	"github.com/nfnt/resize"
 	"github.com/vincent-petithory/dataurl"
 )
@@ -94,7 +96,12 @@ func reducirImageWebp(img64 string) ([]byte, error) {
 	}
 
 	var buf bytes.Buffer
-	if err := webp.Encode(&buf, img, &webp.Options{Lossless: false, Quality: 90}); err != nil {
+	options, err := encoder.NewLossyEncoderOptions(encoder.PresetDefault, 90)
+	if err != nil {
+		return nil, err
+	}
+	// if err := webp.Encode(&buf, img, &webp.Options{Lossless: false, Quality: 90}); err != nil {
+	if err := webp.Encode(&buf, img, options); err != nil {
 		return nil, err
 	}
 
