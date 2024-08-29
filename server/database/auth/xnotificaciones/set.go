@@ -27,7 +27,7 @@ func EnviarNotificacion(ctx context.Context, mensaje model.XNotificacionEnvio) (
 		}
 	}
 
-	fmt.Printf("-> %+v\n", cha.Subscriptores)
+	// fmt.Printf("-> %+v\n", cha.Subscriptores)
 
 	return true, nil
 }

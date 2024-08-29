@@ -1,3 +1,4 @@
+
 create table `usuarios`(
     `id` integer unsigned auto_increment not null primary key,
     `nombres` varchar(30) not null,
@@ -28,7 +29,8 @@ create table `roles`(
 -- para permisos no hay crud, se agregan segun se crean las funcionaes 
 -- en el propio codigo fuente 
 create table `permisos`(
-    -- en golang hay funciones, cada funcion representa un permiso, el nombre de esa funcion es el valor de metodo, (ej createPersona)
+    -- en golang hay funciones(query,mutation), cada funcion representa un permiso, el nombre de esa funcion 
+    -- es el valor de metodo, (ej createPersona)
     `metodo` varchar(50) not null primary key,
     -- el nombre es el mismo que metodo, pero para que un humano lo lea, (ej crear persona)
     `nombre` varchar(50) not null,
