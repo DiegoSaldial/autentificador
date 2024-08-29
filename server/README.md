@@ -1,7 +1,8 @@
 # Notas de Mantenibilidad y Ampliación
 
 El alcance de este sistema incluye **usuarios**, **roles** y **permisos**.
-Genera **token** y **refreshToken** de autenticación.
+
+Generando el **token** y **refreshToken** de autenticación.
 
 Al crear una nueva funcionalidad, el nombre de la función debe registrarse en la tabla de permisos de la base de datos. Esa funcionalidad se invoca desde el archivo `schema.resolvers.go`.
 
