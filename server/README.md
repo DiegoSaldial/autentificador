@@ -1,17 +1,8 @@
-==========================================================
-NOTAS DE MANTENIBILIDAD Y AMPLIACION
-==========================================================
+# Notas de Mantenibilidad y Ampliación
 
-El alcance de este sistema es **usuarios**, **roles** y **permisos**
-Generando token y refreshToken de autentificacion 
+El alcance de este sistema incluye **usuarios**, **roles** y **permisos**.
+Genera **token** y **refreshToken** de autenticación.
 
+Al crear una nueva funcionalidad, el nombre de la función debe registrarse en la tabla de permisos de la base de datos. Esa funcionalidad se invoca desde el archivo `schema.resolvers.go`.
 
-Al crear una nueva funcionalidad el nombre de la funcion 
-debe ir como un registro en la tabla permisos de la db
-esa funcionalidad se llama desde el archivo 'schema.resolvers.go'
-
-Por ejemplo para el permiso **'usuarioById'** existe un query con el mismo
-nombre **'usuarioById(input:GetUser!): ResponseMe!'**
-
-
-
+Por ejemplo, para el permiso **`usuarioById`**, existe un query con el mismo nombre: **`usuarioById(input:GetUser!): ResponseMe!`**.
