@@ -165,7 +165,7 @@ export default {
 
     const cargarRoles = async () => {
       loading_roles.value = true;
-      const res = await rolesService.roles(false);
+      const res = await rolesService.roles();
       roles.value = res.roles;
       loading_roles.value = false;
     };

@@ -103,12 +103,12 @@ func (r *queryResolver) Me(ctx context.Context, input model.InputMe) (*model.Res
 }
 
 // Roles is the resolver for the roles field.
-func (r *queryResolver) Roles(ctx context.Context, showPermisos bool) ([]*model.ResponseRolCreate, error) {
+func (r *queryResolver) Roles(ctx context.Context) ([]*model.ResponseRoles, error) {
 	_, err := xauth.CtxValue(ctx, r.DB, "roles")
 	if err != nil {
 		return nil, err
 	}
-	return roles.GetRoles(r.DB, showPermisos)
+	return roles.GetRoles(r.DB)
 }
 
 // Permisos is the resolver for the permisos field.

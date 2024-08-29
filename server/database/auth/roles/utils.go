@@ -16,12 +16,15 @@ func parse(rows *sql.Rows, t *model.ResponseRolMe) error {
 	)
 }
 
-func parseRes(rows *sql.Rows, t *model.ResponseRolCreate) error {
+func parseRes(rows *sql.Rows, t *model.ResponseRoles) error {
 	return rows.Scan(
 		&t.Nombre,
 		&t.Descripcion,
 		&t.Jerarquia,
 		&t.FechaRegistro,
+		&t.Menus,
+		&t.Permisos,
+		&t.Usuarios,
 	)
 }
 

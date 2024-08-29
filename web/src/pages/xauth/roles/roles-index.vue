@@ -28,19 +28,7 @@
         <q-td :props="props">
           {{ parseFecha(props.row.fecha_registro, true) }}
         </q-td>
-      </template>
-
-      <template v-slot:body-cell-permisos="props">
-        <q-td :props="props">
-          {{ props.row.permisos.length }}
-        </q-td>
-      </template>
-
-      <template v-slot:body-cell-menus="props">
-        <q-td :props="props">
-          {{ props.row.menus.length }}
-        </q-td>
-      </template>
+      </template> 
 
       <template v-slot:body-cell-opt="props">
         <q-td :props="props">
@@ -84,8 +72,9 @@ const columns = [
   { name: 'descripcion', label: 'descripcion', field: 'descripcion' },
   { name: 'jerarquia', label: 'jerarquia', field: 'jerarquia' },
   { name: 'fecha_registro', label: 'registro', field: 'fecha_registro' },
-  { name: 'permisos', label: 'permisos', field: 'permisos' },
   { name: 'menus', label: 'menus', field: 'menus' },
+  { name: 'permisos', label: 'permisos', field: 'permisos' },
+  { name: 'usuarios', label: 'usuarios', field: 'usuarios' },
   { name: 'opt', label: '', field: 'opt' },
 ]
 
@@ -102,7 +91,7 @@ export default {
     const listar = async () => {
       loading.value = true;
       rows.value = [];
-      const res = await rolesService.roles(true) 
+      const res = await rolesService.roles() 
       if(res.roles) rows.value = res.roles;
       loading.value = false;
     }

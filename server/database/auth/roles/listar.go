@@ -52,32 +52,38 @@ func GetRolById(db *sql.DB, rol string) (*model.Rol, error) {
 	return &r, nil
 }
 
-func GetRoles(db *sql.DB, show_permisos bool) ([]*model.ResponseRolCreate, error) {
-	sql := `select nombre,descripcion,jerarquia,fecha_registro from roles order by jerarquia asc`
+func GetRoles(db *sql.DB) ([]*model.ResponseRoles, error) {
+	sql := `
+	SELECT  
+		r.nombre,r.descripcion,r.jerarquia,r.fecha_registro,
+		COUNT(DISTINCT rm.id) AS total_menus,
+		COUNT(DISTINCT rp.metodo) AS total_permisos,
+		COUNT(DISTINCT ru.usuario_id) AS total_usuarios
+	FROM
+		roles r
+	LEFT JOIN 
+		rol_menus rm ON r.nombre = rm.rol
+	LEFT JOIN 
+		rol_permiso rp ON r.nombre = rp.rol
+	LEFT JOIN 
+		rol_usuario ru ON r.nombre = ru.rol
+	GROUP BY 
+		r.nombre
+	order by r.jerarquia asc;
+	`
 	rows, err := db.Query(sql)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	roles := []*model.ResponseRolCreate{}
+	roles := []*model.ResponseRoles{}
 
 	for rows.Next() {
-		r := model.ResponseRolCreate{}
+		r := model.ResponseRoles{}
 		er := parseRes(rows, &r)
 		if er != nil {
 			return nil, er
 		}
-		if show_permisos {
-			r.Permisos, er = permisos.GetPermisosByRol(db, r.Nombre)
-			if er != nil {
-				return nil, er
-			}
-		}
-		r.Menus, er = menu.GetMenusbyRol(db, r.Nombre)
-		if er != nil {
-			return nil, er
-		}
-
 		roles = append(roles, &r)
 	}
 

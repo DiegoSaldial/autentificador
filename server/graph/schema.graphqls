@@ -87,6 +87,16 @@ type ResponseRolCreate {
   menus: [Menus!]!
 } 
 
+type ResponseRoles {
+  nombre: String!
+  descripcion: String
+  jerarquia: Int! 
+  fecha_registro: Time! 
+  menus: Int!
+  permisos: Int!
+  usuarios: Int!
+} 
+
 type XNotificacion {
   title: String!
   data_json: String!
@@ -197,7 +207,7 @@ input AsignarMenusUsuario {
 # =================================
 type Query {
   me(input:InputMe!): ResponseMe!
-  roles(show_permisos:Boolean!): [ResponseRolCreate!]!
+  roles: [ResponseRoles!]!
   permisos: [Permiso!]!
   usuarios(query:QueryUsuarios!): [Usuario!]! 
   usuarioById(input:GetUser!): ResponseMe!

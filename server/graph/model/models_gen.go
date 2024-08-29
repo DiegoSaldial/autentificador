@@ -126,6 +126,16 @@ type ResponseRolMe struct {
 	Permisos      []*ResponsePermisoMe `json:"permisos"`
 }
 
+type ResponseRoles struct {
+	Nombre        string    `json:"nombre"`
+	Descripcion   *string   `json:"descripcion,omitempty"`
+	Jerarquia     int       `json:"jerarquia"`
+	FechaRegistro time.Time `json:"fecha_registro"`
+	Menus         int       `json:"menus"`
+	Permisos      int       `json:"permisos"`
+	Usuarios      int       `json:"usuarios"`
+}
+
 type Rol struct {
 	Nombre        string    `json:"nombre"`
 	Descripcion   *string   `json:"descripcion,omitempty"`
