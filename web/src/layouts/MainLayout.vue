@@ -4,7 +4,7 @@
       <q-toolbar>
         <q-btn v-if="store.dataUser.usuario" flat dense round @click="toggleLeftDrawer" aria-label="Menu" icon="menu" />
 
-        <q-btn flat no-caps no-wrap class="q-ml-xs" v-if="$q.screen.gt.xs && store.dataUser.usuario" to="/">
+        <q-btn flat no-caps no-wrap class="q-ml-xs" v-if="$q.screen.gt.xs && store.dataUser.usuario" :to="toHome()">
           <!-- <q-icon :name="fabYoutube" color="red" size="28px" /> -->
           <q-toolbar-title shrink class="text-weight-bold">
             Auth
@@ -77,6 +77,7 @@ import PerfilService from 'src/components/perfil/perfilService'
 import LoginView from 'components/login/LoginView.vue'
 import BtnPerfil from 'components/perfil/boton_perfil.vue'
 import Notificaciones from 'pages/xauth/notificaciones/index_notificaciones.vue'
+import { colorWs } from './utils'
 
 export default {
   name: 'MyLayout',
@@ -93,16 +94,6 @@ export default {
 
     const toggleLeftDrawer = () => leftDrawerOpen.value = !leftDrawerOpen.value
 
-    const colorWs = (str) => {
-      const d = {
-        'connected':'green',
-        'closed':'negative',
-        'error':'red',
-        'connecting':'orange',
-      }
-      return d[str];
-    }
-
     const getFoto = async () => {
       foto_64.value = '';
       const data = store.dataUser;
@@ -112,6 +103,11 @@ export default {
       if(!url) return;
       const res = await perfilService.get_imagen(url); 
       if(res && res.get_imagen) foto_64.value = res.get_imagen; 
+    }
+
+    const toHome = () => {
+      if(store.dataUser.usuario) return '/login'
+      else return '/'
     }
 
     watch(
@@ -134,6 +130,7 @@ export default {
       show_time,
       refNotificaciones,
       foto_64,
+      toHome,
       colorWs,
       toggleLeftDrawer,
 

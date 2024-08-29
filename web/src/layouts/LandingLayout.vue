@@ -6,13 +6,13 @@
 
         <q-btn flat no-caps no-wrap class="q-ml-xs" to="/">
           <q-toolbar-title shrink class="text-weight-bold">
-            WG
+            Auth
           </q-toolbar-title>
         </q-btn>
 
         <q-space />
         <q-toggle v-model="$q.dark.isActive" color="white" />
-        
+
         <q-btn flat no-caps no-wrap class="q-ml-xs" to="/login">
           <q-icon name="person"></q-icon>
           <q-tooltip>
@@ -90,3 +90,16 @@ export default {
   }
 }
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+

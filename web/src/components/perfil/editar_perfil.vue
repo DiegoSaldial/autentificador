@@ -47,6 +47,15 @@
             </div>
           </div>
 
+          <div v-if="!input.oauth_id"> 
+            <q-separator color="green" class="q-mt-md q-mb-xs" />
+            <div class="row">
+              <div class="col-xs-12 col-sm-12">
+                <q-input outlined v-model.trim="input.password" label="Cambiar clave de acceso:" dense lazy-rules :rules="[(val) => validaciones.val_password(val)]" />
+              </div> 
+            </div>
+          </div>
+
           <div class="q-mt-md" :align="'right'">
             <q-linear-progress v-if="loading" dark rounded indeterminate color="secondary" class="q-mb-sm" />
             <q-btn :disable="loading" label="cerrar" color="red" icon="close" square flat @click="cerrar()" />
@@ -100,6 +109,7 @@ export default {
         input.value.correo = res.me.usuario.correo;
         input.value.documento = res.me.usuario.documento;
         input.value.direccion = res.me.usuario.direccion;
+        input.value.oauth_id = res.me.usuario.oauth_id;
         getFoto(res.me.usuario);
       }
       loading.value = false;
@@ -135,7 +145,10 @@ export default {
 
     const onSubmit = async () => {
       loading.value = true;
-      const res = await perfilService.updateUsuarioPerfil(input.value)
+      const obj = Object.assign({}, input.value);
+      delete obj.oauth_id;
+
+      const res = await perfilService.updateUsuarioPerfil(obj)
       if(res && res.updateUsuarioPerfil) alert.value = false;
       loading.value = false;
     }

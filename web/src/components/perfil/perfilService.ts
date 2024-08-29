@@ -7,7 +7,7 @@ export default class PerfilService {
     const sql = gql`
       query{
         me(input:{show_roles:true, show_permisos:true}){
-          usuario{id nombres apellido1 apellido2 documento celular correo sexo direccion username fecha_registro fecha_update foto_url estado}
+          usuario{id nombres apellido1 apellido2 documento celular correo sexo direccion username fecha_registro fecha_update foto_url oauth_id estado}
         }
       }
       `;

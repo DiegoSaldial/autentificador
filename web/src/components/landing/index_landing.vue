@@ -41,7 +41,7 @@ export default {
     const landingService = new LandingService();
 
     const click = () => {
-      console.log('>>>');
+      // console.log('>>>');
     };
 
     onMounted(() => {
