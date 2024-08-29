@@ -85,6 +85,8 @@ export default class UsuariosService {
             fecha_registro
             fecha_update
             estado
+            latitud
+            longitud
           }
           menus{id label path icon grupo}
           roles{nombre permisos{metodo, nombre}}

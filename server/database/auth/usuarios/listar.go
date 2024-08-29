@@ -28,6 +28,8 @@ func GetById(db *sql.DB, id string) (*model.Usuario, error) {
 		u.last_login,
 		u.oauth_id,
 		u.foto_url,
+		ST_X(u.ubicacion) AS latitud, 
+		ST_Y(u.ubicacion) AS longitud,  
 		u.fecha_registro,
 		u.fecha_update
 		from usuarios u 
@@ -65,6 +67,8 @@ func GetByUserPass(db *sql.DB, user, pass string) (*model.Usuario, error) {
 		u.last_login,
 		u.oauth_id,
 		u.foto_url,
+    	ST_X(u.ubicacion) AS latitud, 
+		ST_Y(u.ubicacion) AS longitud,
 		u.fecha_registro,
 		u.fecha_update
 		from usuarios u 

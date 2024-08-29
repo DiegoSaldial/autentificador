@@ -11,7 +11,7 @@
             <div class="col-xs-12 col-sm-8 ">
               <q-img
                 v-if="foto_64" :src="foto_64"
-                spinner-color="white" 
+                spinner-color="white"
               />
             </div>
             <div class="col-xs-12 col-sm-6">
@@ -53,6 +53,10 @@
                 <q-tooltip> Seleccionar foto de perfil </q-tooltip>
               </q-file>
             </div>
+            <div class="col-xs-12 col-sm-12 q-pt-md">
+              <q-btn color="grey" icon="fmd_good" dense square outline @click="openGeo()"> Ubicacion geografica </q-btn>
+              <small class="q-pl-md"> {{ input.latitud }} {{ input.longitud }} </small>
+            </div>
 
             <div class="col-xs-12 col-sm-12 q-mt-md">
               <q-list >
@@ -79,7 +83,7 @@
                   <q-table flat color="orange" :loading="loading_menus" title="" hide-pagination :rows-per-page-options="[0]" dense :rows="menus" :columns="columnas_menu" row-key="label" selection="multiple" v-model:selected="menus_sel" />
                 </q-expansion-item>
               </q-list>
-            </div>  
+            </div>
           </div>
 
           <div class="q-mt-md" :align="'right'">
@@ -90,6 +94,8 @@
         </q-form>
       </q-card-section>
     </q-card>
+
+    <Geo ref="refGeo" v-on:onpin="onpin"/>
   </q-dialog>
 </template>
 
@@ -103,22 +109,12 @@ import MenusService from './menuService';
 import { Notify } from 'quasar';
 import Validaciones from './validador';
 import click from 'src/shared/session';
+import Geo from 'src/pages/xauth/geo/geo_modal.vue'
+import {columnas_menu,columnas_perm,columnas_rols} from './utils'
 
-const columnas_rols = [
-  { name: 'nombre', label: '', field: 'nombre', align: 'left' },
-  { name: 'descripcion', label: '', field: 'descripcion', align: 'left' },
-  { name: 'jerarquia', label: '', field: 'jerarquia', align: 'left' },
-];
-const columnas_perm = [
-  { name: 'nombre', label: '', field: 'nombre', align: 'left' },
-  { name: 'jerarquia', label: '', field: 'descripcion', align: 'left' },
-];
-const columnas_menu = [
-  { name: 'label', label: '', field: 'label', align: 'left' },
-  { name: 'oreden', label: '', field: 'orden', align: 'left' },
-];
 
 export default {
+  components:{ Geo },
   setup(_, vue) {
     const alert = ref(false);
     const loading = ref(false);
@@ -131,6 +127,7 @@ export default {
     const permisoService = new PermisoService();
     const menuService = new MenusService();
     const validaciones = new Validaciones();
+    const refGeo = ref();
     const menus = ref([]);
     const menus_sel = ref([]);
     const roles = ref([]);
@@ -201,6 +198,9 @@ export default {
       delete us.last_login;
       delete us.foto_url;
       us.password = '';
+      if(!us.latitud) delete us.latitud;
+      if(!us.longitud) delete us.longitud; 
+      
       input.value = us;
       roles_sel.value = xroles;
       permisos_sel.value = xpermisos;
@@ -211,7 +211,7 @@ export default {
     const filevalue = (file) => {
       if (file) {
         const reader = new FileReader();
-        reader.onload = function (e) {  
+        reader.onload = function (e) {
           input.value.foto64 = e.target.result;
         };
         reader.readAsDataURL(file);
@@ -231,8 +231,19 @@ export default {
     const getFoto = async (us) => {
       const url = us.foto_url;
       if(!url) return url;
-      const res = await usuarioService.get_imagen(url); 
-      if(res && res.get_imagen) foto_64.value = res.get_imagen; 
+      const res = await usuarioService.get_imagen(url);
+      if(res && res.get_imagen) foto_64.value = res.get_imagen;
+    }
+
+    const openGeo = () => {
+      const lt = input.value.latitud;
+      const ln = input.value.longitud;
+      refGeo.value.open(lt,ln);
+    }
+
+    const onpin = (lat, lon) =>{ 
+      input.value.latitud = lat;
+      input.value.longitud = lon;
     }
 
     const onSubmit = async () => {
@@ -307,12 +318,15 @@ export default {
       permisos_sel,
       foto_file,
       foto_64,
+      refGeo,
       filevalue,
       onRejected,
       checkClickSession: click.setup().checkClickSession,
       open,
       onSubmit,
       cerrar,
+      openGeo,
+      onpin,
       columnas_rols,
       columnas_perm,
       columnas_menu,

@@ -20,6 +20,10 @@ func Crear(db *sql.DB, input model.NewUsuario, oauth_id *string) (*model.Usuario
 	if err := validarCadena(input.Password, "password"); err != nil {
 		return nil, err
 	}
+	point, err := ubicacion(input.Latitud, input.Longitud)
+	if err != nil {
+		return nil, err
+	}
 
 	tx, err := db.Begin()
 	if err != nil {
@@ -27,8 +31,8 @@ func Crear(db *sql.DB, input model.NewUsuario, oauth_id *string) (*model.Usuario
 	}
 
 	sql := `
-	INSERT INTO usuarios(nombres, apellido1, apellido2, documento, celular, correo, sexo, direccion, username, password,oauth_id)
-	VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, SHA2(?, 256),?);
+	INSERT INTO usuarios(nombres, apellido1, apellido2, documento, celular, correo, sexo, direccion, username, password,oauth_id,ubicacion)
+	VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, SHA2(?, 256),?, ST_GeomFromText(?));
 	`
 	res, err := tx.Exec(sql,
 		input.Nombres,
@@ -42,6 +46,7 @@ func Crear(db *sql.DB, input model.NewUsuario, oauth_id *string) (*model.Usuario
 		input.Username,
 		input.Password,
 		oauth_id,
+		point,
 	)
 
 	if err != nil {

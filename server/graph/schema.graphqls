@@ -21,6 +21,8 @@ type Usuario {
   last_login: Time
   oauth_id: String
   foto_url: String
+  latitud: Float
+  longitud: Float
   conexiones: Int!
 } 
 
@@ -139,6 +141,8 @@ input NewUsuario {
   roles: [String!]!
   permisos_sueltos: [String!]!
   foto64: String
+  latitud: Float
+  longitud: Float
 }
 input UpdateUsuario {
   id: ID!
@@ -155,6 +159,8 @@ input UpdateUsuario {
   roles: [String!]!
   permisos_sueltos: [String!]!
   foto64: String
+  latitud: Float
+  longitud: Float
 }
 
 input UpdatePerfil {
@@ -170,6 +176,8 @@ input UpdatePerfil {
   username: String
   password: String 
   foto64: String
+  latitud: Float
+  longitud: Float
 }
 
 input NewRol {

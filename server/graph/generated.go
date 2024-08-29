@@ -159,6 +159,8 @@ type ComplexityRoot struct {
 		FotoURL       func(childComplexity int) int
 		ID            func(childComplexity int) int
 		LastLogin     func(childComplexity int) int
+		Latitud       func(childComplexity int) int
+		Longitud      func(childComplexity int) int
 		Nombres       func(childComplexity int) int
 		OauthID       func(childComplexity int) int
 		Sexo          func(childComplexity int) int
@@ -816,6 +818,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Usuario.LastLogin(childComplexity), true
+
+	case "Usuario.latitud":
+		if e.complexity.Usuario.Latitud == nil {
+			break
+		}
+
+		return e.complexity.Usuario.Latitud(childComplexity), true
+
+	case "Usuario.longitud":
+		if e.complexity.Usuario.Longitud == nil {
+			break
+		}
+
+		return e.complexity.Usuario.Longitud(childComplexity), true
 
 	case "Usuario.nombres":
 		if e.complexity.Usuario.Nombres == nil {
@@ -1793,6 +1809,10 @@ func (ec *executionContext) fieldContext_Mutation_createUsuario(ctx context.Cont
 				return ec.fieldContext_Usuario_oauth_id(ctx, field)
 			case "foto_url":
 				return ec.fieldContext_Usuario_foto_url(ctx, field)
+			case "latitud":
+				return ec.fieldContext_Usuario_latitud(ctx, field)
+			case "longitud":
+				return ec.fieldContext_Usuario_longitud(ctx, field)
 			case "conexiones":
 				return ec.fieldContext_Usuario_conexiones(ctx, field)
 			}
@@ -1884,6 +1904,10 @@ func (ec *executionContext) fieldContext_Mutation_createOauth(ctx context.Contex
 				return ec.fieldContext_Usuario_oauth_id(ctx, field)
 			case "foto_url":
 				return ec.fieldContext_Usuario_foto_url(ctx, field)
+			case "latitud":
+				return ec.fieldContext_Usuario_latitud(ctx, field)
+			case "longitud":
+				return ec.fieldContext_Usuario_longitud(ctx, field)
 			case "conexiones":
 				return ec.fieldContext_Usuario_conexiones(ctx, field)
 			}
@@ -1975,6 +1999,10 @@ func (ec *executionContext) fieldContext_Mutation_updateUsuario(ctx context.Cont
 				return ec.fieldContext_Usuario_oauth_id(ctx, field)
 			case "foto_url":
 				return ec.fieldContext_Usuario_foto_url(ctx, field)
+			case "latitud":
+				return ec.fieldContext_Usuario_latitud(ctx, field)
+			case "longitud":
+				return ec.fieldContext_Usuario_longitud(ctx, field)
 			case "conexiones":
 				return ec.fieldContext_Usuario_conexiones(ctx, field)
 			}
@@ -2066,6 +2094,10 @@ func (ec *executionContext) fieldContext_Mutation_updateUsuarioPerfil(ctx contex
 				return ec.fieldContext_Usuario_oauth_id(ctx, field)
 			case "foto_url":
 				return ec.fieldContext_Usuario_foto_url(ctx, field)
+			case "latitud":
+				return ec.fieldContext_Usuario_latitud(ctx, field)
+			case "longitud":
+				return ec.fieldContext_Usuario_longitud(ctx, field)
 			case "conexiones":
 				return ec.fieldContext_Usuario_conexiones(ctx, field)
 			}
@@ -2757,6 +2789,10 @@ func (ec *executionContext) fieldContext_Query_usuarios(ctx context.Context, fie
 				return ec.fieldContext_Usuario_oauth_id(ctx, field)
 			case "foto_url":
 				return ec.fieldContext_Usuario_foto_url(ctx, field)
+			case "latitud":
+				return ec.fieldContext_Usuario_latitud(ctx, field)
+			case "longitud":
+				return ec.fieldContext_Usuario_longitud(ctx, field)
 			case "conexiones":
 				return ec.fieldContext_Usuario_conexiones(ctx, field)
 			}
@@ -3358,6 +3394,10 @@ func (ec *executionContext) fieldContext_ResponseMe_usuario(_ context.Context, f
 				return ec.fieldContext_Usuario_oauth_id(ctx, field)
 			case "foto_url":
 				return ec.fieldContext_Usuario_foto_url(ctx, field)
+			case "latitud":
+				return ec.fieldContext_Usuario_latitud(ctx, field)
+			case "longitud":
+				return ec.fieldContext_Usuario_longitud(ctx, field)
 			case "conexiones":
 				return ec.fieldContext_Usuario_conexiones(ctx, field)
 			}
@@ -5407,6 +5447,88 @@ func (ec *executionContext) fieldContext_Usuario_foto_url(_ context.Context, fie
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Usuario_latitud(ctx context.Context, field graphql.CollectedField, obj *model.Usuario) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Usuario_latitud(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Latitud, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*float64)
+	fc.Result = res
+	return ec.marshalOFloat2ᚖfloat64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Usuario_latitud(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Usuario",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Float does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Usuario_longitud(ctx context.Context, field graphql.CollectedField, obj *model.Usuario) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Usuario_longitud(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Longitud, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*float64)
+	fc.Result = res
+	return ec.marshalOFloat2ᚖfloat64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Usuario_longitud(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Usuario",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Float does not have child fields")
 		},
 	}
 	return fc, nil
@@ -7537,7 +7659,7 @@ func (ec *executionContext) unmarshalInputNewUsuario(ctx context.Context, obj in
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"nombres", "apellido1", "apellido2", "documento", "celular", "correo", "sexo", "direccion", "username", "password", "roles", "permisos_sueltos", "foto64"}
+	fieldsInOrder := [...]string{"nombres", "apellido1", "apellido2", "documento", "celular", "correo", "sexo", "direccion", "username", "password", "roles", "permisos_sueltos", "foto64", "latitud", "longitud"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -7635,6 +7757,20 @@ func (ec *executionContext) unmarshalInputNewUsuario(ctx context.Context, obj in
 				return it, err
 			}
 			it.Foto64 = data
+		case "latitud":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("latitud"))
+			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Latitud = data
+		case "longitud":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("longitud"))
+			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Longitud = data
 		}
 	}
 
@@ -7730,7 +7866,7 @@ func (ec *executionContext) unmarshalInputUpdatePerfil(ctx context.Context, obj 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"id", "nombres", "apellido1", "apellido2", "documento", "celular", "correo", "sexo", "direccion", "username", "password", "foto64"}
+	fieldsInOrder := [...]string{"id", "nombres", "apellido1", "apellido2", "documento", "celular", "correo", "sexo", "direccion", "username", "password", "foto64", "latitud", "longitud"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -7821,6 +7957,20 @@ func (ec *executionContext) unmarshalInputUpdatePerfil(ctx context.Context, obj 
 				return it, err
 			}
 			it.Foto64 = data
+		case "latitud":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("latitud"))
+			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Latitud = data
+		case "longitud":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("longitud"))
+			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Longitud = data
 		}
 	}
 
@@ -7834,7 +7984,7 @@ func (ec *executionContext) unmarshalInputUpdateUsuario(ctx context.Context, obj
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"id", "nombres", "apellido1", "apellido2", "documento", "celular", "correo", "sexo", "direccion", "username", "password", "roles", "permisos_sueltos", "foto64"}
+	fieldsInOrder := [...]string{"id", "nombres", "apellido1", "apellido2", "documento", "celular", "correo", "sexo", "direccion", "username", "password", "roles", "permisos_sueltos", "foto64", "latitud", "longitud"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -7939,6 +8089,20 @@ func (ec *executionContext) unmarshalInputUpdateUsuario(ctx context.Context, obj
 				return it, err
 			}
 			it.Foto64 = data
+		case "latitud":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("latitud"))
+			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Latitud = data
+		case "longitud":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("longitud"))
+			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Longitud = data
 		}
 	}
 
@@ -8898,6 +9062,10 @@ func (ec *executionContext) _Usuario(ctx context.Context, sel ast.SelectionSet, 
 			out.Values[i] = ec._Usuario_oauth_id(ctx, field, obj)
 		case "foto_url":
 			out.Values[i] = ec._Usuario_foto_url(ctx, field, obj)
+		case "latitud":
+			out.Values[i] = ec._Usuario_latitud(ctx, field, obj)
+		case "longitud":
+			out.Values[i] = ec._Usuario_longitud(ctx, field, obj)
 		case "conexiones":
 			out.Values[i] = ec._Usuario_conexiones(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -10151,6 +10319,22 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	}
 	res := graphql.MarshalBoolean(*v)
 	return res
+}
+
+func (ec *executionContext) unmarshalOFloat2ᚖfloat64(ctx context.Context, v interface{}) (*float64, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalFloatContext(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOFloat2ᚖfloat64(ctx context.Context, sel ast.SelectionSet, v *float64) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	res := graphql.MarshalFloatContext(*v)
+	return graphql.WrapContextMarshaler(ctx, res)
 }
 
 func (ec *executionContext) unmarshalOID2ᚖstring(ctx context.Context, v interface{}) (*string, error) {

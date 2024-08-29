@@ -45,13 +45,18 @@
                 <q-tooltip> Seleccionar foto de perfil </q-tooltip>
               </q-file>
             </div>
+
+            <div class="col-xs-12 col-sm-12 q-pt-md">
+              <q-btn color="grey" icon="fmd_good" dense square outline @click="openGeo()"> Ubicacion geografica </q-btn>
+              <small class="q-pl-md"> {{ input.latitud }} {{ input.longitud }} </small>
+            </div>
           </div>
 
-          <div v-if="!input.oauth_id"> 
+          <div vv-show="!input.oauth_id"> 
             <q-separator color="green" class="q-mt-md q-mb-xs" />
             <div class="row">
               <div class="col-xs-12 col-sm-12">
-                <q-input outlined v-model.trim="input.password" label="Cambiar clave de acceso:" dense lazy-rules :rules="[(val) => validaciones.val_password(val)]" />
+                <q-input outlined v-model.trim="input.password" label="Cambiar clave de acceso:" dense lazy-rules :rules="[(val) => validaciones.val_password_opc(val)]" />
               </div> 
             </div>
           </div>
@@ -64,6 +69,8 @@
         </q-form>
       </q-card-section>
     </q-card>
+
+    <Geo ref="refGeo" v-on:onpin="onpin" />
   </q-dialog>
 </template>
 
@@ -74,15 +81,18 @@ import Validaciones from 'src/pages/xauth/usuarios/validador';
 import click from 'src/shared/session';
 import { ref } from 'vue';
 import {Notify} from 'quasar'
+import Geo from 'src/pages/xauth/geo/geo_modal.vue';
 import {init_zoomer} from 'src/pages/xauth/usuarios/zoomer';
 
 export default {
+  components:{ Geo },
   setup() {
     const store = useLoginStore();
     const perfilService = new PerfilService();
     const validaciones = new Validaciones();
     const loading = ref(false);
     const alert = ref(false);
+    const refGeo = ref();
     const input = ref({});
     const foto_file = ref();
     const foto_64 = ref('');
@@ -110,6 +120,9 @@ export default {
         input.value.documento = res.me.usuario.documento;
         input.value.direccion = res.me.usuario.direccion;
         input.value.oauth_id = res.me.usuario.oauth_id;
+        input.value.latitud = res.me.usuario.latitud;
+        input.value.longitud = res.me.usuario.longitud;
+        // input.value.password = '';
         getFoto(res.me.usuario);
       }
       loading.value = false;
@@ -143,8 +156,21 @@ export default {
       init_zoomer(); 
     }
 
+    const openGeo = () => {
+      const lt = input.value.latitud;
+      const ln = input.value.longitud;
+      refGeo.value.open(lt,ln);
+    };
+
+    const onpin = (lat, lon) => { 
+      input.value.latitud = lat;
+      input.value.longitud = lon;
+    };
+
     const onSubmit = async () => {
+      console.log('ssssss',input.value);
       loading.value = true;
+      
       const obj = Object.assign({}, input.value);
       delete obj.oauth_id;
 
@@ -161,12 +187,15 @@ export default {
       validaciones,
       foto_file,
       foto_64,
+      refGeo,
       checkClickSession: click.setup().checkClickSession,
       cerrar,
       open,
       onSubmit,
       filevalue,
       onRejected,
+      openGeo,
+      onpin,
     };
   },
 };

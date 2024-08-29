@@ -15,6 +15,7 @@ create table `usuarios`(
     `last_login` datetime,
     `oauth_id` varchar(80),
     `foto_url` varchar(80),
+    `ubicacion` point,
     `fecha_registro` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00'),
     `fecha_update` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00') ON UPDATE now()
 );

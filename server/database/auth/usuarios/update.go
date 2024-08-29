@@ -4,6 +4,7 @@ import (
 	"auth/database/auth/utils"
 	"auth/graph/model"
 	"database/sql"
+	"fmt"
 	"strconv"
 )
 
@@ -12,6 +13,10 @@ func Actualizar(db *sql.DB, input model.UpdateUsuario) (*model.Usuario, error) {
 		return nil, err
 	}
 	us, err := GetById(db, input.ID)
+	if err != nil {
+		return nil, err
+	}
+	point, err := ubicacion(input.Latitud, input.Longitud)
 	if err != nil {
 		return nil, err
 	}
@@ -30,7 +35,8 @@ func Actualizar(db *sql.DB, input model.UpdateUsuario) (*model.Usuario, error) {
 	celular=?, 
 	correo=?, 
 	sexo=?, 
-	direccion=? 
+	direccion=?,
+	ubicacion=ST_GeomFromText(?) 
 	where id= ? 
 	`
 	_, err = tx.Exec(sql,
@@ -42,6 +48,7 @@ func Actualizar(db *sql.DB, input model.UpdateUsuario) (*model.Usuario, error) {
 		input.Correo,
 		input.Sexo,
 		input.Direccion,
+		point,
 		input.ID,
 	)
 
@@ -129,6 +136,10 @@ func UpdatePerfil(db *sql.DB, input model.UpdatePerfil) (*model.Usuario, error) 
 	if err != nil {
 		return nil, err
 	}
+	point, err := ubicacion(input.Latitud, input.Longitud)
+	if err != nil {
+		return nil, err
+	}
 	tx, err := db.Begin()
 	if err != nil {
 		return nil, err
@@ -143,7 +154,8 @@ func UpdatePerfil(db *sql.DB, input model.UpdatePerfil) (*model.Usuario, error) 
 	celular=?, 
 	correo=?, 
 	sexo=?, 
-	direccion=? 
+	direccion=?,
+	ubicacion=ST_GeomFromText(?)  
 	where id= ? 
 	`
 	_, err = tx.Exec(sql,
@@ -155,11 +167,13 @@ func UpdatePerfil(db *sql.DB, input model.UpdatePerfil) (*model.Usuario, error) 
 		input.Correo,
 		input.Sexo,
 		input.Direccion,
+		point,
 		input.ID,
 	)
 
 	if err != nil {
 		tx.Rollback()
+		fmt.Println(">>>>>")
 		return nil, err
 	}
 

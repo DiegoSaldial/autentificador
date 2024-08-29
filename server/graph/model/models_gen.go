@@ -63,6 +63,8 @@ type NewUsuario struct {
 	Roles           []string `json:"roles"`
 	PermisosSueltos []string `json:"permisos_sueltos"`
 	Foto64          *string  `json:"foto64,omitempty"`
+	Latitud         *float64 `json:"latitud,omitempty"`
+	Longitud        *float64 `json:"longitud,omitempty"`
 }
 
 type NewUsuarioOauth struct {
@@ -140,18 +142,20 @@ type Subscription struct {
 }
 
 type UpdatePerfil struct {
-	ID        string  `json:"id"`
-	Nombres   string  `json:"nombres"`
-	Apellido1 string  `json:"apellido1"`
-	Apellido2 *string `json:"apellido2,omitempty"`
-	Documento *string `json:"documento,omitempty"`
-	Celular   string  `json:"celular"`
-	Correo    *string `json:"correo,omitempty"`
-	Sexo      *string `json:"sexo,omitempty"`
-	Direccion *string `json:"direccion,omitempty"`
-	Username  *string `json:"username,omitempty"`
-	Password  *string `json:"password,omitempty"`
-	Foto64    *string `json:"foto64,omitempty"`
+	ID        string   `json:"id"`
+	Nombres   string   `json:"nombres"`
+	Apellido1 string   `json:"apellido1"`
+	Apellido2 *string  `json:"apellido2,omitempty"`
+	Documento *string  `json:"documento,omitempty"`
+	Celular   string   `json:"celular"`
+	Correo    *string  `json:"correo,omitempty"`
+	Sexo      *string  `json:"sexo,omitempty"`
+	Direccion *string  `json:"direccion,omitempty"`
+	Username  *string  `json:"username,omitempty"`
+	Password  *string  `json:"password,omitempty"`
+	Foto64    *string  `json:"foto64,omitempty"`
+	Latitud   *float64 `json:"latitud,omitempty"`
+	Longitud  *float64 `json:"longitud,omitempty"`
 }
 
 type UpdateUsuario struct {
@@ -169,6 +173,8 @@ type UpdateUsuario struct {
 	Roles           []string `json:"roles"`
 	PermisosSueltos []string `json:"permisos_sueltos"`
 	Foto64          *string  `json:"foto64,omitempty"`
+	Latitud         *float64 `json:"latitud,omitempty"`
+	Longitud        *float64 `json:"longitud,omitempty"`
 }
 
 type Usuario struct {
@@ -188,6 +194,8 @@ type Usuario struct {
 	LastLogin     *time.Time `json:"last_login,omitempty"`
 	OauthID       *string    `json:"oauth_id,omitempty"`
 	FotoURL       *string    `json:"foto_url,omitempty"`
+	Latitud       *float64   `json:"latitud,omitempty"`
+	Longitud      *float64   `json:"longitud,omitempty"`
 	Conexiones    int        `json:"conexiones"`
 }
 

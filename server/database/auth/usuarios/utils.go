@@ -4,6 +4,7 @@ import (
 	"auth/graph/model"
 	"database/sql"
 	"errors"
+	"fmt"
 	"os"
 	"strings"
 	"unicode"
@@ -25,6 +26,8 @@ func parseRow(row *sql.Row, t *model.Usuario) error {
 		&t.LastLogin,
 		&t.OauthID,
 		&t.FotoURL,
+		&t.Latitud,
+		&t.Longitud,
 		&t.FechaRegistro,
 		&t.FechaUpdate,
 	)
@@ -130,4 +133,19 @@ func validarCadena(cadena, field string) error {
 		}
 	}
 	return nil
+}
+
+func ubicacion(lat, lon *float64) (string, error) {
+	if (lat != nil && lon == nil) || (lat == nil && lon != nil) {
+		return "", errors.New("si manda lat o lon, ambos deben tener un valor o ninguno")
+	}
+
+	if (lat != nil && lon != nil) || (lat == nil && lon == nil) {
+		// Ambos valores están presentes o ambos son nulos.
+		if lat != nil && lon != nil {
+			point := fmt.Sprintf("POINT(%v %v)", *lat, *lon)
+			return point, nil
+		}
+	}
+	return "", nil
 }
