@@ -3,3 +3,4 @@ database-queries.sql
 res/
 .bin/
 auth
+.env

@@ -4,14 +4,13 @@ go 1.23.0
 
 require (
 	github.com/99designs/gqlgen v0.17.49
-	// github.com/chai2010/webp v1.1.1
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/go-chi/chi v1.5.5
 	github.com/go-sql-driver/mysql v1.8.1
 	github.com/gorilla/websocket v1.5.3
 	github.com/joho/godotenv v1.5.1
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
-	github.com/rs/cors v1.11.0
+	github.com/rs/cors v1.11.1
 	github.com/vektah/gqlparser/v2 v2.5.16
 	github.com/vincent-petithory/dataurl v1.0.0
 )
