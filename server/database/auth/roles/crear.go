@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func Crear(db *sql.DB, input model.NewRol) (*model.ResponseRolCreate, error) {
+func Crear(db *sql.DB, input model.NewRol) (*model.Rol, error) {
 	sql := `insert into roles(nombre,descripcion,jerarquia) values (?,?,?)`
 	tx, err := db.Begin()
 	if err != nil {
@@ -68,7 +68,7 @@ func Crear(db *sql.DB, input model.NewRol) (*model.ResponseRolCreate, error) {
 		tx.Rollback()
 		return nil, err
 	}
-	res := model.ResponseRolCreate{}
+	res := model.Rol{}
 	res.Nombre = r.Nombre
 	res.Descripcion = r.Descripcion
 	res.Jerarquia = r.Jerarquia

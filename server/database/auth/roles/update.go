@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func Actualizar(db *sql.DB, input model.NewRol) (*model.ResponseRolCreate, error) {
+func Actualizar(db *sql.DB, input model.NewRol) (*model.Rol, error) {
 	sql := `update roles set descripcion=?,jerarquia=? where nombre=?`
 	tx, err := db.Begin()
 	if err != nil {
@@ -81,7 +81,7 @@ func Actualizar(db *sql.DB, input model.NewRol) (*model.ResponseRolCreate, error
 		tx.Rollback()
 		return nil, err
 	}
-	res := model.ResponseRolCreate{}
+	res := model.Rol{}
 	res.Nombre = r.Nombre
 	res.Descripcion = r.Descripcion
 	res.Jerarquia = r.Jerarquia

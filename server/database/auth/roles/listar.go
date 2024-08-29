@@ -49,6 +49,15 @@ func GetRolById(db *sql.DB, rol string) (*model.Rol, error) {
 	if err == sql.ErrNoRows {
 		return nil, errors.New("rol no existente")
 	}
+
+	r.Permisos, err = permisos.GetPermisosByRol(db, r.Nombre)
+	if err != nil {
+		return nil, err
+	}
+	r.Menus, err = menu.GetMenusbyRol(db, r.Nombre)
+	if err != nil {
+		return nil, err
+	}
 	return &r, nil
 }
 
@@ -88,37 +97,4 @@ func GetRoles(db *sql.DB) ([]*model.ResponseRoles, error) {
 	}
 
 	return roles, nil
-}
-
-func GetRolById2(db *sql.DB, rol string, show_permisos bool) (*model.ResponseRolCreate, error) {
-	sq := `
-	select r.nombre, r.descripcion, r.jerarquia, r.fecha_registro
-	from roles r 
-	where r.nombre  = ?;
-	`
-	row := db.QueryRow(sq, rol)
-	if row.Err() == sql.ErrNoRows {
-		return nil, errors.New("no se encontro el registo del rol")
-	}
-
-	ro, err := GetRolById(db, rol)
-	if err != nil {
-		return nil, err
-	}
-
-	r := model.ResponseRolCreate{}
-	r.Nombre = ro.Nombre
-	r.Descripcion = ro.Descripcion
-	r.Jerarquia = ro.Jerarquia
-	r.FechaRegistro = ro.FechaRegistro
-	r.Permisos, err = permisos.GetPermisosByRol(db, r.Nombre)
-	if err != nil {
-		return nil, err
-	}
-	r.Menus, err = menu.GetMenusbyRol(db, r.Nombre)
-	if err != nil {
-		return nil, err
-	}
-
-	return &r, nil
 }

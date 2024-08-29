@@ -29,6 +29,8 @@ type Rol {
   descripcion: String
   jerarquia: Int! 
   fecha_registro: Time! 
+  permisos: [ResponsePermisoMe]!
+  menus: [Menus!]!
 } 
 
 type Permiso {
@@ -76,15 +78,6 @@ type ResponseMe {
   menus: [Menus!]!
   roles: [ResponseRolMe]!
   permisos_sueltos: [ResponsePermisoMe]!
-} 
-
-type ResponseRolCreate {
-  nombre: String!
-  descripcion: String
-  jerarquia: Int! 
-  fecha_registro: Time! 
-  permisos: [ResponsePermisoMe]!
-  menus: [Menus!]!
 } 
 
 type ResponseRoles {
@@ -163,6 +156,7 @@ input UpdateUsuario {
   permisos_sueltos: [String!]!
   foto64: String
 }
+
 input UpdatePerfil {
   id: ID!
   nombres: String!
@@ -177,7 +171,6 @@ input UpdatePerfil {
   password: String 
   foto64: String
 }
-
 
 input NewRol {
   nombre: String!
@@ -211,10 +204,12 @@ type Query {
   permisos: [Permiso!]!
   usuarios(query:QueryUsuarios!): [Usuario!]! 
   usuarioById(input:GetUser!): ResponseMe!
-  rolById(rol:String!): ResponseRolCreate!
+  rolById(rol:String!): Rol!
   menus: [Menus!]!
   conexiones_ws: String!
   get_imagen(url:String!): String!
+
+  # 
 }
 
 # =================================
@@ -225,10 +220,12 @@ type Mutation {
   createOauth(input:NewUsuarioOauth!): Usuario!
   updateUsuario(input:UpdateUsuario!): Usuario!
   updateUsuarioPerfil(input:UpdatePerfil!): Usuario!
-  createRol(input:NewRol!): ResponseRolCreate!
-  updateRol(input:NewRol!): ResponseRolCreate!
+  createRol(input:NewRol!): Rol!
+  updateRol(input:NewRol!): Rol!
   asignarMenusUsuario(input:AsignarMenusUsuario!): String!
   enviarNotificacion(input:XNotificacionEnvio!): Boolean!
+
+  # 
 }
 
 # =================================

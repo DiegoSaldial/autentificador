@@ -107,15 +107,6 @@ type ResponsePermisoMe struct {
 	FechaAsignado time.Time `json:"fecha_asignado"`
 }
 
-type ResponseRolCreate struct {
-	Nombre        string               `json:"nombre"`
-	Descripcion   *string              `json:"descripcion,omitempty"`
-	Jerarquia     int                  `json:"jerarquia"`
-	FechaRegistro time.Time            `json:"fecha_registro"`
-	Permisos      []*ResponsePermisoMe `json:"permisos"`
-	Menus         []*Menus             `json:"menus"`
-}
-
 type ResponseRolMe struct {
 	Nombre        string               `json:"nombre"`
 	Descripcion   *string              `json:"descripcion,omitempty"`
@@ -137,10 +128,12 @@ type ResponseRoles struct {
 }
 
 type Rol struct {
-	Nombre        string    `json:"nombre"`
-	Descripcion   *string   `json:"descripcion,omitempty"`
-	Jerarquia     int       `json:"jerarquia"`
-	FechaRegistro time.Time `json:"fecha_registro"`
+	Nombre        string               `json:"nombre"`
+	Descripcion   *string              `json:"descripcion,omitempty"`
+	Jerarquia     int                  `json:"jerarquia"`
+	FechaRegistro time.Time            `json:"fecha_registro"`
+	Permisos      []*ResponsePermisoMe `json:"permisos"`
+	Menus         []*Menus             `json:"menus"`
 }
 
 type Subscription struct {

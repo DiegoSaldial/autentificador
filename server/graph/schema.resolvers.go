@@ -60,7 +60,7 @@ func (r *mutationResolver) UpdateUsuarioPerfil(ctx context.Context, input model.
 }
 
 // CreateRol is the resolver for the createRol field.
-func (r *mutationResolver) CreateRol(ctx context.Context, input model.NewRol) (*model.ResponseRolCreate, error) {
+func (r *mutationResolver) CreateRol(ctx context.Context, input model.NewRol) (*model.Rol, error) {
 	_, err := xauth.CtxValue(ctx, r.DB, "createRol")
 	if err != nil {
 		return nil, err
@@ -69,7 +69,7 @@ func (r *mutationResolver) CreateRol(ctx context.Context, input model.NewRol) (*
 }
 
 // UpdateRol is the resolver for the updateRol field.
-func (r *mutationResolver) UpdateRol(ctx context.Context, input model.NewRol) (*model.ResponseRolCreate, error) {
+func (r *mutationResolver) UpdateRol(ctx context.Context, input model.NewRol) (*model.Rol, error) {
 	_, err := xauth.CtxValue(ctx, r.DB, "updateRol")
 	if err != nil {
 		return nil, err
@@ -139,12 +139,12 @@ func (r *queryResolver) UsuarioByID(ctx context.Context, input model.GetUser) (*
 }
 
 // RolByID is the resolver for the rolById field.
-func (r *queryResolver) RolByID(ctx context.Context, rol string) (*model.ResponseRolCreate, error) {
+func (r *queryResolver) RolByID(ctx context.Context, rol string) (*model.Rol, error) {
 	_, err := xauth.CtxValue(ctx, r.DB, "rolById")
 	if err != nil {
 		return nil, err
 	}
-	return roles.GetRolById2(r.DB, rol, true)
+	return roles.GetRolById(r.DB, rol)
 }
 
 // Menus is the resolver for the menus field.
