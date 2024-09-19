@@ -67,7 +67,9 @@ module.exports = configure(function (/* ctx */) {
       // analyze: true,
       // rawDefine: {}
       // ignorePublicFolder: true,
-      // minify: false,
+      minify: true,
+      treeShake: true,
+      extractCSS: true,
       // polyfillModulePreload: true,
       // distDir
 
@@ -149,7 +151,7 @@ module.exports = configure(function (/* ctx */) {
       swFilename: 'sw.js',
       manifestFilename: 'manifest.json',
       useCredentialsForManifestTag: false,
-      // useFilenameHashes: true,
+      useFilenameHashes: true,
       // extendGenerateSWOptions (cfg) {}
       // extendInjectManifestOptions (cfg) {},
       // extendManifestJson (json) {}

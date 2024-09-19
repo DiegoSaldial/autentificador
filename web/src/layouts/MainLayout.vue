@@ -5,7 +5,6 @@
         <q-btn v-if="store.dataUser.usuario" flat dense round @click="toggleLeftDrawer" aria-label="Menu" icon="menu" />
 
         <q-btn flat no-caps no-wrap class="q-ml-xs" v-if="$q.screen.gt.xs && store.dataUser.usuario" :to="toHome()">
-          <!-- <q-icon :name="fabYoutube" color="red" size="28px" /> -->
           <q-toolbar-title shrink class="text-weight-bold">
             Auth
           </q-toolbar-title>
@@ -101,24 +100,28 @@ export default {
       if(!us) return;
       const url = us.foto_url;
       if(!url) return;
-      const res = await perfilService.get_imagen(url); 
-      if(res && res.get_imagen) foto_64.value = res.get_imagen; 
+      const res = await perfilService.get_imagen(url);
+      if(res && res.get_imagen) foto_64.value = res.get_imagen;
     }
 
     const toHome = () => {
-      if(store.dataUser.usuario) return '/login'
-      else return '/'
+      let landing = process.env.SHOW_LANDING_PAGE;
+      if(landing){
+        if(store.dataUser.usuario) return '/login'
+        else return '/'
+      }
+      return '/'
     }
 
     watch(
       () => store.dataUser,
-      () => { 
+      () => {
         if (store.dataUser) getFoto();
       }
     );
 
     onMounted(()=>{
-      storeClima.setearClima(); 
+      storeClima.setearClima();
       getFoto();
     })
 

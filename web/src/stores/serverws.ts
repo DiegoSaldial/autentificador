@@ -55,7 +55,7 @@ export const subs = (
     });
 
     return () => {
-      stop;
+      stop();
       // Cleanup logic if necessary, such as unsubscribing
       // For example, you can use a flag to stop processing new results
       // or use the `envio` subscription object to unsubscribe if it supports it

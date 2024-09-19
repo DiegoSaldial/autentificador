@@ -10,11 +10,9 @@ export default {
   components:{},
 
   setup () {
-
     return {
       checkClickSession: session.setup().checkClickSession,
     }
-
   }
 }
 </script>

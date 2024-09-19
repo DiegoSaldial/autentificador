@@ -1,17 +1,8 @@
 <template>
   <div class="q-pa-sm">
     <h6 class="q-my-sm text-center"> Usuarios del sistema </h6>
-    <q-table
-      color="primary"
-      :rows="rows"
-      :columns="columns"
-      row-key="id"
-      dense
-      hide-pagination :rows-per-page-options="[0]"
-      :visible-columns="visibleColumns"
-      :filter="filter"
-      :loading="loading">
 
+    <q-table color="primary" :rows="rows" :columns="columns" row-key="id" dense hide-pagination :rows-per-page-options="[0]" :visible-columns="visibleColumns" :filter="filter" :loading="loading">
       <template v-slot:top-left>
         <q-toggle v-model="more_datos" @update:model-value="columnas()" color="orange" label="mostrar mas columnas" class="q-my-none" />
       </template>
@@ -30,12 +21,23 @@
         <q-inner-loading showing color="primary" />
       </template>
 
+      <template v-slot:body-cell-index="props">
+        <q-td :props="props" :title="'ID: '+props.row.id">
+          {{ props.rowIndex + 1 }}
+        </q-td>
+      </template>
+
       <template v-slot:body-cell-foto_url="props">
         <q-td :props="props">
           <img v-if="props.row.foto64" :src="props.row.foto64" alt="perfil" style="max-width: 50px;">
         </q-td>
       </template>
-      
+
+      <template v-slot:body-cell-nombres="props">
+        <q-td :props="props" :title="'ID: '+props.row.id">
+          {{ props.row.nombres }}
+        </q-td>
+      </template>
       <template v-slot:body-cell-fecha_registro="props">
         <q-td :props="props">
           {{ parseFecha(props.row.fecha_registro, true) }}
@@ -61,7 +63,7 @@
       </template>
 
       <template v-slot:body-cell-conexiones="props">
-        <q-td :props="props"> 
+        <q-td :props="props">
           <q-badge color="green" v-if="props.row.conexiones>0">
             {{ props.row.conexiones }}
             <q-tooltip class="bg-purple">
@@ -104,32 +106,13 @@
 
 <script>
 import { onMounted, ref,watch } from 'vue';
+import { parseFecha } from 'stores/utils'
+import { useRoute, useRouter } from 'vue-router';
+import { columns } from './utils'
 import UsuariosService from './usuariosService'
 import RolesService from 'pages/xauth/roles/rolesService';
 import Registrar from './registrar_usuario.vue'
 import Ver from './ver-usuario.vue'
-import { parseFecha } from 'stores/utils'
-import { useRoute, useRouter } from 'vue-router';
-
-const columns = [
-  { name: 'id', align: 'center', label: 'ID', field: 'id', sortable: true },
-  { name: 'foto_url', label: '', field: 'foto_url', sortable: false  },
-  { name: 'nombres', label: 'Nombres', field: 'nombres', sortable: true },
-  { name: 'apellido1', label: 'apellido1', field: 'apellido1' },
-  { name: 'apellido2', label: 'apellido2', field: 'apellido2' },
-  { name: 'documento', label: 'documento', field: 'documento' },
-  { name: 'celular', label: 'celular', field: 'celular' },
-  { name: 'correo', label: 'correo', field: 'correo' },
-  { name: 'sexo', label: 'sexo', field: 'sexo' },
-  { name: 'direccion', label: 'direccion', field: 'direccion' },
-  { name: 'username', label: 'username', field: 'username' },
-  { name: 'last_login', label: 'last login', field: 'last_login' },
-  { name: 'fecha_registro', label: 'registro', field: 'fecha_registro' },
-  { name: 'fecha_update', label: 'modificado', field: 'fecha_update' },
-  { name: 'estado', label: 'estado', field: 'estado' },
-  { name: 'conexiones', label: 'conexiones', field: 'conexiones' },
-  { name: 'opt', label: '', field: 'opt' },
-]
 
 export default {
   components:{ Registrar,Ver },
@@ -159,14 +142,25 @@ export default {
       if(res.usuarios) {
         const us = res.usuarios;
         for(let i=0;i<us.length;i++){
-          us[i].foto64 = ''; 
-        } 
+          us[i].foto64 = '';
+        }
         rows.value = us;
-        rows.value.forEach(x=>{
-          getFoto(x)
-        })
+        cargarImagenes();
       }
-      loading.value = false; 
+      loading.value = false;
+    }
+
+    const cargarImagenes = async () => {
+      for(let i=0;i<rows.value.length;i++){
+        getFoto(rows.value[i]);
+      }
+    }
+
+    const getFoto = async (us) => {
+      const url = us.foto_url;
+      if(!url) return url;
+      const res = await usuariosService.get_imagen(url);
+      if(res && res.get_imagen) us.foto64 = res.get_imagen;
     }
 
     const listarRoles = async () => {
@@ -183,15 +177,8 @@ export default {
     const visualizar = (item) => refVer.value.open(item.id);
 
     const columnas = () => {
-      if(more_datos.value) visibleColumns.value = ['id','foto_url','nombres','apellido1','apellido2','documento','celular','correo','sexo','direccion','username','last_login','fecha_registro','fecha_update','estado','conexiones','opt'];
-      else visibleColumns.value = ['id','foto_url','nombres','apellido1','apellido2','last_login','conexiones','opt'];
-    }
-
-    const getFoto = async (us) => {
-      const url = us.foto_url;
-      if(!url) return url;
-      const res = await usuariosService.get_imagen(url); 
-      if(res && res.get_imagen) us.foto64 = res.get_imagen; 
+      if(more_datos.value) visibleColumns.value = ['index','foto_url','nombres','apellido1','apellido2','documento','celular','correo','sexo','direccion','username','last_login','fecha_registro','fecha_update','estado','conexiones','opt'];
+      else visibleColumns.value = ['index','foto_url','nombres','apellido1','apellido2','last_login','conexiones','opt'];
     }
 
     const setParams = async ()=> {
@@ -204,7 +191,6 @@ export default {
 
     onMounted(()=>{
       columnas();
-      // listar();
       listarRoles();
     })
 
@@ -225,8 +211,8 @@ export default {
       registrar,
       actualizar,
       visualizar,
-      parseFecha, 
+      parseFecha,
     }
   }
 }
-</script> 
+</script>
