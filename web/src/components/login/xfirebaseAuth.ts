@@ -6,6 +6,7 @@ import {
   signOut,
 } from 'firebase/auth';
 
+/*
 const firebaseConfig = initializeApp({
   apiKey: 'AIzaSyD2muOLjhasMAyrYPsn-jNkNMCmmIdP86A',
   authDomain: 'autentificador-94.firebaseapp.com',
@@ -14,7 +15,19 @@ const firebaseConfig = initializeApp({
   messagingSenderId: '433905422324',
   appId: '1:433905422324:web:0b7ff6acc980aac300f3a1',
   measurementId: 'G-MXCD201ZJV',
-});
+});*/
+
+const conf = {
+  apiKey: 'AIzaSyBmi5YVYzUezal_pvZA8QNlkEFKLDFLcOA',
+  authDomain: 'autentificador-994.firebaseapp.com',
+  projectId: 'autentificador-994',
+  storageBucket: 'autentificador-994.appspot.com',
+  messagingSenderId: '944733909164',
+  appId: '1:944733909164:web:a2859e077fd7bae0bc6f09',
+  measurementId: 'G-YD8VEM3LQW',
+};
+
+const firebaseConfig = initializeApp(conf);
 
 export const auth = getAuth(firebaseConfig);
 

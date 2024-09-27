@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import gql from 'graphql-tag';
-import { query, mutar } from 'stores/server';
+import { query, mutar } from 'src/stores/server';
 import { NewUsuario, QueryUsuarios, UpdateUsuario } from './type_usuarios';
 
 export default class UsuariosService {

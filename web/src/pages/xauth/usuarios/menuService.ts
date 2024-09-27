@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import gql from 'graphql-tag';
-import { mutar, query } from 'stores/server';
+import { mutar, query } from 'src/stores/server';
 
 export default class MenusService {
   async menus() {
