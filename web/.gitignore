@@ -7,6 +7,7 @@ src-pwa
 .quasar
 /dist
 /quasar.config.*.temporary.compiled*
+/src-pwa
 
 # Cordova related directories and files
 /src-cordova/node_modules
