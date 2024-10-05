@@ -17,6 +17,7 @@
     "@eslint/eslintrc": "^3.1.0",
     "@eslint/js": "^9.10.0",
     "@quasar/extras": "^1.16.4",
+    "@vue-leaflet/vue-leaflet": "^0.10.1",
     "@vue/apollo-composable": "^4.0.0",
     "axios": "^1.2.1",
     "dotenv": "^16.4.5",
@@ -26,11 +27,13 @@
     "graphql-tag": "^2.12.6",
     "graphql-ws": "^5.16.0",
     "jwt-decode": "^4.0.0",
+    "leaflet": "^1.9.4",
     "pinia": "^2.0.11",
     "quasar": "^2.8.0",
     "vue": "^3.4.18",
     "vue-router": "^4.0.12",
     "vue3-google-map": "^0.21.0",
+    "vue3-leaflet": "git+https://git@github.com/geonativefr/vue3-leaflet",
     "vuefire": "^3.1.23"
   },
   "devDependencies": {
