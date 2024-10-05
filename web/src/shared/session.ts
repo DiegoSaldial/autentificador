@@ -56,7 +56,7 @@ export default {
         plugins: {},
       });
       const instancia = app.mount(r);
-      const d = instancia.$refs.reloginComponent;
+      const d: any = instancia.$refs.reloginComponent;
       const re = await d.openDialog();
       r.remove();
       app.unmount();
