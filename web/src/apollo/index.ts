@@ -74,7 +74,7 @@ export async function getClientOptions() {
       url: '' + process.env.GRAPHQL_WSS,
       connectionParams: () => {
         const store = useLoginStore();
-        const token = store.token;
+        const token = store.token;        
 
         return {
           Authorization: `Bearer ${token}`,

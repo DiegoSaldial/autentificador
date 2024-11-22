@@ -102,7 +102,7 @@ func Crear(db *sql.DB, input model.NewUsuario, oauth_id *string) (*model.Usuario
 	return GetById(db, strconv.FormatInt(id, 10))
 }
 
-func CrearOauth(db *sql.DB, input model.NewUsuarioOauth) (*model.Usuario, error) {
+func CrearOauth(db *sql.DB, input model.NewUsuarioOauth, isportal bool) (*model.Usuario, error) {
 
 	if err := oauth_emails_permitidos(input.Correo); err != nil {
 		return nil, err
@@ -130,6 +130,24 @@ func CrearOauth(db *sql.DB, input model.NewUsuarioOauth) (*model.Usuario, error)
 	data.Username = input.Username
 	data.Password = input.Password
 	data.Roles = []string{rol}
+
+	if isportal {
+		id_existe := ""
+		xsql := "select id  from usuarios where username=?"
+		err := db.QueryRow(xsql, input.Username).Scan(&id_existe)
+		if err != nil && err != sql.ErrNoRows {
+			return nil, err
+		}
+
+		if id_existe != "" {
+			sqlx := "update usuarios set password=SHA2(?, 256) where id=?"
+			_, err = db.Exec(sqlx, input.Password, id_existe)
+			if err != nil {
+				return nil, err
+			}
+			return GetById(db, id_existe)
+		}
+	}
 
 	return Crear(db, data, &data.Username)
 }

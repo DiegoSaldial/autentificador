@@ -20,12 +20,16 @@ func CreateExternal(db *sql.DB, data model.NewLogin) (*model.ResponseLogin, erro
 		return nil, err
 	}
 	dp := me.Data.Me.DatosPersonales
+	sa := ""
+	if dp.SegApellido != nil {
+		sa = *dp.SegApellido
+	}
 	input := model.NewUsuarioOauth{
-		Nombres:  fmt.Sprintf("%s %s", dp.Nombres, dp.PriApellido),
+		Nombres:  fmt.Sprintf("%s %s %s", dp.Nombres, dp.PriApellido, sa),
 		Username: data.Username,
 		Password: data.Password,
 	}
-	us, err := usuarios.CrearOauth(db, input)
+	us, err := usuarios.CrearOauth(db, input, true)
 	if err != nil {
 		return nil, err
 	}

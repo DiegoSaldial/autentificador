@@ -94,8 +94,15 @@ export default {
         const menuItemsAgrupados = await cargarMenus(meres.me.menus);
         useLogin.setMenus(menuItemsAgrupados);
         useLogin.setUser(meres.me);
+
+        router.push('/');
+        setTimeout(()=>{ reload() },200)
       }
       loading.value = false;
+    }
+
+    const reload = () => {
+      window.location.reload(); 
     }
 
     const changePWD = () =>

@@ -72,11 +72,20 @@ export const useLoginStore = defineStore('counter', {
     },
     clearStore() {
       // localStorage.clear();
-      for (const clave in process.env) {
+
+      localStorage.removeItem('xrefreshToken-authx');
+      localStorage.removeItem('xtoken-authx');
+      localStorage.removeItem('xdataUser-authx');
+      localStorage.removeItem('xmenus-authx');
+      localStorage.removeItem('xclima-authx');
+
+      window.location.reload();
+
+      /* for (const clave in process.env) {
         if (process.env.hasOwnProperty(clave)) {
           localStorage.removeItem(process.env[clave] + '');
         }
-      }
+      }*/
     },
   },
 });

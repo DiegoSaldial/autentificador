@@ -1,7 +1,7 @@
 
 create table `usuarios`(
     `id` integer unsigned auto_increment not null primary key,
-    `nombres` varchar(30) not null,
+    `nombres` varchar(60) not null,
     `apellido1` varchar(30) not null,
     `apellido2` varchar(30),
     `documento` varchar(30),
