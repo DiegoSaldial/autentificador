@@ -2,6 +2,8 @@
 .thumbs.db
 node_modules
 src-pwa
+.vscode/
+src-pwa/
 
 # Quasar core related directories
 .quasar
