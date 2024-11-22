@@ -57,8 +57,8 @@ export default {
     const router = useRouter();
     const foto_64 = ref('');
 
-    const logout = ()=> {
-      router.push('/');
+    const logout = async ()=> {
+      await router.push('/');
       store.setToken()
     }
 

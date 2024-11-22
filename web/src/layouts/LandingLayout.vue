@@ -56,10 +56,11 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { fabYoutube } from '@quasar/extras/fontawesome-v6'
 import {useLoginStore} from 'stores/login-store'
 import Landing from 'components/landing/index_landing.vue'
+import { useRouter } from 'vue-router';
 
 export default {
   name: 'MyLayout',
@@ -69,8 +70,15 @@ export default {
     const leftDrawerOpen = ref(false)
     const store = useLoginStore();
     const show_time = ref(process.env.SHOW_TIME_LABEL)
+    const router = useRouter();
 
     const toggleLeftDrawer = () => leftDrawerOpen.value = !leftDrawerOpen.value
+
+    onMounted(()=>{
+      let p = process.env.SHOW_LANDING_PAGE;
+      let us = store.dataUser.usuario; 
+      if(p && us) router.push('/login');
+    })
 
     return {
       fabYoutube,

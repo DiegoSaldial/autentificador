@@ -81,7 +81,7 @@ import Validaciones from 'src/pages/xauth/usuarios/validador';
 import click from 'src/shared/session';
 import { ref } from 'vue';
 import {Notify} from 'quasar'
-import Geo from 'src/pages/xauth/geo/geo_modal.vue';
+import Geo from 'src/pages/xauth/geo/geo_modalbk.vue';
 import {init_zoomer} from 'src/pages/xauth/usuarios/zoomer';
 
 export default {

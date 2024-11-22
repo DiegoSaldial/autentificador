@@ -18,7 +18,7 @@
           :zoom="zoom"
           :center="center"
           :options="mapOptions"
-          style="height: 50vh; width: 40vw"
+          style="height: 50vh; width: 100%"
           @click="handleMapClick"
         >
           <LTileLayer :url="url" :attribution="attribution" />

@@ -53,6 +53,7 @@ import { cargarMenus } from './utils';
 import { loginGoogle } from './xfirebaseAuth';
 import { Notify } from 'quasar';
 import { useIndexedStore } from 'stores/indexed-store'
+import { useRouter } from 'vue-router';
 
 export default {
   setup() {
@@ -65,6 +66,7 @@ export default {
     const pwd = ref('password');
     const accept_oauth = ref(false);
     const useIndexed = useIndexedStore();
+    const router = useRouter();
 
     const onSubmit = async (u = null, p = null) => {
       const external = process.env.EXTERNAL_LOGIN;
@@ -95,13 +97,15 @@ export default {
         useLogin.setMenus(menuItemsAgrupados);
         useLogin.setUser(meres.me);
 
-        router.push('/');
-        setTimeout(()=>{ reload() },200)
+        setTimeout(()=>{ reload() },150)
       }
       loading.value = false;
     }
 
-    const reload = () => {
+    const reload = async () => {
+      let ruta = '/'
+      if (process.env.SHOW_LANDING_PAGE) ruta= '/login';
+      await router.push(ruta);
       window.location.reload(); 
     }
 

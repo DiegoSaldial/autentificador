@@ -1,6 +1,6 @@
 import { RouteRecordRaw } from 'vue-router';
 
-const inicio = () => {
+const inicio = () => { 
   if (process.env.SHOW_LANDING_PAGE) return '/login';
   return '/';
 };
