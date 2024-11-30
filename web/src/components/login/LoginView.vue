@@ -69,6 +69,7 @@ export default {
     const router = useRouter();
 
     const onSubmit = async (u = null, p = null) => {
+      useLogin.clearStore(false);
       const external = process.env.EXTERNAL_LOGIN;
       loading.value = true;
       let user = username.value;

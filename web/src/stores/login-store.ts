@@ -70,16 +70,24 @@ export const useLoginStore = defineStore('counter', {
     setWsNoti(e: string) {
       this.ws_noti_status = e;
     },
-    clearStore() {
+    clearStore(reload = true) {
       // localStorage.clear();
 
-      localStorage.removeItem('xrefreshToken-authx');
+      /* localStorage.removeItem('xrefreshToken-authx');
       localStorage.removeItem('xtoken-authx');
       localStorage.removeItem('xdataUser-authx');
       localStorage.removeItem('xmenus-authx');
-      localStorage.removeItem('xclima-authx');
+      localStorage.removeItem('xclima-authx'); */
+      localStorage.removeItem(process.env.COOKIE_THEME_NAME + '');
+      localStorage.removeItem(process.env.XTOKENREFRESH_NAME + '');
+      localStorage.removeItem(process.env.XTOKEN_NAME + '');
+      localStorage.removeItem(process.env.XDATAUSER_NAME + '');
+      localStorage.removeItem(process.env.XMENUS_NAME + '');
+      localStorage.removeItem(process.env.X_CLIMA + '');
 
-      window.location.reload();
+      if (reload) {
+        window.location.reload();
+      }
 
       /* for (const clave in process.env) {
         if (process.env.hasOwnProperty(clave)) {
