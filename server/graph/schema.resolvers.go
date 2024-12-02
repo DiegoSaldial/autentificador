@@ -11,8 +11,8 @@ import (
 )
 
 // Mundo is the resolver for the mundo field.
-func (r *mutationResolver) Mundo(ctx context.Context) (string, error) {
-	return "not implemented: Mundo - mundo", nil
+func (r *mutationResolver) Mundo(ctx context.Context, name string) (string, error) {
+	return "not implemented: Mundo - mundo: " + name, nil
 }
 
 // Hola is the resolver for the hola field.

@@ -1,6 +1,7 @@
 import { RouteRecordRaw } from 'vue-router';
+import { rutas } from './rutas';
 
-const inicio = () => { 
+const inicio = () => {
   if (process.env.SHOW_LANDING_PAGE) return '/login';
   return '/';
 };
@@ -26,6 +27,7 @@ const routes: RouteRecordRaw[] = [
         component: async () =>
           await import('pages/xauth/roles/roles-index.vue'),
       },
+      ...rutas,
     ],
   },
   {

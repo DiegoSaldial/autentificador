@@ -2,7 +2,6 @@
 #
 # https://gqlgen.com/getting-started/
 
-# go run github.com/99designs/gqlgen generate --config gqlgen_auth.yml
 # go run github.com/99designs/gqlgen generate
 # CGO_ENABLED=0 go build -ldflags="-s -w" -o auth server.go 
 # CGO_ENABLED=0 go build -a -ldflags '-s -w' -o auth server.go
@@ -14,7 +13,7 @@ type Query {
 
 # =================================
 type Mutation {
-  mundo: String!
+  mundo(name:String!): String!
 }
 
 # =================================
