@@ -1,7 +1,7 @@
 package usuarios
 
 import (
-	"auth/graph/model"
+	"auth/graph_auth/model"
 	"database/sql"
 	"errors"
 	"fmt"

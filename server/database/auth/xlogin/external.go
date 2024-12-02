@@ -3,7 +3,7 @@ package xlogin
 import (
 	"auth/database/auth/usuarios"
 	"auth/database/auth/xauth"
-	"auth/graph/model"
+	"auth/graph_auth/model"
 	"context"
 	"database/sql"
 	"fmt"

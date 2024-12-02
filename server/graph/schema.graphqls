@@ -2,241 +2,24 @@
 #
 # https://gqlgen.com/getting-started/
 
-scalar Time
-
-type Usuario {
-  id: ID!
-  nombres: String!
-  apellido1: String!
-  apellido2: String
-  documento: String
-  celular: String
-  correo: String
-  sexo: String
-  direccion: String
-  username: String!
-  fecha_registro: Time! 
-  fecha_update: Time! 
-  estado: Boolean! 
-  last_login: Time
-  oauth_id: String
-  foto_url: String
-  latitud: Float
-  longitud: Float
-  conexiones: Int!
-} 
-
-type Rol { 
-  nombre: String!
-  descripcion: String
-  jerarquia: Int! 
-  fecha_registro: Time! 
-  permisos: [ResponsePermisoMe]!
-  menus: [Menus!]!
-} 
-
-type Permiso {
-  metodo: String!
-  nombre: String!
-  descripcion: String
-  fecha_registro: Time! 
-}
-
-type Menus {
-    id: ID!
-    label: String!
-    path: String!
-    icon: String!
-    color: String!
-    grupo: Int!
-    orden: Int!
-}
-
-# =================================
-type ResponseLogin {
-  token: String!
-  refreshToken: String!
-}
-type ResponsePermisoMe {
-  metodo: String!
-  nombre: String!
-  descripcion: String
-  fecha_registro: Time! 
-  fecha_asignado: Time!
-} 
-
-type ResponseRolMe { 
-  nombre: String!
-  descripcion: String
-  jerarquia: Int! 
-  fecha_registro: Time!
-  usuario_id: ID!
-  fecha_asignado: Time!
-  permisos: [ResponsePermisoMe]!
-} 
-
-type ResponseMe {
-  usuario: Usuario!
-  menus: [Menus!]!
-  roles: [ResponseRolMe]!
-  permisos_sueltos: [ResponsePermisoMe]!
-} 
-
-type ResponseRoles {
-  nombre: String!
-  descripcion: String
-  jerarquia: Int! 
-  fecha_registro: Time! 
-  menus: Int!
-  permisos: Int!
-  usuarios: Int!
-} 
-
-type XNotificacion {
-  title: String!
-  data_json: String!
-}
-# =================================
-
-input QueryUsuarios {
-  rol: ID
-}
-
-input XNotificacionEnvio {
-  title: String!
-  data_json: String!
-}
-
-# =================================
-input NewLogin {
-  username: String!
-  password: String!
-  external: Boolean! = false
-}
-
-input InputMe{ 
-  show_roles: Boolean!
-  show_permisos: Boolean!
-}
-
-input NewUsuarioOauth { 
-  nombres: String! 
-  celular: String
-  correo: String 
-  username: String!
-  password: String! 
-}
-
-input NewUsuario { 
-  nombres: String!
-  apellido1: String!
-  apellido2: String
-  documento: String
-  celular: String
-  correo: String
-  sexo: String
-  direccion: String
-  username: String!
-  password: String!
-  roles: [String!]!
-  permisos_sueltos: [String!]!
-  foto64: String
-  latitud: Float
-  longitud: Float
-}
-input UpdateUsuario {
-  id: ID!
-  nombres: String!
-  apellido1: String!
-  apellido2: String
-  documento: String
-  celular: String
-  correo: String
-  sexo: String
-  direccion: String
-  username: String!
-  password: String!
-  roles: [String!]!
-  permisos_sueltos: [String!]!
-  foto64: String
-  latitud: Float
-  longitud: Float
-}
-
-input UpdatePerfil {
-  id: ID!
-  nombres: String!
-  apellido1: String!
-  apellido2: String
-  documento: String
-  celular: String!
-  correo: String
-  sexo: String
-  direccion: String
-  username: String
-  password: String 
-  foto64: String
-  latitud: Float
-  longitud: Float
-}
-
-input NewRol {
-  nombre: String!
-  descripcion: String
-  jerarquia: Int = 1
-  permisos: [String!]!
-  menus: [Int!]!
-}
-
-input GetUser { 
-  id: ID!
-  show_roles: Boolean!
-  show_permisos: Boolean!
-}
-
-input AsignarMenusUsuario {
-  user_id: ID!
-  menus: [ID!]!
-}
-
-
-
+# go run github.com/99designs/gqlgen generate --config gqlgen_auth.yml
 # go run github.com/99designs/gqlgen generate
 # CGO_ENABLED=0 go build -ldflags="-s -w" -o auth server.go 
 # CGO_ENABLED=0 go build -a -ldflags '-s -w' -o auth server.go
 # scp auth root@185.203.216.16:/root/apps/auth/
 # =================================
 type Query {
-  me(input:InputMe!): ResponseMe!
-  roles: [ResponseRoles!]!
-  permisos: [Permiso!]!
-  usuarios(query:QueryUsuarios!): [Usuario!]! 
-  usuarioById(input:GetUser!): ResponseMe!
-  rolById(rol:String!): Rol!
-  menus: [Menus!]!
-  conexiones_ws: String!
-  get_imagen(url:String!): String!
-
-  # 
+  hola: String! 
 }
 
 # =================================
 type Mutation {
-  login(input:NewLogin!): ResponseLogin!
-  refreshtoken(token:String!, refreshToken:String!): String!
-  createUsuario(input:NewUsuario!): Usuario!
-  createOauth(input:NewUsuarioOauth!): Usuario!
-  updateUsuario(input:UpdateUsuario!): Usuario!
-  updateUsuarioPerfil(input:UpdatePerfil!): Usuario!
-  createRol(input:NewRol!): Rol!
-  updateRol(input:NewRol!): Rol!
-  asignarMenusUsuario(input:AsignarMenusUsuario!): String!
-  enviarNotificacion(input:XNotificacionEnvio!): Boolean!
-
-  # 
+  mundo: String!
 }
 
 # =================================
 type Subscription {
-  notificaciones_subs: XNotificacion!
+  x: String!
 }
+
+

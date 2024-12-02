@@ -1,7 +1,7 @@
 package permisos
 
 import (
-	"auth/graph/model"
+	"auth/graph_auth/model"
 	"database/sql"
 )
 

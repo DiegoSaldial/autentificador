@@ -3,7 +3,7 @@ package roles
 import (
 	"auth/database/auth/menu"
 	"auth/database/auth/permisos"
-	"auth/graph/model"
+	"auth/graph_auth/model"
 	"database/sql"
 	"errors"
 )

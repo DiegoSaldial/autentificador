@@ -3,7 +3,7 @@ package xauth
 import (
 	"auth/database/auth/permisos"
 	"auth/database/auth/usuarios"
-	"auth/graph/model"
+	"auth/graph_auth/model"
 	"context"
 	"database/sql"
 	"errors"

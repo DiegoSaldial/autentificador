@@ -5,7 +5,7 @@ import (
 	"auth/database/auth/permisos"
 	"auth/database/auth/roles"
 	"auth/database/auth/xnotificaciones"
-	"auth/graph/model"
+	"auth/graph_auth/model"
 	"database/sql"
 	"errors"
 	"fmt"

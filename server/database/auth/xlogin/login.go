@@ -4,7 +4,7 @@ import (
 	"auth/database/auth/usuarios"
 	"auth/database/auth/xauth"
 	"auth/database/auth/xnotificaciones"
-	"auth/graph/model"
+	"auth/graph_auth/model"
 	"context"
 	"database/sql"
 	"errors"

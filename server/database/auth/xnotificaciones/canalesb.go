@@ -1,7 +1,7 @@
 package xnotificaciones
 
 import (
-	"auth/graph/model"
+	"auth/graph_auth/model"
 	"sync"
 )
 
