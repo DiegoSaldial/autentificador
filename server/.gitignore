@@ -3,3 +3,4 @@ database-queries.sql
 res/*.webp
 .bin/ 
 .env 
+authx

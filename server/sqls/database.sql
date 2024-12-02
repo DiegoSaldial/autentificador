@@ -16,15 +16,18 @@ create table `usuarios`(
     `oauth_id` varchar(80),
     `foto_url` varchar(80),
     `ubicacion` point,
-    `fecha_registro` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00'),
-    `fecha_update` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00') ON UPDATE now()
+    -- `fecha_registro` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00'),
+    -- `fecha_update` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00') ON UPDATE now()
+    `fecha_registro` datetime not null default NOW(),
+    `fecha_update` datetime not null default NOW() ON UPDATE now()
 );
 
 create table `roles`(
     `nombre` varchar(50) not null primary key,
     `descripcion` varchar(100),
     `jerarquia` tinyint(1) not null default 0,
-    `fecha_registro` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00')
+    -- `fecha_registro` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00')
+    `fecha_registro` datetime not null default NOW()
 );
 
 -- para permisos no hay crud, se agregan segun se crean las funcionaes 
@@ -36,13 +39,15 @@ create table `permisos`(
     -- el nombre es el mismo que metodo, pero para que un humano lo lea, (ej crear persona)
     `nombre` varchar(50) not null,
     `descripcion` varchar(200),
-    `fecha_registro` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00')
+    -- `fecha_registro` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00')
+    `fecha_registro` datetime not null default NOW()
 );
 
 create table `rol_permiso`(
     `rol` varchar(50) not null,
     `metodo` varchar(50) not null,
-    `fecha_registro` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00'),
+    -- `fecha_registro` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00'),
+    `fecha_registro` datetime not null default NOW(),
     foreign key(`rol`) references `roles`(`nombre`),
     foreign key(`metodo`) references `permisos`(`metodo`),
     primary key(`rol`,`metodo`)
@@ -51,7 +56,8 @@ create table `rol_permiso`(
 create table `rol_usuario`(
     `rol` varchar(50) not null,
     `usuario_id` integer unsigned not null,
-    `fecha_registro` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00'),
+    -- `fecha_registro` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00'),
+    `fecha_registro` datetime not null default NOW(),
     foreign key(`rol`) references `roles`(`nombre`),
     foreign key(`usuario_id`) references `usuarios`(`id`),
     primary key(`rol`,`usuario_id`)
@@ -60,7 +66,8 @@ create table `rol_usuario`(
 create table `usuario_permiso`(
     `usuario_id` integer unsigned not null,
     `metodo` varchar(50) not null,
-    `fecha_registro` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00'),
+    -- `fecha_registro` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00'),
+    `fecha_registro` datetime not null default NOW(),
     foreign key(`usuario_id`) references `usuarios`(`id`),
     foreign key(`metodo`) references `permisos`(`metodo`),
     primary key(`usuario_id`,`metodo`)
@@ -80,7 +87,8 @@ create table `menus_usuario`(
     `id` tinyint unsigned auto_increment not null primary key,
     `usuario_id` integer unsigned not null,
     `menu_id` tinyint unsigned not null,
-    `fecha_registro` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00'),
+    -- `fecha_registro` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00'),
+    `fecha_registro` datetime not null default NOW(),
     foreign key(`usuario_id`) references `usuarios`(`id`),
     foreign key(`menu_id`) references `menus`(`id`)
 );
@@ -89,7 +97,8 @@ create table `rol_menus`(
     `id` tinyint unsigned auto_increment not null primary key,
     `rol` varchar(50) not null,
     `menu_id` tinyint unsigned not null,
-    `fecha_registro` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00'),
+    -- `fecha_registro` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00'),
+    `fecha_registro` datetime not null default NOW(),
     foreign key(`rol`) references `roles`(`nombre`),
     foreign key(`menu_id`) references `menus`(`id`)
 );
@@ -108,6 +117,8 @@ create table `rol_menus`(
 
 -- indice para optimizar la busqueda 
 CREATE INDEX idx_username ON usuarios (username);
+CREATE INDEX idx_usuario_rol ON rol_usuario(usuario_id, rol);
+CREATE INDEX idx_rol_permiso ON rol_permiso(rol, metodo);
 
 -- VALORES POR DEFECTO
 INSERT INTO `usuarios` (`nombres`, `apellido1`, `username`, `password`)

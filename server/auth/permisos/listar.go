@@ -1,6 +1,7 @@
 package permisos
 
 import (
+	"auth/auth/utils"
 	"auth/graph_auth/model"
 	"database/sql"
 	"errors"
@@ -55,6 +56,8 @@ func GetPermisosByRol(db *sql.DB, rol string) ([]*model.ResponsePermisoMe, error
 		if er != nil {
 			return nil, er
 		}
+		p.FechaRegistro = utils.ToTZ(p.FechaRegistro)
+		p.FechaAsignado = utils.ToTZ(p.FechaAsignado)
 		perms = append(perms, &p)
 	}
 
@@ -82,6 +85,8 @@ func GetPermisosSueltosByUser(db *sql.DB, userid string) ([]*model.ResponsePermi
 		if er != nil {
 			return nil, er
 		}
+		p.FechaRegistro = utils.ToTZ(p.FechaRegistro)
+		p.FechaAsignado = utils.ToTZ(p.FechaAsignado)
 		perms = append(perms, &p)
 	}
 
@@ -103,6 +108,7 @@ func GetPermisos(db *sql.DB) ([]*model.Permiso, error) {
 		if er != nil {
 			return nil, er
 		}
+		p.FechaRegistro = utils.ToTZ(p.FechaRegistro)
 		permisos = append(permisos, &p)
 	}
 

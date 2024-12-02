@@ -4,6 +4,7 @@ import (
 	"auth/auth/menu"
 	"auth/auth/permisos"
 	"auth/auth/roles"
+	"auth/auth/utils"
 	"auth/auth/xnotificaciones"
 	"auth/graph_auth/model"
 	"database/sql"
@@ -47,6 +48,10 @@ func GetById(db *sql.DB, id string) (*model.Usuario, error) {
 		return nil, err
 	}
 
+	us.FechaRegistro = utils.ToTZ(us.FechaRegistro)
+	us.FechaUpdate = utils.ToTZ(us.FechaUpdate)
+	us.LastLogin = utils.ToTZNil(us.LastLogin)
+
 	return &us, nil
 }
 
@@ -87,6 +92,10 @@ func GetByUserPass(db *sql.DB, user, pass string) (*model.Usuario, error) {
 		return nil, err
 	}
 
+	us.FechaRegistro = utils.ToTZ(us.FechaRegistro)
+	us.FechaUpdate = utils.ToTZ(us.FechaUpdate)
+	us.LastLogin = utils.ToTZNil(us.LastLogin)
+
 	return &us, nil
 }
 
@@ -95,6 +104,10 @@ func GetMe(db *sql.DB, input model.InputMe, userid string, only_user bool) (*mod
 	if err != nil {
 		return nil, err
 	}
+
+	us.FechaRegistro = utils.ToTZ(us.FechaRegistro)
+	us.FechaUpdate = utils.ToTZ(us.FechaUpdate)
+	us.LastLogin = utils.ToTZNil(us.LastLogin)
 
 	user := model.ResponseMe{}
 	user.Usuario = us
@@ -148,6 +161,10 @@ func GetUsuarios(db *sql.DB, query model.QueryUsuarios) ([]*model.Usuario, error
 		if er != nil {
 			return nil, er
 		}
+
+		u.FechaRegistro = utils.ToTZ(u.FechaRegistro)
+		u.FechaUpdate = utils.ToTZ(u.FechaUpdate)
+		u.LastLogin = utils.ToTZNil(u.LastLogin)
 
 		cons := len(cha.Subscriptores[u.ID])
 		u.Conexiones = cons
