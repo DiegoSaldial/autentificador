@@ -1,6 +1,6 @@
 database-data.sql
 database-queries.sql
-res/
+res/*.webp
 .bin/
 auth
 .env 
