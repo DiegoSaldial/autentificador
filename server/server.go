@@ -1,8 +1,8 @@
 package main
 
 import (
-	"auth/database/auth/xauth"
-	"auth/database/auth/xnotificaciones"
+	"auth/auth/xauth"
+	"auth/auth/xnotificaciones"
 	"auth/graph"
 	"auth/graph_auth"
 	"database/sql"
@@ -71,6 +71,7 @@ func main() {
 	xnotificaciones.InitializeGlobal()
 	resolver_auth := &graph_auth.Resolver{DB: db}
 	srv_auth := handler.NewDefaultServer(graph_auth.NewExecutableSchema(graph_auth.Config{Resolvers: resolver_auth}))
+
 	resolver := &graph.Resolver{DB: db}
 	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: resolver}))
 
