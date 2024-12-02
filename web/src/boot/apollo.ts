@@ -12,8 +12,11 @@ export default boot(async ({ app }) => {
   //const cache = new InMemoryCache();
 
   // Default client.
-  const options = await getClientOptions();
+  const options = await getClientOptions(process.env.GRAPHQL_URI + '');
   const apolloClient = new ApolloClient(options);
+
+  const optionsApp = await getClientOptions(process.env.GRAPHQL_APP + '');
+  const apolloClientApp = new ApolloClient(optionsApp);
 
   // const optionsB = await getClientOptionsWs(process.env.GRAPHQL_WSS);
   // const apolloClientB = new ApolloClient(optionsB);
@@ -21,6 +24,7 @@ export default boot(async ({ app }) => {
   const apolloClients: Record<string, ApolloClient<unknown>> = {
     default: apolloClient,
     clientews: apolloClient,
+    cliente_app: apolloClientApp,
   };
 
   // // Additional client `clientA`

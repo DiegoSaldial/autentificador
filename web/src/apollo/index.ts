@@ -66,16 +66,16 @@ const authLink = setContext(async (_, { headers }) => {
   };
 });
 
-export async function getClientOptions() {
+export async function getClientOptions(url_graphql: string) {
   const store = useLoginStore();
-  store.setWsNoti('closed')
+  store.setWsNoti('closed');
 
   const wsLink = new GraphQLWsLink(
     createClient({
       url: '' + process.env.GRAPHQL_WSS,
       connectionParams: () => {
         const store = useLoginStore();
-        const token = store.token;        
+        const token = store.token;
 
         return {
           Authorization: `Bearer ${token}`,
@@ -85,22 +85,34 @@ export async function getClientOptions() {
 
       lazy: true,
       on: {
-        connected: () => { store.setWsNoti('connected'); console.log('Connected to WebSocket') },
-        closed: () => { store.setWsNoti('closed'); console.log('WebSocket connection closed') },
-        error: (err) => { store.setWsNoti('error'); console.error('WebSocket error:', err) },
-        connecting: () => { store.setWsNoti('connecting'); console.log('Reconnecting to WebSocket...') },
+        connected: () => {
+          store.setWsNoti('connected');
+          console.log('Connected to WebSocket');
+        },
+        closed: () => {
+          store.setWsNoti('closed');
+          console.log('WebSocket connection closed');
+        },
+        error: (err) => {
+          store.setWsNoti('error');
+          console.error('WebSocket error:', err);
+        },
+        connecting: () => {
+          store.setWsNoti('connecting');
+          console.log('Reconnecting to WebSocket...');
+        },
       },
       retryAttempts: Infinity,
-    })
+    }),
   );
 
   const httpLink = authLink.concat(
     createHttpLink({
-      uri: process.env.GRAPHQL_URI,
+      uri: url_graphql,
       headers: {
         authorization: `Bearer ${store.token}`,
       },
-    })
+    }),
   );
 
   const link = split(
@@ -112,7 +124,7 @@ export async function getClientOptions() {
       );
     },
     wsLink,
-    httpLink
+    httpLink,
   );
 
   ///* {app, router, ...} */ options?: Partial<BootFileParams<any>>
@@ -191,6 +203,6 @@ export async function getClientOptions() {
       ? {
           ssrForceFetchDelay: 100,
         }
-      : {}
+      : {},
   );
 }

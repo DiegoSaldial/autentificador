@@ -1,9 +1,10 @@
 package main
 
 import (
-	"auth/database/auth/xauth"
-	"auth/database/auth/xnotificaciones"
+	"auth/auth/xauth"
+	"auth/auth/xnotificaciones"
 	"auth/graph"
+	"auth/graph_auth"
 	"database/sql"
 	"fmt"
 	"log"
@@ -68,11 +69,14 @@ func main() {
 
 	// subs := make(map[string]chan *model.XNotificacion)
 	xnotificaciones.InitializeGlobal()
+	resolver_auth := &graph_auth.Resolver{DB: db}
+	srv_auth := handler.NewDefaultServer(graph_auth.NewExecutableSchema(graph_auth.Config{Resolvers: resolver_auth}))
+
 	resolver := &graph.Resolver{DB: db}
 	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: resolver}))
 
 	// websocket
-	srvws := handler.New(graph.NewExecutableSchema(graph.Config{Resolvers: resolver}))
+	srvws := handler.New(graph_auth.NewExecutableSchema(graph_auth.Config{Resolvers: resolver_auth}))
 	srvws.AddTransport(&transport.Websocket{
 		KeepAlivePingInterval: 40 * time.Second,
 		Upgrader: websocket.Upgrader{
@@ -86,8 +90,10 @@ func main() {
 
 	show_playground := os.Getenv("PLAYGROUND")
 	if show_playground == "1" {
+		router.Handle("/auth", playground.Handler("GraphQL playground", "/query_auth"))
 		router.Handle("/", playground.Handler("GraphQL playground", "/query"))
 	}
+	router.Handle("/query_auth", srv_auth)
 	router.Handle("/query", srv)
 	router.Handle("/ws", srvws)
 
