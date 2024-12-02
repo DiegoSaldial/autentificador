@@ -68,6 +68,7 @@ const authLink = setContext(async (_, { headers }) => {
 
 export async function getClientOptions() {
   const store = useLoginStore();
+  store.setWsNoti('closed')
 
   const wsLink = new GraphQLWsLink(
     createClient({

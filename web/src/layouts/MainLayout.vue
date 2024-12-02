@@ -58,7 +58,7 @@
       </q-scroll-area>
     </q-drawer>
 
-    <Notificaciones ref="refNotificaciones" />
+    <!-- <Notificaciones ref="refNotificaciones" /> -->
 
     <q-page-container>
       <LoginView v-if="!store.dataUser.usuario" />
@@ -75,19 +75,20 @@ import {useClimaStore} from 'stores/clima-store'
 import PerfilService from 'src/components/perfil/perfilService'
 import LoginView from 'components/login/LoginView.vue'
 import BtnPerfil from 'components/perfil/boton_perfil.vue'
-import Notificaciones from 'pages/xauth/notificaciones/index_notificaciones.vue'
+// import Notificaciones from 'pages/xauth/notificaciones/index_notificaciones.vue'
+import {} from 'src/pages/xauth/notificaciones/notificaciones'
 import { colorWs } from './utils'
 
 export default {
   name: 'MyLayout',
-  components:{ LoginView,BtnPerfil,Notificaciones },
+  components:{ LoginView,BtnPerfil,/* Notificaciones */ },
 
   setup () {
     const leftDrawerOpen = ref(false)
     const store = useLoginStore();
     const storeClima = useClimaStore();
     const show_time = ref(process.env.SHOW_TIME_LABEL)
-    const refNotificaciones = ref()
+    // const refNotificaciones = ref()
     const perfilService = new PerfilService()
     const foto_64 = ref('');
 
@@ -122,7 +123,7 @@ export default {
 
     onMounted(()=>{
       storeClima.setearClima();
-      getFoto();
+      getFoto(); 
     })
 
     return {
@@ -131,7 +132,7 @@ export default {
       storeClima,
       store,
       show_time,
-      refNotificaciones,
+      // refNotificaciones,
       foto_64,
       toHome,
       colorWs,

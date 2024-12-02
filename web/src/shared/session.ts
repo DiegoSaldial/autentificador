@@ -5,6 +5,7 @@ import { Quasar, Notify } from 'quasar';
 import { setTimeLabel } from 'src/shared/login-time';
 import { createApp, h } from 'vue';
 import Relogin from 'src/shared/dialog_relogin.vue';
+import {} from 'src/pages/xauth/notificaciones/notificaciones'
 
 export default {
   name: 'MyLayout',
