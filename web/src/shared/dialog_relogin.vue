@@ -3,20 +3,26 @@
     <q-dialog v-model="dialog" persistent>
       <q-card>
         <q-card-section class="row items-center q-pb-none">
-          <div class="text-h6">Vuelve a iniciar session</div>
+          <div class="text-h6"> Tu sesión ha expirado </div>
           <q-space />
           <q-btn icon="close" flat round dense @click="handleCancel" />
         </q-card-section>
 
-        <q-card-section class="row items-center">
+        <q-card-section class="q-pt-xs">
+          <p class="q-my-none text-grey">
+            Tu acceso ha caducado 
+          </p>
+          <p class="q-mt-none q-pb-md text-grey">
+            pero no te preocupes, ¡es fácil retomarlo!!
+          </p>
           <q-form @submit="handleAccept" @reset="onReset" class="q-gutter-md">
-            <q-input filled v-model.trim="username" label="Nombre de usuario" lazy-rules dense :color="$q.dark.isActive ? 'orange' : 'primary'" :rules="[(val) => (val && val.length > 0) || 'dato obligatorio']" >
+            <q-input v-show="false" filled v-model.trim="username" readonly label="Nombre de usuario" lazy-rules dense :color="$q.dark.isActive ? 'orange' : 'primary'" :rules="[(val) => (val && val.length > 0) || 'dato obligatorio']" >
               <template v-slot:prepend>
                 <q-icon name="person" />
               </template>
             </q-input>
 
-            <q-input filled :type="pwd" :disable="loading" v-model.trim="clave" label="Clave de acceso" lazy-rules dense :color="$q.dark.isActive ? 'orange' : 'primary'" :rules="[(val) => (val && val.length > 0) || 'dato obligatorio']">
+            <q-input filled :type="pwd" :disable="loading" v-model.trim="clave" label="Ingresa tu clave de acceso" lazy-rules dense :color="$q.dark.isActive ? 'orange' : 'primary'" :rules="[(val) => (val && val.length > 0) || 'dato obligatorio']">
               <template v-slot:prepend>
                 <q-icon name="key" />
               </template>
@@ -27,13 +33,13 @@
               </template>
             </q-input>
 
-            <div class="column items-center">
+            <div class="column items-center q-mt-none">
               <q-linear-progress v-if="loading" dark rounded indeterminate color="secondary" class="q-mb-sm" />
-              <q-btn :disable="loading" icon="person" stretch label="Ingresar" type="submit" color="orange" />
+              <q-btn :disable="loading" icon="person" outline stretch label="Re ingresar" type="submit" color="green" />
             </div>
 
             <div class="row text-right" v-if="accept_oauth">
-              <div class="col-12"> 
+              <div class="col-12">
                 <q-btn flat class="q-mt-none q-pr-xs" size="sm" color="grey" :loading="loading" @click="googleLogin()">
                   <q-icon name="hive" size="xs" left></q-icon>
                   Acceder con Google
@@ -76,7 +82,13 @@ export default {
 
     const openDialog = () => {
       dialog.value = true;
-      accept_oauth.value = process.env.ACCEPT_OAUTH; 
+      if(!useLogin.dataUser){
+        useLogin.clearStore();
+        return;
+      }
+      username.value = useLogin.dataUser.usuario.username;
+
+      accept_oauth.value = process.env.ACCEPT_OAUTH;
 
       return new Promise((resolve) => {
         resolvePromise = resolve;

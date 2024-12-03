@@ -23,7 +23,7 @@ export default {
       const timeRemaining = expirationTime - currentTime;
 
       setTimeLabel(store.token + '', store.refreshToken + '');
-      if (timeRemaining < 0) {
+      if (timeRemaining < 20) {
         const r = await mostrarRelogin();
         if (r) return;
 
