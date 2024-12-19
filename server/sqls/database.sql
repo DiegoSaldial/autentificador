@@ -17,9 +17,7 @@ create table `usuarios`(
     `last_login` datetime,
     `oauth_id` varchar(80),
     `foto_url` varchar(80),
-    `ubicacion` point,
-    -- `fecha_registro` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00'),
-    -- `fecha_update` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00') ON UPDATE now()
+    `ubicacion` point, 
     `fecha_registro` datetime not null default CURRENT_TIMESTAMP,
     `fecha_update` datetime not null default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -28,7 +26,6 @@ create table `roles`(
     `nombre` varchar(50) not null primary key,
     `descripcion` varchar(100),
     `jerarquia` tinyint(1) not null default 0,
-    -- `fecha_registro` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00')
     `fecha_registro` datetime not null default CURRENT_TIMESTAMP
 );
 
@@ -48,7 +45,6 @@ create table `permisos`(
 create table `rol_permiso`(
     `rol` varchar(50) not null,
     `metodo` varchar(50) not null,
-    -- `fecha_registro` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00'),
     `fecha_registro` datetime not null default CURRENT_TIMESTAMP,
     foreign key(`rol`) references `roles`(`nombre`),
     foreign key(`metodo`) references `permisos`(`metodo`),
@@ -58,7 +54,6 @@ create table `rol_permiso`(
 create table `rol_usuario`(
     `rol` varchar(50) not null,
     `usuario_id` integer unsigned not null,
-    -- `fecha_registro` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00'),
     `fecha_registro` datetime not null default CURRENT_TIMESTAMP,
     foreign key(`rol`) references `roles`(`nombre`),
     foreign key(`usuario_id`) references `usuarios`(`id`),
@@ -68,7 +63,6 @@ create table `rol_usuario`(
 create table `usuario_permiso`(
     `usuario_id` integer unsigned not null,
     `metodo` varchar(50) not null,
-    -- `fecha_registro` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00'),
     `fecha_registro` datetime not null default CURRENT_TIMESTAMP,
     foreign key(`usuario_id`) references `usuarios`(`id`),
     foreign key(`metodo`) references `permisos`(`metodo`),
@@ -89,7 +83,6 @@ create table `menus_usuario`(
     `id` tinyint unsigned auto_increment not null primary key,
     `usuario_id` integer unsigned not null,
     `menu_id` tinyint unsigned not null,
-    -- `fecha_registro` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00'),
     `fecha_registro` datetime not null default CURRENT_TIMESTAMP,
     foreign key(`usuario_id`) references `usuarios`(`id`),
     foreign key(`menu_id`) references `menus`(`id`)
@@ -99,7 +92,6 @@ create table `rol_menus`(
     `id` tinyint unsigned auto_increment not null primary key,
     `rol` varchar(50) not null,
     `menu_id` tinyint unsigned not null,
-    -- `fecha_registro` datetime not null default CONVERT_TZ(NOW(), @@session.time_zone, '-4:00'),
     `fecha_registro` datetime not null default CURRENT_TIMESTAMP,
     foreign key(`rol`) references `roles`(`nombre`),
     foreign key(`menu_id`) references `menus`(`id`)
