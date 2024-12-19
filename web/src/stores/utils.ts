@@ -9,9 +9,9 @@ export const parseFecha = (fecha: string, ful: boolean) => {
   }
   return date*/
 
-  const host = location.host;
-  if (!host.includes('localhost:')) {
-    fecha = fecha.replaceAll('-04:00', 'Z');
+  const host = process.env.GRAPHQL_URI + '';
+  if (host.includes('localhost:')) {
+    fecha = fecha.replaceAll('Z', '-04:00');
   }
 
   const date = new Date(fecha);

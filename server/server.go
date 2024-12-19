@@ -27,7 +27,8 @@ func conexion() *sql.DB {
 	dbpass := os.Getenv("DB_PASS")
 	dbhost := os.Getenv("DB_HOST")
 	dbname := os.Getenv("DB_NAME")
-	loc := "America%2FLa_Paz"
+	// loc := "America%2FLa_Paz"
+	loc := "UTC"
 	dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?parseTime=true&loc=%s", dbuser, dbpass, dbhost, dbname, loc)
 	db, err := sql.Open("mysql", dsn)
 	fmt.Println(dsn)
