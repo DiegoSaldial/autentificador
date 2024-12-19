@@ -3,7 +3,6 @@ package roles
 import (
 	"auth/auth/menu"
 	"auth/auth/permisos"
-	"auth/auth/utils"
 	"auth/graph_auth/model"
 	"database/sql"
 	"errors"
@@ -36,8 +35,8 @@ func GetRolesByUsuario(db *sql.DB, userid string, show_permisos bool) ([]*model.
 				return nil, er
 			}
 		}
-		r.FechaRegistro = utils.ToTZ(r.FechaRegistro)
-		r.FechaAsignado = utils.ToTZ(r.FechaAsignado)
+		// r.FechaRegistro = utils.ToTZ(r.FechaRegistro)
+		// r.FechaAsignado = utils.ToTZ(r.FechaAsignado)
 		roles = append(roles, &r)
 	}
 
@@ -62,7 +61,7 @@ func GetRolById(db *sql.DB, rol string) (*model.Rol, error) {
 		return nil, err
 	}
 
-	r.FechaRegistro = utils.ToTZ(r.FechaRegistro)
+	// r.FechaRegistro = utils.ToTZ(r.FechaRegistro)
 	return &r, nil
 }
 
@@ -98,7 +97,7 @@ func GetRoles(db *sql.DB) ([]*model.ResponseRoles, error) {
 		if er != nil {
 			return nil, er
 		}
-		r.FechaRegistro = utils.ToTZ(r.FechaRegistro)
+		// r.FechaRegistro = utils.ToTZ(r.FechaRegistro)
 		roles = append(roles, &r)
 	}
 

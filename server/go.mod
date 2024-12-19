@@ -20,7 +20,7 @@ require github.com/nickalie/go-webpbin v0.0.0-20220110095747-f10016bf2dc1
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/agnivade/levenshtein v1.2.0 // indirect
-	github.com/cpuguy83/go-md2man/v2 v2.0.5 // indirect
+	github.com/cpuguy83/go-md2man/v2 v2.0.6 // indirect
 	github.com/dsnet/compress v0.0.1 // indirect
 	github.com/frankban/quicktest v1.14.6 // indirect
 	github.com/go-viper/mapstructure/v2 v2.2.1 // indirect
