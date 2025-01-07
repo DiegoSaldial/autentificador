@@ -8,7 +8,9 @@
 // Configuration for your app
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js
 
+// import { configure } from 'quasar/wrappers';
 const { configure } = require('quasar/wrappers');
+// import { config } from 'dotenv';
 
 // icongenie generate -m spa -i cseiiLogo512.png
 module.exports = configure(function (/* ctx */) {
@@ -67,9 +69,9 @@ module.exports = configure(function (/* ctx */) {
       // analyze: true,
       // rawDefine: {}
       // ignorePublicFolder: true,
-      minify: true,
-      treeShake: true,
-      extractCSS: true,
+      // minify: true,
+      // treeShake: true,
+      // extractCSS: true,
       // polyfillModulePreload: true,
       // distDir
 
