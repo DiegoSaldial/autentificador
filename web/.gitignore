@@ -1,7 +1,6 @@
 .DS_Store
 .thumbs.db
 node_modules
-src-pwa
 .vscode/
 src-pwa/
 

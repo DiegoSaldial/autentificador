@@ -4,3 +4,5 @@ res/*.webp
 .bin/ 
 .env 
 authx
+src-pwa/
+web/src-pwa/
