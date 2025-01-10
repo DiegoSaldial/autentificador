@@ -3,7 +3,7 @@ module auth
 go 1.23
 
 require (
-	github.com/99designs/gqlgen v0.17.62
+	github.com/99designs/gqlgen v0.17.63
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/go-chi/chi v1.5.5
 	github.com/go-sql-driver/mysql v1.8.1
