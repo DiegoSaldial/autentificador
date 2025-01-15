@@ -30,7 +30,7 @@
           <div class="q-mt-md" :align="'right'">
             <q-linear-progress v-if="loading" dark rounded indeterminate color="secondary" class="q-mb-sm" />
             <q-btn :disable="loading" label="cerrar" color="red" icon="close" square flat @click="cerrar()" />
-            <q-btn :disable="loading" :label="is_edit ? 'Actualizar' : 'Registrar'" icon="done" type="submit" color="green" square />
+            <q-btn :disable="loading" :label="is_edit ? 'Actualizar' : 'Registrar'" icon="done" type="submit" color="secondary" outline square />
           </div>
         </q-form>
       </q-card-section>

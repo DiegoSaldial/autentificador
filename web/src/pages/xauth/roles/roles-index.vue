@@ -17,7 +17,7 @@
             <q-icon name="search" />
           </template>
         </q-input>
-        <q-btn label="Registrar" color="green" icon="post_add" class="q-ml-xs" square @click="registrar()" />
+        <q-btn label="Registrar" color="secondary" icon="post_add" class="q-ml-xs" outline square @click="registrar()" />
       </template>
 
       <template v-slot:loading>

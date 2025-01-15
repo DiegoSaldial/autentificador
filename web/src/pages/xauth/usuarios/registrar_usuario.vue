@@ -1,5 +1,5 @@
 <template>
-  <q-dialog v-model="alert" persistent square>
+  <q-dialog v-model="alert" persistent square full-width>
     <q-card flat bordered v-on:click="checkClickSession()">
       <q-card-section>
         <div class="text-h6">{{ input.id ? 'Actualizar' : 'Registrar' }}</div>
@@ -7,89 +7,97 @@
 
       <q-card-section class="q-pt-none">
         <q-form @submit="onSubmit">
-          <div class="row q-col-gutter-xs justify-center">
-            <div class="col-xs-12 col-sm-8 ">
-              <q-img
-                v-if="foto_64" :src="foto_64"
-                spinner-color="white"
-              />
-            </div>
-            <div class="col-xs-12 col-sm-6">
-              <q-input outlined v-model.trim="input.nombres" label="* Nombres" dense :rules="[(val) => validaciones.val_nombre(val)]" />
-            </div>
-            <div class="col-xs-12 col-sm-6">
-              <q-input outlined v-model.trim="input.apellido1" label="* Apellido 1" lazy-rules dense :rules="[(val) => validaciones.val_apellido1(val)]" />
-            </div>
-            <div class="col-xs-12 col-sm-6">
-              <q-input outlined v-model.trim="input.apellido2" label="Apellido 2" lazy-rules dense counter :rules="[(val) => validaciones.val_apellido2(val)]" />
-            </div>
-            <div class="col-xs-12 col-sm-6">
-              <q-input outlined v-model.trim="input.documento" label="Documento" lazy-rules dense counter :rules="[(val) => validaciones.val_documento(val)]" />
-            </div>
-            <div class="col-xs-12 col-sm-6">
-              <q-input outlined v-model.trim="input.celular" label="Celular" lazy-rules dense counter :rules="[(val) => validaciones.val_celular(val)]" />
-            </div>
-            <div class="col-xs-12 col-sm-6">
-              <q-radio v-model="input.sexo" val="M" label="Masculino" class="q-pa-none" />
-              <q-radio v-model="input.sexo" val="F" label="Femenino" class="q-pa-none" />
-            </div>
-            <div class="col-xs-12 col-sm-12">
-              <q-input outlined v-model.trim="input.correo" label="Correo" lazy-rules dense counter :rules="[(val) => validaciones.val_correo(val)]" />
-            </div>
-            <div class="col-xs-12 col-sm-12">
-              <q-input outlined v-model.trim="input.direccion" label="Direccion" lazy-rules dense counter :rules="[(val) => validaciones.val_direccion(val)]" />
-            </div>
-            <div class="col-xs-12 col-sm-6">
-              <q-input outlined v-model.trim="input.username" label="* username" lazy-rules dense counter :rules="[(val) => validaciones.val_username(val)]" />
-            </div>
-            <div class="col-xs-12 col-sm-6">
-              <q-input outlined v-model.trim="input.password" label="password" :placeholder="input.id ? 'vacio sin cambios' : ''" lazy-rules dense counter :rules="[(val) => validaciones.val_password(val, input)]" />
-            </div>
-            <div class="col-xs-12 col-sm-12">
-              <q-file style="min-width: 50px" clearable v-model="foto_file" dense accept="image/*" :disable="loading" square outlined color="orange" label="Seleccionar foto de perfil" max-file-size="2097152" @update:model-value="filevalue($event)" @rejected="onRejected" >
-                <template v-slot:prepend>
-                  <q-icon name="upload" />
-                </template>
-                <q-tooltip> Seleccionar foto de perfil </q-tooltip>
-              </q-file>
-            </div>
-            <div class="col-xs-12 col-sm-12 q-pt-md">
-              <q-btn color="grey" icon="fmd_good" dense square outline @click="openGeo()"> Ubicacion geografica </q-btn>
-              <small class="q-pl-md"> {{ input.latitud }} {{ input.longitud }} </small>
-            </div>
-
-            <div class="col-xs-12 col-sm-12 q-mt-md">
-              <q-list >
-                <q-expansion-item header-class="text-purple" default-opened expand-separator icon="group_add" label="* Roles" caption="Un rol contiene un grupo de permisos" >
-                  <q-table flat color="orange" :loading="loading_roles" title="" hide-pagination :rows-per-page-options="[0]" dense :rows="roles" :columns="columnas_rols" row-key="nombre" selection="multiple" v-model:selected="roles_sel" />
-                </q-expansion-item>
-
-                <q-expansion-item header-class="text-orange q-mt-lg" expand-separator icon="key" label="Permisos sueltos" caption="Independientes del rol" >
-                  <q-table flat color="orange" :loading="loading_perms" title="" hide-pagination :rows-per-page-options="[0]" dense :rows="permisos" :columns="columnas_perm" row-key="metodo" selection="multiple" v-model:selected="permisos_sel">
-                    <template v-slot:body-cell-nombre="props">
-                      <q-td :props="props">
-                        <p class="q-my-none">
-                          {{ props.row.nombre }}
-                          <q-tooltip class="bg-orange">
-                            {{ props.row.metodo }}
-                          </q-tooltip>
-                        </p>
-                      </q-td>
+          <div class="row q-col-gutter-xs">
+            <div class="col-xs-12 col-md-6">
+              <div class="row q-col-gutter-xs justify-center">
+                <div class="col-xs-12 col-sm-7 col-md-8 col-lg-7">
+                  <q-img v-if="foto_64" :src="foto_64" spinner-color="white" />
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                  <q-input outlined v-model.trim="input.nombres" label="* Nombres" dense :rules="[(val) => validaciones.val_nombre(val)]" />
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                  <q-input outlined v-model.trim="input.apellido1" label="* Apellido 1" lazy-rules dense :rules="[(val) => validaciones.val_apellido1(val)]" />
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                  <q-input outlined v-model.trim="input.apellido2" label="Apellido 2" lazy-rules dense counter :rules="[(val) => validaciones.val_apellido2(val)]" />
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                  <q-input outlined v-model.trim="input.documento" label="Documento" lazy-rules dense counter :rules="[(val) => validaciones.val_documento(val)]" />
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                  <q-input outlined v-model.trim="input.celular" label="Celular" lazy-rules dense counter :rules="[(val) => validaciones.val_celular(val)]" />
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                  <q-radio v-model="input.sexo" val="M" label="Masculino" class="q-pa-none" />
+                  <q-radio v-model="input.sexo" val="F" label="Femenino" class="q-pa-none" />
+                </div>
+                <div class="col-xs-12 col-sm-12">
+                  <q-input outlined v-model.trim="input.correo" label="Correo" lazy-rules dense counter :rules="[(val) => validaciones.val_correo(val)]" />
+                </div>
+                <div class="col-xs-12 col-sm-12">
+                  <q-input outlined v-model.trim="input.direccion" label="Direccion" lazy-rules dense counter :rules="[(val) => validaciones.val_direccion(val)]" />
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                  <q-input outlined v-model.trim="input.username" label="* username" lazy-rules dense counter :rules="[(val) => validaciones.val_username(val)]" />
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                  <q-input outlined v-model.trim="input.password" label="password" :placeholder="input.id ? 'vacio sin cambios' : ''" lazy-rules dense counter :rules="[(val) => validaciones.val_password(val, input)]" />
+                </div>
+                <div class="col-xs-12 col-sm-12">
+                  <q-file style="min-width: 50px" clearable v-model="foto_file" dense accept="image/*" :disable="loading" square outlined color="orange" label="Seleccionar foto de perfil" max-file-size="2097152" @update:model-value="filevalue($event)" @rejected="onRejected" >
+                    <template v-slot:prepend>
+                      <q-icon name="upload" />
                     </template>
-                  </q-table>
-                </q-expansion-item>
+                    <q-tooltip> Seleccionar foto de perfil </q-tooltip>
+                  </q-file>
+                </div>
+                <div class="col-xs-12 col-sm-12 q-pt-md">
+                  <q-btn color="grey" icon="fmd_good" dense square outline @click="openGeo()"> Ubicacion geografica </q-btn>
+                  <small class="q-pl-md"> {{ input.latitud }} {{ input.longitud }} </small>
+                </div> 
 
-                <q-expansion-item header-class="text-green q-mt-lg" expand-separator icon="menu_open" label="Menus" caption="Opciones en el menu lateral" >
-                  <q-table flat color="orange" :loading="loading_menus" title="" hide-pagination :rows-per-page-options="[0]" dense :rows="menus" :columns="columnas_menu" row-key="label" selection="multiple" v-model:selected="menus_sel" />
-                </q-expansion-item>
-              </q-list>
+              </div>
+            </div>
+
+            <!-- SEGUNDA COLUMNA -->
+            <div class="col-xs-12 col-md-6">
+              <div class="row">
+                <div class="col-xs-12 q-mt-md">
+                  <q-list bordered>
+                    <q-expansion-item header-class="text-purple" default-opened expand-separator icon="group_add" label="* Roles" caption="Un rol contiene un grupo de permisos" >
+                      <q-table flat color="orange" :loading="loading_roles" title="" hide-pagination :rows-per-page-options="[0]" dense :rows="roles" :columns="columnas_rols" row-key="nombre" selection="multiple" v-model:selected="roles_sel" />
+                    </q-expansion-item>
+
+                    <q-expansion-item header-class="text-orange q-mt-lg" expand-separator icon="key" label="Permisos sueltos" caption="Independientes del rol" >
+                      <q-table flat color="orange" :loading="loading_perms" title="" hide-pagination :rows-per-page-options="[0]" dense :rows="permisos" :columns="columnas_perm" row-key="metodo" selection="multiple" v-model:selected="permisos_sel">
+                        <template v-slot:body-cell-nombre="props">
+                          <q-td :props="props">
+                            <p class="q-my-none">
+                              {{ props.row.nombre }}
+                              <q-tooltip class="bg-orange">
+                                {{ props.row.metodo }}
+                              </q-tooltip>
+                            </p>
+                          </q-td>
+                        </template>
+                      </q-table>
+                    </q-expansion-item>
+
+                    <q-expansion-item header-class="text-green q-mt-lg" expand-separator icon="menu_open" label="Menus" caption="Opciones en el menu lateral" >
+                      <q-table flat color="orange" :loading="loading_menus" title="" hide-pagination :rows-per-page-options="[0]" dense :rows="menus" :columns="columnas_menu" row-key="label" selection="multiple" v-model:selected="menus_sel" />
+                    </q-expansion-item>
+                  </q-list>
+                </div>
+              </div>
             </div>
           </div>
+          
 
           <div class="q-mt-md" :align="'right'">
             <q-linear-progress v-if="loading" dark rounded indeterminate color="secondary" class="q-mb-sm" />
             <q-btn :disable="loading" label="cerrar" color="red" icon="close" square flat @click="cerrar()" />
-            <q-btn :disable="loading" :label="input.id ? 'Actualizar' : 'Registrar'" icon="done" type="submit" color="green" square />
+            <q-btn :disable="loading" :label="input.id ? 'Actualizar' : 'Registrar'" icon="done" type="submit" outline color="secondary" square />
           </div>
         </q-form>
       </q-card-section>
