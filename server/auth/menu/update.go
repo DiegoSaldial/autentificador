@@ -14,7 +14,7 @@ func AsignarMenusUsuario(db *sql.DB, input model.AsignarMenusUsuario) (string, e
 	_, err = tx.Exec("delete from menus_usuario where usuario_id=?", input.UserID)
 	if err != nil {
 		tx.Rollback()
-		return "", nil
+		return "", err
 	}
 
 	if len(input.Menus) > 0 {

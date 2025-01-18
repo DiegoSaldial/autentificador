@@ -50,51 +50,6 @@ func UaserIDMiddleware(db *sql.DB) transport.WebsocketInitFunc {
 	}
 }
 
-// =======================================================
-// =======================================================
-// headers websockets
-/*func UaserIDMiddleware(db *sql.DB) func(next http.Handler) http.Handler {
-	return func(next http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			auth := r.Header.Get("Authorization")
-
-			fmt.Println("auth", auth)
-
-			if auth == "" || len(auth) <= 7 {
-				next.ServeHTTP(w, r)
-				return
-			}
-
-			bearer := "Bearer "
-			auth = auth[len(bearer):]
-
-			validate, err := JwtValidate(auth)
-			if err != nil {
-				txt := err.Error()
-				if !strings.HasPrefix(txt, "token is expired by") {
-					next.ServeHTTP(w, r)
-					return
-				}
-			}
-
-			customClaim, _ := validate.Claims.(*JwtCustomClaim)
-
-			data := AuthData{}
-			data.Clains = customClaim
-			data.TOKEN = auth
-			us, er := usuarios.GetById(db, customClaim.USERID)
-			if er == nil {
-				data.Usuario = us
-			}
-
-			ctx := context.WithValue(r.Context(), authString("auth"), &data)
-
-			r = r.WithContext(ctx)
-			next.ServeHTTP(w, r)
-		})
-	}
-}*/
-
 func CtxValueWs(ctx context.Context, db *sql.DB, metodo string) (*AuthData, error) {
 	str := authString("auth")
 	algo := ctx.Value(str)
